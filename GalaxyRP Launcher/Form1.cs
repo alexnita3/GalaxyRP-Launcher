@@ -17,6 +17,7 @@ using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.Download;
+using System.Reflection;
 
 namespace GalaxyRP_Launcher
 {
@@ -42,6 +43,14 @@ namespace GalaxyRP_Launcher
             return originalFileList;
         }
 
+        private string GetCurrentSelectedFileName()
+        {
+            return files[listBox1.SelectedIndex].Name;
+        }
+        private string GetCurrentSelectedFileId()
+        {
+            return files[listBox1.SelectedIndex].Id;
+        }
 
         IList<Google.Apis.Drive.v3.Data.File> files;
 
@@ -125,7 +134,13 @@ namespace GalaxyRP_Launcher
                 };
             request.Download(stream);
 
-            FileStream fileStream = new FileStream("d:\\Sola_Terrik.pk3", FileMode.Create, FileAccess.Write);
+            //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            filePath += "\\" + GetCurrentSelectedFileName();
+
+            FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
 
             stream.WriteTo(fileStream);
 
@@ -138,7 +153,7 @@ namespace GalaxyRP_Launcher
         private void button2_Click(object sender, EventArgs e)
         {
 
-            string selectedFileId = files[listBox1.SelectedIndex].Id;
+            string selectedFileId = GetCurrentSelectedFileId();
 
             DownloadFile(selectedFileId);
             
