@@ -21,6 +21,7 @@ using System.Reflection;
 using System.Windows;
 using System.Web.Script.Serialization;
 using System.Text.RegularExpressions;
+using File = System.IO.File;
 
 namespace GalaxyRP_Launcher
 {
@@ -47,6 +48,30 @@ namespace GalaxyRP_Launcher
         int resolution_y = 0;
         string clientMod = "BaseJKA";
         string serverIP = "86.160.153.128:27340";
+
+        void compareLocalFilesWithCloud()
+        {
+            for(int i = 0;i<files.Count;i++)
+            {
+                Google.Apis.Drive.v3.Data.File file = files[i];
+
+                // Process the list of files found in the directory.
+                string[] fileEntries = Directory.GetFiles(filepath);
+                foreach (string fileName in fileEntries)
+                {
+                    var md5 = System.Security.Cryptography.MD5.Create();
+                    var stream = File.OpenRead(fileName);
+
+                    var hash = md5.ComputeHash(stream);
+                    var md5String = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                    if (md5String == file.Md5Checksum)
+                    {
+                        files.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+        }
 
         string GetFolderIdFromLink(string link)
         {
@@ -95,6 +120,8 @@ namespace GalaxyRP_Launcher
                     i--;
                 }
             }
+
+            compareLocalFilesWithCloud();
 
             return originalFileList;
         }
