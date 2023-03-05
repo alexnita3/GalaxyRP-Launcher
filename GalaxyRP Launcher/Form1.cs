@@ -18,6 +18,7 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.Download;
 using System.Reflection;
+using System.Windows;
 
 namespace GalaxyRP_Launcher
 {
@@ -112,54 +113,77 @@ namespace GalaxyRP_Launcher
             return files;
         }
 
-        private async Task DownloadFile(string fileId)
+        private int GetSizeOfSelectedItem()
+        {
+            return (int)files[listBox1.SelectedIndex].Size;
+        }
+
+        // Asynchronous event handler
+        private async void StartDownloadAsync(string fileId)
         {
             DriveService service = await CreateService();
 
+            //var fileId = "1QETWTnkIp9q6O35Rm99qC6LsJ4Gdg3I5";
+
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
+            progressBar1.Value = 0;
+
+            // Creating an instance of Progress<T> captures the current 
+            // SynchronizationContext (UI context) to prevent cross threading when updating the ProgressBar
+            IProgress<double> progressReporter =
+              new Progress<double>(value => progressBar1.Value =(int) value);
+
+            await DownloadAsync(progressReporter, fileId);
+        }
+
+
+        private async Task DownloadAsync(IProgress<double>  progressReporter, string fileId)
+        {
+            DriveService service = await CreateService();
+
+            var streamDownload = new MemoryStream();
+
             var request = service.Files.Get(fileId);
-            var stream = new MemoryStream();
+            var file = request.Execute();
+            long? fileSize = file.Size;
 
-            // Add a handler which will be notified on progress changes.
-            // It will notify on each chunk download and when the
-            // download is completed or failed.
+            // Report progress to UI via the captured UI's SynchronizationContext using IProgress<T>
             request.MediaDownloader.ProgressChanged +=
-                progress =>
-                {
-                    switch (progress.Status)
+              (progress) => ReportProgress(progress, progressReporter, fileSize, streamDownload, file.Name);
+
+            // Execute download asynchronous
+            await Task.Run(() => request.Download(streamDownload));
+        }
+
+
+        private void ReportProgress(IDownloadProgress progress, IProgress<double> progressReporter, long? fileSize, MemoryStream streamDownload, string fileName)
+        {
+            switch (progress.Status)
+            {
+                case DownloadStatus.Downloading:
                     {
-                        case DownloadStatus.Downloading:
-                            {
-                                Console.WriteLine(progress.BytesDownloaded);
-                                break;
-                            }
-                        case DownloadStatus.Completed:
-                            {
-                                Console.WriteLine("Download complete.");
-                                break;
-                            }
-                        case DownloadStatus.Failed:
-                            {
-                                Console.WriteLine("Download failed.");
-                                break;
-                            }
+                        double progressValue = Convert.ToDouble(progress.BytesDownloaded * 100 / fileSize);
+
+                        // Update the ProgressBar on the UI thread
+                        progressReporter.Report(progressValue);
+                        break;
                     }
-                };
-            request.Download(stream);
-
-            //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            filePath += "\\" + GetCurrentSelectedFileName();
-
-            FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-
-            stream.WriteTo(fileStream);
-
-            fileStream.Close();
-
-            stream.Dispose();
-            stream.Close();
+                case DownloadStatus.Completed:
+                    {
+                        Console.WriteLine("Download complete.");
+                        using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate))
+                        {
+                            streamDownload.WriteTo(fs);
+                            fs.Flush();
+                        }
+                        break;
+                    }
+                case DownloadStatus.Failed:
+                    {
+                        break;
+                    }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -167,7 +191,7 @@ namespace GalaxyRP_Launcher
 
             string selectedFileId = GetCurrentSelectedFileId();
 
-            DownloadFile(selectedFileId);
+            StartDownloadAsync(selectedFileId);
             
         }
     }
