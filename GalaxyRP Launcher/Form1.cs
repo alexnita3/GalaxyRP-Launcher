@@ -85,17 +85,29 @@ namespace GalaxyRP_Launcher
             DriveService service = await CreateService();
 
             var testRequest = service.Files.List();
+            testRequest.SupportsAllDrives = true;
+            testRequest.SupportsTeamDrives = true;
+            testRequest.IncludeItemsFromAllDrives = true;
+            testRequest.Q = "parents in '1krZva8NV7BBDsivrRiu0keOfQ-y_pEyS'";
 
-            FileList filelist = testRequest.Execute();
+            try
+            {
+                FileList filelist = testRequest.Execute();
+                files = filelist.Files;
+            }
+            catch (Exception e)
+            {
+                int i = 0;
+            }
 
-            files = filelist.Files;
+
 
             files = ProcessFileList(files);
 
             foreach (Google.Apis.Drive.v3.Data.File file in files)
             {
                 listBox1.Items.Add(file.Name);
-                
+
             }
             return files;
         }
