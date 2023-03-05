@@ -105,6 +105,8 @@ namespace GalaxyRP_Launcher
 
             files = ProcessFileList(files);
 
+            listBox1.Items.Clear();
+
             foreach (Google.Apis.Drive.v3.Data.File file in files)
             {
                 listBox1.Items.Add(file.Name);
@@ -196,6 +198,14 @@ namespace GalaxyRP_Launcher
 
             StartDownloadAsync(selectedFileId);
             
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            label_filename.Text = files[listBox1.SelectedIndex].Name;
+            label_version_number.Text = files[listBox1.SelectedIndex].Version.ToString();
+            label_author.Text = files[listBox1.SelectedIndex].Owners[0].DisplayName;
+            label_last_changed.Text = files[listBox1.SelectedIndex].ModifiedTime.ToString();
         }
     }
 }
