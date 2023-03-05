@@ -33,7 +33,7 @@ namespace GalaxyRP_Launcher
 
             for(int i = 0; i < originalFileList.Count; i++)
             {
-                if (!originalFileList[i].Name.Contains(".pk3"))
+                if (originalFileList[i].FullFileExtension != "pk3")
                 {
                     originalFileList.RemoveAt(i);
                     i--;
@@ -89,6 +89,7 @@ namespace GalaxyRP_Launcher
             testRequest.SupportsTeamDrives = true;
             testRequest.IncludeItemsFromAllDrives = true;
             testRequest.Q = "parents in '1krZva8NV7BBDsivrRiu0keOfQ-y_pEyS'";
+            testRequest.Fields = "*";
 
             try
             {
@@ -99,7 +100,6 @@ namespace GalaxyRP_Launcher
             {
                 int i = 0;
             }
-
 
 
             files = ProcessFileList(files);
