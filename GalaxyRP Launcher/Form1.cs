@@ -54,7 +54,7 @@ namespace GalaxyRP_Launcher
             string theValue = string.Empty;
             string theDescription = string.Empty;
             string theLevel = string.Empty;
-            string pattern = @".*[/=]([01A-Z][-_[:alnum:]]+)([?/].*|$)"; // continue the pattern for your needs
+            string pattern = ".*[/=]([01A-Z][-_[:alnum:]]+)([?/].*|$)"; // continue the pattern for your needs
             Regex rx = new Regex(pattern);
 
             Match m = rx.Match(searchString);
@@ -81,7 +81,7 @@ namespace GalaxyRP_Launcher
             textBox_server_ip.Text = serverIP;
             comboBox_client_mod.Text = clientMod;
             textBox_google_drive_link.Text = googleDriveLink;
-            //googleDriveFolderId = GetFolderIdFromLink(googleDriveLink);
+            googleDriveFolderId = googleDriveLink.Substring(googleDriveLink.Length - 33);
         }
 
         IList<Google.Apis.Drive.v3.Data.File> ProcessFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
