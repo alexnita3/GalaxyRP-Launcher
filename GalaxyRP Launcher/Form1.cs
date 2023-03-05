@@ -16,6 +16,7 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Google.Apis.Download;
 
 namespace GalaxyRP_Launcher
 {
@@ -26,9 +27,27 @@ namespace GalaxyRP_Launcher
             InitializeComponent();
         }
 
+        IList<Google.Apis.Drive.v3.Data.File> ProcessFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
+        {
+
+            for(int i = 0; i < originalFileList.Count; i++)
+            {
+                if (!originalFileList[i].Name.Contains(".pk3"))
+                {
+                    originalFileList.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            return originalFileList;
+        }
+
+
+        IList<Google.Apis.Drive.v3.Data.File> files;
+
         private void button1_Click(object sender, EventArgs e)
         {
-            var filelist = GetFileList();
+             var filelist = GetFileList();
         }
 
         private async Task<DriveService> CreateService()
@@ -52,7 +71,7 @@ namespace GalaxyRP_Launcher
             return service;
         }
 
-        private async Task<FileList> GetFileList()
+        private async Task<IList<Google.Apis.Drive.v3.Data.File>> GetFileList()
         {
             DriveService service = await CreateService();
 
@@ -60,11 +79,69 @@ namespace GalaxyRP_Launcher
 
             FileList filelist = testRequest.Execute();
 
-            foreach(Google.Apis.Drive.v3.Data.File file in filelist.Files)
+            files = filelist.Files;
+
+            files = ProcessFileList(files);
+
+            foreach (Google.Apis.Drive.v3.Data.File file in files)
             {
                 listBox1.Items.Add(file.Name);
+                
             }
-            return filelist;
+            return files;
+        }
+
+        private async Task DownloadFile(string fileId)
+        {
+            DriveService service = await CreateService();
+
+            var request = service.Files.Get(fileId);
+            var stream = new MemoryStream();
+
+            // Add a handler which will be notified on progress changes.
+            // It will notify on each chunk download and when the
+            // download is completed or failed.
+            request.MediaDownloader.ProgressChanged +=
+                progress =>
+                {
+                    switch (progress.Status)
+                    {
+                        case DownloadStatus.Downloading:
+                            {
+                                Console.WriteLine(progress.BytesDownloaded);
+                                break;
+                            }
+                        case DownloadStatus.Completed:
+                            {
+                                Console.WriteLine("Download complete.");
+                                break;
+                            }
+                        case DownloadStatus.Failed:
+                            {
+                                Console.WriteLine("Download failed.");
+                                break;
+                            }
+                    }
+                };
+            request.Download(stream);
+
+            FileStream fileStream = new FileStream("d:\\Sola_Terrik.pk3", FileMode.Create, FileAccess.Write);
+
+            stream.WriteTo(fileStream);
+
+            fileStream.Close();
+
+            stream.Dispose();
+            stream.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            string selectedFileId = files[listBox1.SelectedIndex].Id;
+
+            DownloadFile(selectedFileId);
+            
         }
     }
 }
