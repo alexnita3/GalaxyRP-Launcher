@@ -48,9 +48,21 @@ namespace GalaxyRP_Launcher
                 ApplicationName = "GalaxyRP Launcher",
             });
 
-            var filelist = await service.Files.List().ExecuteAsync();
+            //var filelist = await service.Files.List().ExecuteAsync();
+            var testRequest = service.Files.List();
 
-            listBox1.Items.Add(filelist);
+            //try
+            //{
+                var filelist = testRequest.Execute();
+            //}catch (Exception e)
+            //{
+            //    return;
+            //}
+            foreach(Google.Apis.Drive.v3.Data.File file in filelist.Files)
+            {
+                listBox1.Items.Add(file.Name);
+            }
+            //listBox1.Items.Add(filelist);
         }
     }
 }
