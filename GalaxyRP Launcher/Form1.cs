@@ -81,7 +81,7 @@ namespace GalaxyRP_Launcher
             textBox_server_ip.Text = serverIP;
             comboBox_client_mod.Text = clientMod;
             textBox_google_drive_link.Text = googleDriveLink;
-            googleDriveFolderId = GetFolderIdFromLink(googleDriveLink);
+            //googleDriveFolderId = GetFolderIdFromLink(googleDriveLink);
         }
 
         IList<Google.Apis.Drive.v3.Data.File> ProcessFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
