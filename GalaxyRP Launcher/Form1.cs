@@ -27,7 +27,15 @@ namespace GalaxyRP_Launcher
         public Form1()
         {
             InitializeComponent();
+            tabControl1.TabPages[0].Text = "File Manager";
+            tabControl1.TabPages[1].Text = "Launcher Settings";
         }
+
+        IList<Google.Apis.Drive.v3.Data.File> files;
+        string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
+        string googleDriveFolderId = "1krZva8NV7BBDsivrRiu0keOfQ-y_pEyS";
+
+
 
         IList<Google.Apis.Drive.v3.Data.File> ProcessFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
         {
@@ -52,8 +60,6 @@ namespace GalaxyRP_Launcher
         {
             return files[listBox1.SelectedIndex].Id;
         }
-
-        IList<Google.Apis.Drive.v3.Data.File> files;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -89,7 +95,7 @@ namespace GalaxyRP_Launcher
             testRequest.SupportsAllDrives = true;
             testRequest.SupportsTeamDrives = true;
             testRequest.IncludeItemsFromAllDrives = true;
-            testRequest.Q = "parents in '1krZva8NV7BBDsivrRiu0keOfQ-y_pEyS'";
+            testRequest.Q = "parents in '" + googleDriveFolderId +"'";
             testRequest.Fields = "*";
 
             try
@@ -176,7 +182,7 @@ namespace GalaxyRP_Launcher
                 case DownloadStatus.Completed:
                     {
                         Console.WriteLine("Download complete.");
-                        using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate))
+                        using (FileStream fs = new FileStream(filepath + "\\" + fileName, FileMode.OpenOrCreate))
                         {
                             progressReporter.Report(100);
                             streamDownload.WriteTo(fs);
@@ -203,6 +209,7 @@ namespace GalaxyRP_Launcher
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             label_filename.Text = files[listBox1.SelectedIndex].Name;
+            label_filesize.Text = (files[listBox1.SelectedIndex].Size / 1000000).ToString() + "MB";
             label_version_number.Text = files[listBox1.SelectedIndex].Version.ToString();
             label_author.Text = files[listBox1.SelectedIndex].Owners[0].DisplayName;
             label_last_changed.Text = files[listBox1.SelectedIndex].ModifiedTime.ToString();
