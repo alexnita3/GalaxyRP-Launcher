@@ -19,6 +19,7 @@ using Google.Apis.Util.Store;
 using Google.Apis.Download;
 using System.Reflection;
 using System.Windows;
+using System.Web.Script.Serialization;
 
 namespace GalaxyRP_Launcher
 {
@@ -29,6 +30,12 @@ namespace GalaxyRP_Launcher
             InitializeComponent();
             tabControl1.TabPages[0].Text = "File Manager";
             tabControl1.TabPages[1].Text = "Launcher Settings";
+
+            string json = System.IO.File.ReadAllText("launcher_config.cfg");
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            Dictionary<string, object> dic = serializer.Deserialize<Dictionary<string, object>>(json);
+
+            tabControl1.TabPages[0].Text = "File Manager";
         }
 
         IList<Google.Apis.Drive.v3.Data.File> files;
