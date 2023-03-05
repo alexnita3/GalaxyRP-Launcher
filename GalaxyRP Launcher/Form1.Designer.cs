@@ -58,6 +58,14 @@ namespace GalaxyRP_Launcher
             this.label10 = new System.Windows.Forms.Label();
             this.textBox_resolution_x = new System.Windows.Forms.TextBox();
             this.textBox_resolution_y = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.comboBox_server_selection = new System.Windows.Forms.ComboBox();
+            this.textBox_server_name = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBox_server_name_2 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox_server_ip_2 = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -96,7 +104,7 @@ namespace GalaxyRP_Launcher
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(266, 218);
+            this.progressBar1.Location = new System.Drawing.Point(266, 170);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(516, 23);
             this.progressBar1.TabIndex = 3;
@@ -118,7 +126,7 @@ namespace GalaxyRP_Launcher
             this.groupBox1.Size = new System.Drawing.Size(516, 129);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "File Details";
             // 
             // label_last_changed
             // 
@@ -213,6 +221,8 @@ namespace GalaxyRP_Launcher
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.comboBox_server_selection);
+            this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.listBox1);
             this.tabPage1.Controls.Add(this.progressBar1);
             this.tabPage1.Controls.Add(this.groupBox1);
@@ -228,6 +238,12 @@ namespace GalaxyRP_Launcher
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.textBox_server_name_2);
+            this.tabPage2.Controls.Add(this.label12);
+            this.tabPage2.Controls.Add(this.textBox_server_ip_2);
+            this.tabPage2.Controls.Add(this.label13);
+            this.tabPage2.Controls.Add(this.textBox_server_name);
+            this.tabPage2.Controls.Add(this.label11);
             this.tabPage2.Controls.Add(this.textBox_resolution_y);
             this.tabPage2.Controls.Add(this.textBox_resolution_x);
             this.tabPage2.Controls.Add(this.label10);
@@ -250,7 +266,7 @@ namespace GalaxyRP_Launcher
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 68);
+            this.label8.Location = new System.Drawing.Point(3, 152);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(78, 17);
             this.label8.TabIndex = 3;
@@ -259,7 +275,7 @@ namespace GalaxyRP_Launcher
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 39);
+            this.label7.Location = new System.Drawing.Point(3, 123);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(125, 17);
             this.label7.TabIndex = 2;
@@ -276,9 +292,9 @@ namespace GalaxyRP_Launcher
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(6, 202);
+            this.button3.Location = new System.Drawing.Point(319, 212);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(112, 54);
+            this.button3.Size = new System.Drawing.Size(133, 44);
             this.button3.TabIndex = 0;
             this.button3.Text = "Save";
             this.button3.UseVisualStyleBackColor = true;
@@ -301,7 +317,7 @@ namespace GalaxyRP_Launcher
             // 
             // textBox_google_drive_link
             // 
-            this.textBox_google_drive_link.Location = new System.Drawing.Point(139, 36);
+            this.textBox_google_drive_link.Location = new System.Drawing.Point(139, 120);
             this.textBox_google_drive_link.Name = "textBox_google_drive_link";
             this.textBox_google_drive_link.Size = new System.Drawing.Size(643, 22);
             this.textBox_google_drive_link.TabIndex = 5;
@@ -313,7 +329,7 @@ namespace GalaxyRP_Launcher
             "BaseJKA",
             "OpenJK",
             "EternalJK (Experimental)"});
-            this.comboBox_client_mod.Location = new System.Drawing.Point(139, 65);
+            this.comboBox_client_mod.Location = new System.Drawing.Point(139, 149);
             this.comboBox_client_mod.Name = "comboBox_client_mod";
             this.comboBox_client_mod.Size = new System.Drawing.Size(121, 24);
             this.comboBox_client_mod.TabIndex = 6;
@@ -321,7 +337,7 @@ namespace GalaxyRP_Launcher
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 95);
+            this.label9.Location = new System.Drawing.Point(3, 179);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(79, 17);
             this.label9.TabIndex = 7;
@@ -330,7 +346,7 @@ namespace GalaxyRP_Launcher
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(212, 99);
+            this.label10.Location = new System.Drawing.Point(212, 183);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(17, 17);
             this.label10.TabIndex = 8;
@@ -338,17 +354,82 @@ namespace GalaxyRP_Launcher
             // 
             // textBox_resolution_x
             // 
-            this.textBox_resolution_x.Location = new System.Drawing.Point(139, 96);
+            this.textBox_resolution_x.Location = new System.Drawing.Point(139, 180);
             this.textBox_resolution_x.Name = "textBox_resolution_x";
             this.textBox_resolution_x.Size = new System.Drawing.Size(67, 22);
             this.textBox_resolution_x.TabIndex = 9;
             // 
             // textBox_resolution_y
             // 
-            this.textBox_resolution_y.Location = new System.Drawing.Point(235, 96);
+            this.textBox_resolution_y.Location = new System.Drawing.Point(235, 180);
             this.textBox_resolution_y.Name = "textBox_resolution_y";
             this.textBox_resolution_y.Size = new System.Drawing.Size(67, 22);
             this.textBox_resolution_y.TabIndex = 10;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(266, 199);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(185, 51);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Launch Game";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // comboBox_server_selection
+            // 
+            this.comboBox_server_selection.FormattingEnabled = true;
+            this.comboBox_server_selection.Location = new System.Drawing.Point(457, 199);
+            this.comboBox_server_selection.Name = "comboBox_server_selection";
+            this.comboBox_server_selection.Size = new System.Drawing.Size(325, 24);
+            this.comboBox_server_selection.TabIndex = 6;
+            // 
+            // textBox_server_name
+            // 
+            this.textBox_server_name.Location = new System.Drawing.Point(139, 35);
+            this.textBox_server_name.Name = "textBox_server_name";
+            this.textBox_server_name.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_name.TabIndex = 12;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 38);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(95, 17);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "Server Name:";
+            // 
+            // textBox_server_name_2
+            // 
+            this.textBox_server_name_2.Location = new System.Drawing.Point(139, 91);
+            this.textBox_server_name_2.Name = "textBox_server_name_2";
+            this.textBox_server_name_2.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_name_2.TabIndex = 16;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 94);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(107, 17);
+            this.label12.TabIndex = 15;
+            this.label12.Text = "Server 2 Name:";
+            // 
+            // textBox_server_ip_2
+            // 
+            this.textBox_server_ip_2.Location = new System.Drawing.Point(139, 63);
+            this.textBox_server_ip_2.Name = "textBox_server_ip_2";
+            this.textBox_server_ip_2.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_ip_2.TabIndex = 14;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 66);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(82, 17);
+            this.label13.TabIndex = 13;
+            this.label13.Text = "Server 2 IP:";
             // 
             // Form1
             // 
@@ -399,6 +480,14 @@ namespace GalaxyRP_Launcher
         private System.Windows.Forms.TextBox textBox_resolution_x;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ComboBox comboBox_server_selection;
+        private System.Windows.Forms.TextBox textBox_server_name_2;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox_server_ip_2;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBox_server_name;
+        private System.Windows.Forms.Label label11;
     }
 }
 

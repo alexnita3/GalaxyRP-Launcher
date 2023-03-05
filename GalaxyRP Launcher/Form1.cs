@@ -42,12 +42,15 @@ namespace GalaxyRP_Launcher
 
         IList<Google.Apis.Drive.v3.Data.File> files;
         string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
-        string googleDriveFolderId = "1krZva8NV7BBDsivrRiu0keOfQ-y_pEyS";
+        string googleDriveFolderId = "";
         string googleDriveLink = "";
         int resolution_x = 0;
         int resolution_y = 0;
         string clientMod = "BaseJKA";
-        string serverIP = "86.160.153.128:27340";
+        string serverIP = "";
+        string serverName = "";
+        string serverIP2 = "";
+        string server2Name = "";
 
         void compareLocalFilesWithCloud()
         {
@@ -100,13 +103,27 @@ namespace GalaxyRP_Launcher
             clientMod = dictionary["clientMod"];
             googleDriveLink = dictionary["googleDriveLink"];
             serverIP = dictionary["serverIP"];
+            serverName = dictionary["serverName"];
+            serverIP2 = dictionary["serverIP2"];
+            server2Name = dictionary["server2Name"];
 
             textBox_resolution_x.Text = resolution_x.ToString();
             textBox_resolution_y.Text = resolution_y.ToString();
             textBox_server_ip.Text = serverIP;
+            textBox_server_name.Text = serverName;
+            textBox_server_ip_2.Text = serverIP2;
+            textBox_server_name_2.Text = server2Name;
             comboBox_client_mod.Text = clientMod;
             textBox_google_drive_link.Text = googleDriveLink;
             googleDriveFolderId = googleDriveLink.Substring(googleDriveLink.Length - 33);
+
+            
+            comboBox_server_selection.Items.Add(serverName+ " | " + serverIP);
+            if (serverIP2 != "")
+            {
+                comboBox_server_selection.Items.Add(server2Name + " | " + serverIP2);
+            }
+            comboBox_server_selection.Text = comboBox_server_selection.Items[0].ToString();
         }
 
         IList<Google.Apis.Drive.v3.Data.File> ProcessFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
