@@ -8,3 +8,20 @@ D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\Galaxy
 D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.csproj.CoreCompileInputs.cache
 D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.exe
 D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.pdb
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Auth.dll
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Auth.PlatformServices.dll
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Core.dll
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.dll
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Drive.v3.dll
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.PlatformServices.dll
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Newtonsoft.Json.dll
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.pdb
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.xml
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Auth.pdb
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Auth.xml
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Core.pdb
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Core.xml
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Drive.v3.pdb
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Google.Apis.Drive.v3.xml
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\Newtonsoft.Json.xml
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.csproj.CopyComplete
