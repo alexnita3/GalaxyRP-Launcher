@@ -1,0 +1,10 @@
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\GalaxyRP Launcher.exe.config
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\GalaxyRP Launcher.exe
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\bin\Debug\GalaxyRP Launcher.pdb
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.csproj.AssemblyReference.cache
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP_Launcher.Form1.resources
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP_Launcher.Properties.Resources.resources
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.csproj.GenerateResource.cache
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.csproj.CoreCompileInputs.cache
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.exe
+D:\Development\Repositories\GalaxyRP Launcher\GalaxyRP Launcher\obj\Debug\GalaxyRP Launcher.pdb
