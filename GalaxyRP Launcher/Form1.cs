@@ -28,41 +28,43 @@ namespace GalaxyRP_Launcher
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Test();
+            var filelist = GetFileList();
         }
 
-        private async Task Test()
+        private async Task<DriveService> CreateService()
         {
             UserCredential credential;
-            using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read)) {
+            using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
+            {
 
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     new[] { DriveService.Scope.DriveReadonly },
-                    "user", CancellationToken.None, new FileDataStore("Drive.ListMyFiles"));   
+                    "user", CancellationToken.None, new FileDataStore("Drive.ListMyFiles"));
             }
 
-            var service = new DriveService(new BaseClientService.Initializer()
+            DriveService service = new DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
                 ApplicationName = "GalaxyRP Launcher",
             });
 
-            //var filelist = await service.Files.List().ExecuteAsync();
+            return service;
+        }
+
+        private async Task<FileList> GetFileList()
+        {
+            DriveService service = await CreateService();
+
             var testRequest = service.Files.List();
 
-            //try
-            //{
-                var filelist = testRequest.Execute();
-            //}catch (Exception e)
-            //{
-            //    return;
-            //}
+            FileList filelist = testRequest.Execute();
+
             foreach(Google.Apis.Drive.v3.Data.File file in filelist.Files)
             {
                 listBox1.Items.Add(file.Name);
             }
-            //listBox1.Items.Add(filelist);
+            return filelist;
         }
     }
 }
