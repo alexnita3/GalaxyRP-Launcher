@@ -51,13 +51,13 @@ namespace GalaxyRP_Launcher
             this.label6 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.label_filesize = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox_server_ip = new System.Windows.Forms.TextBox();
+            this.textBox_google_drive_link = new System.Windows.Forms.TextBox();
+            this.comboBox_client_mod = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox_resolution_x = new System.Windows.Forms.TextBox();
+            this.textBox_resolution_y = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -228,13 +228,13 @@ namespace GalaxyRP_Launcher
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.textBox4);
-            this.tabPage2.Controls.Add(this.textBox3);
+            this.tabPage2.Controls.Add(this.textBox_resolution_y);
+            this.tabPage2.Controls.Add(this.textBox_resolution_x);
             this.tabPage2.Controls.Add(this.label10);
             this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.comboBox1);
-            this.tabPage2.Controls.Add(this.textBox2);
-            this.tabPage2.Controls.Add(this.textBox1);
+            this.tabPage2.Controls.Add(this.comboBox_client_mod);
+            this.tabPage2.Controls.Add(this.textBox_google_drive_link);
+            this.tabPage2.Controls.Add(this.textBox_server_ip);
             this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Controls.Add(this.label6);
@@ -292,31 +292,31 @@ namespace GalaxyRP_Launcher
             this.label_filesize.TabIndex = 9;
             this.label_filesize.Text = "label9";
             // 
-            // textBox1
+            // textBox_server_ip
             // 
-            this.textBox1.Location = new System.Drawing.Point(139, 7);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(643, 22);
-            this.textBox1.TabIndex = 4;
+            this.textBox_server_ip.Location = new System.Drawing.Point(139, 7);
+            this.textBox_server_ip.Name = "textBox_server_ip";
+            this.textBox_server_ip.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_ip.TabIndex = 4;
             // 
-            // textBox2
+            // textBox_google_drive_link
             // 
-            this.textBox2.Location = new System.Drawing.Point(139, 36);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(643, 22);
-            this.textBox2.TabIndex = 5;
+            this.textBox_google_drive_link.Location = new System.Drawing.Point(139, 36);
+            this.textBox_google_drive_link.Name = "textBox_google_drive_link";
+            this.textBox_google_drive_link.Size = new System.Drawing.Size(643, 22);
+            this.textBox_google_drive_link.TabIndex = 5;
             // 
-            // comboBox1
+            // comboBox_client_mod
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBox_client_mod.FormattingEnabled = true;
+            this.comboBox_client_mod.Items.AddRange(new object[] {
             "BaseJKA",
             "OpenJK",
             "EternalJK (Experimental)"});
-            this.comboBox1.Location = new System.Drawing.Point(139, 65);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 24);
-            this.comboBox1.TabIndex = 6;
+            this.comboBox_client_mod.Location = new System.Drawing.Point(139, 65);
+            this.comboBox_client_mod.Name = "comboBox_client_mod";
+            this.comboBox_client_mod.Size = new System.Drawing.Size(121, 24);
+            this.comboBox_client_mod.TabIndex = 6;
             // 
             // label9
             // 
@@ -336,19 +336,19 @@ namespace GalaxyRP_Launcher
             this.label10.TabIndex = 8;
             this.label10.Text = "X";
             // 
-            // textBox3
+            // textBox_resolution_x
             // 
-            this.textBox3.Location = new System.Drawing.Point(139, 96);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(67, 22);
-            this.textBox3.TabIndex = 9;
+            this.textBox_resolution_x.Location = new System.Drawing.Point(139, 96);
+            this.textBox_resolution_x.Name = "textBox_resolution_x";
+            this.textBox_resolution_x.Size = new System.Drawing.Size(67, 22);
+            this.textBox_resolution_x.TabIndex = 9;
             // 
-            // textBox4
+            // textBox_resolution_y
             // 
-            this.textBox4.Location = new System.Drawing.Point(235, 96);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(67, 22);
-            this.textBox4.TabIndex = 10;
+            this.textBox_resolution_y.Location = new System.Drawing.Point(235, 96);
+            this.textBox_resolution_y.Name = "textBox_resolution_y";
+            this.textBox_resolution_y.Size = new System.Drawing.Size(67, 22);
+            this.textBox_resolution_y.TabIndex = 10;
             // 
             // Form1
             // 
@@ -392,11 +392,11 @@ namespace GalaxyRP_Launcher
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label_filesize;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.ComboBox comboBox_client_mod;
+        private System.Windows.Forms.TextBox textBox_google_drive_link;
+        private System.Windows.Forms.TextBox textBox_server_ip;
+        private System.Windows.Forms.TextBox textBox_resolution_y;
+        private System.Windows.Forms.TextBox textBox_resolution_x;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
     }

@@ -20,6 +20,7 @@ using Google.Apis.Download;
 using System.Reflection;
 using System.Windows;
 using System.Web.Script.Serialization;
+using System.Text.RegularExpressions;
 
 namespace GalaxyRP_Launcher
 {
@@ -33,16 +34,55 @@ namespace GalaxyRP_Launcher
 
             string json = System.IO.File.ReadAllText("launcher_config.cfg");
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            Dictionary<string, object> dic = serializer.Deserialize<Dictionary<string, object>>(json);
+            Dictionary<string, string> dic = serializer.Deserialize<Dictionary<string, string>>(json);
 
-            tabControl1.TabPages[0].Text = "File Manager";
+            GetSettingsFromConfig(dic);
         }
 
         IList<Google.Apis.Drive.v3.Data.File> files;
         string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
         string googleDriveFolderId = "1krZva8NV7BBDsivrRiu0keOfQ-y_pEyS";
+        string googleDriveLink = "";
+        int resolution_x = 0;
+        int resolution_y = 0;
+        string clientMod = "BaseJKA";
+        string serverIP = "86.160.153.128:27340";
 
+        string GetFolderIdFromLink(string link)
+        {
+            string searchString = link;
+            string theValue = string.Empty;
+            string theDescription = string.Empty;
+            string theLevel = string.Empty;
+            string pattern = @".*[/=]([01A-Z][-_[:alnum:]]+)([?/].*|$)"; // continue the pattern for your needs
+            Regex rx = new Regex(pattern);
 
+            Match m = rx.Match(searchString);
+
+            if (m.Success)
+            {
+                string folderId = m.Groups[0].Value;
+                return folderId;
+            }
+
+            return 0.ToString();
+        }
+
+        void GetSettingsFromConfig(Dictionary<string, string> dictionary)
+        {
+            resolution_x = Int32.Parse(dictionary["resolution_x"]);
+            resolution_y = Int32.Parse(dictionary["resolution_y"]);
+            clientMod = dictionary["clientMod"];
+            googleDriveLink = dictionary["googleDriveLink"];
+            serverIP = dictionary["serverIP"];
+
+            textBox_resolution_x.Text = resolution_x.ToString();
+            textBox_resolution_y.Text = resolution_y.ToString();
+            textBox_server_ip.Text = serverIP;
+            comboBox_client_mod.Text = clientMod;
+            textBox_google_drive_link.Text = googleDriveLink;
+            googleDriveFolderId = GetFolderIdFromLink(googleDriveLink);
+        }
 
         IList<Google.Apis.Drive.v3.Data.File> ProcessFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
         {
