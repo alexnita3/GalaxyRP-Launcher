@@ -113,9 +113,9 @@ namespace GalaxyRP_Launcher
             return files;
         }
 
-        private int GetSizeOfSelectedItem()
+        private long GetSizeOfSelectedItem()
         {
-            return (int)files[listBox1.SelectedIndex].Size;
+            return (long)files[listBox1.SelectedIndex].Size;
         }
 
         // Asynchronous event handler
@@ -146,7 +146,8 @@ namespace GalaxyRP_Launcher
 
             var request = service.Files.Get(fileId);
             var file = request.Execute();
-            long? fileSize = file.Size;
+            //long? fileSize = file.Size;
+            long? fileSize = GetSizeOfSelectedItem();
 
             // Report progress to UI via the captured UI's SynchronizationContext using IProgress<T>
             request.MediaDownloader.ProgressChanged +=
@@ -167,6 +168,7 @@ namespace GalaxyRP_Launcher
 
                         // Update the ProgressBar on the UI thread
                         progressReporter.Report(progressValue);
+                        //progressBar1.Value = (int)(progress.BytesDownloaded * 100 / fileSize);
                         break;
                     }
                 case DownloadStatus.Completed:
@@ -174,6 +176,7 @@ namespace GalaxyRP_Launcher
                         Console.WriteLine("Download complete.");
                         using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate))
                         {
+                            progressReporter.Report(100);
                             streamDownload.WriteTo(fs);
                             fs.Flush();
                         }
