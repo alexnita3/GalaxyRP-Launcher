@@ -68,7 +68,7 @@ namespace GalaxyRP_Launcher
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     new[] { DriveService.Scope.DriveReadonly },
-                    "user", CancellationToken.None, new FileDataStore("Drive.ListMyFiles"));
+                    "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));
             }
 
             DriveService service = new DriveService(new BaseClientService.Initializer()
