@@ -46,19 +46,26 @@ namespace GalaxyRP_Launcher
             label_last_changed.Text = "";
         }
 
+        //GalaxyRP (Alex): This variable will store all the file metadata we get from Google drive.
         IList<Google.Apis.Drive.v3.Data.File> files;
+        //GalaxyRP (Alex): Location of the base folder.
         string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
+        //GalaxyRP (Alex): Id of the drive folder we'll be interacting with.
         string googleDriveFolderId = "";
+        //GalaxyRP (Alex): Full link that the user imputs in the settings tab. Needs to be trimmed before it's useable.
         string googleDriveLink = "";
         int resolution_x = 0;
         int resolution_y = 0;
+        //GalaxyRP (Alex): Client mod to use when running the game. BaseJKA and OpenJK are so far the only valid options.
         string clientMod = "BaseJKA";
         string serverIP = "";
         string serverName = "";
         string serverIP2 = "";
         string server2Name = "";
+        //GalaxyRP (Alex): Extra arguments to run with the game.
         string otherArguments = "";
 
+        //GalaxyRP (Alex): Checks the checksum of each file against the ones in the cloud. (The ones stored in files that were grabbed via the api)
         void compareLocalFilesWithCloud()
         {
             for(int i = 0;i<files.Count;i++)
@@ -83,26 +90,7 @@ namespace GalaxyRP_Launcher
             }
         }
 
-        string GetFolderIdFromLink(string link)
-        {
-            string searchString = link;
-            string theValue = string.Empty;
-            string theDescription = string.Empty;
-            string theLevel = string.Empty;
-            string pattern = ".*[/=]([01A-Z][-_[:alnum:]]+)([?/].*|$)"; // continue the pattern for your needs
-            Regex rx = new Regex(pattern);
-
-            Match m = rx.Match(searchString);
-
-            if (m.Success)
-            {
-                string folderId = m.Groups[0].Value;
-                return folderId;
-            }
-
-            return 0.ToString();
-        }
-
+        //GalaxyRP (Alex): Reads the config json, and fills in all the variables and text fields in the app.
         void GetSettingsFromConfig(Dictionary<string, string> dictionary)
         {
             resolution_x = Int32.Parse(dictionary["resolution_x"]);
@@ -134,7 +122,8 @@ namespace GalaxyRP_Launcher
             comboBox_server_selection.Text = comboBox_server_selection.Items[0].ToString();
         }
 
-        IList<Google.Apis.Drive.v3.Data.File> ProcessFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
+        //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files, and that those files are updates that we don't have.
+        IList<Google.Apis.Drive.v3.Data.File> FilterFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
         {
 
             for(int i = 0; i < originalFileList.Count; i++)
@@ -151,10 +140,7 @@ namespace GalaxyRP_Launcher
             return originalFileList;
         }
 
-        private string GetCurrentSelectedFileName()
-        {
-            return files[listBox1.SelectedIndex].Name;
-        }
+        //GalaxyRP (Alex): Return the Id of the file that's currently selected in listBox1
         private string GetCurrentSelectedFileId()
         {
             return files[listBox1.SelectedIndex].Id;
@@ -166,7 +152,8 @@ namespace GalaxyRP_Launcher
             await GetFileList();
             UnlockControls();
         }
-        
+
+        //GalaxyRP (Alex): Connects to Google Drive via the api key.
         private async Task<DriveService> CreateService()
         {
             UserCredential credential;
@@ -188,6 +175,7 @@ namespace GalaxyRP_Launcher
             return service;
         }
 
+        //GalaxyRP (Alex): Searches google drive for all files, then applies a filter on those. Also fills in listBox1 with values.
         private async Task<IList<Google.Apis.Drive.v3.Data.File>> GetFileList()
         {
             DriveService service = await CreateService();
@@ -210,7 +198,7 @@ namespace GalaxyRP_Launcher
             }
 
 
-            files = ProcessFileList(files);
+            files = FilterFileList(files);
 
             listBox1.Items.Clear();
 
@@ -223,11 +211,7 @@ namespace GalaxyRP_Launcher
             return files;
         }
 
-        private long GetSizeOfSelectedItem()
-        {
-            return (long)files[listBox1.SelectedIndex].Size;
-        }
-
+        //GalaxyRP (Alex): Given an Id, search files for the size in bytes of the item with that id.
         private long GetSizeOfItemWithId(string fileId)
         {
             for(int i = 0; i < files.Count; i++)
@@ -240,7 +224,7 @@ namespace GalaxyRP_Launcher
             return 0;
         }
 
-        // Asynchronous event handler
+        //GalaxyRP (Alex): ASYNCHRONOUS Given a file id, starts to download it from Google Drive.
         private async Task StartDownloadAsync(string fileId)
         {
             DriveService service = await CreateService();
@@ -249,8 +233,8 @@ namespace GalaxyRP_Launcher
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
 
-            // Creating an instance of Progress<T> captures the current 
-            // SynchronizationContext (UI context) to prevent cross threading when updating the ProgressBar
+            //GalaxyRP (Alex): Creating an instance of Progress<T> captures the current 
+            //GalaxyRP (Alex): SynchronizationContext (UI context) to prevent cross threading when updating the ProgressBar
             IProgress<double> progressReporter =
               new Progress<double>(value => progressBar1.Value =(int) value);
 
@@ -259,7 +243,7 @@ namespace GalaxyRP_Launcher
             await GetFileList();
         }
 
-
+        //GalaxyRP (Alex): Manages the ongoing download process.
         private async Task DownloadAsync(IProgress<double>  progressReporter, string fileId)
         {
             DriveService service = await CreateService();
@@ -268,7 +252,6 @@ namespace GalaxyRP_Launcher
 
             var request = service.Files.Get(fileId);
             var file = request.Execute();
-            //long? fileSize = file.Size;
             long? fileSize = GetSizeOfItemWithId(fileId);
 
             // Report progress to UI via the captured UI's SynchronizationContext using IProgress<T>
@@ -279,6 +262,7 @@ namespace GalaxyRP_Launcher
             await Task.Run(() => request.Download(streamDownload));
         }
 
+        //GalaxyRP (Alex): Locks important buttons so that nothing interferes with the download process.
         void LockControls()
         {
             button1.Enabled = false;
@@ -288,7 +272,8 @@ namespace GalaxyRP_Launcher
             listBox1.Enabled = false;
             textBox_google_drive_link.Enabled = false;
         }
-
+        
+        //GalaxyRP (Alex): Unlocks important buttons. Also takes care to not unlock buttons that require other actions to be performed first.
         void UnlockControls()
         {
             button1.Enabled = true;
@@ -306,6 +291,7 @@ namespace GalaxyRP_Launcher
             }
         }
 
+        //GalaxyRP (Alex): Reports on the progress of the current download.
         private void ReportProgress(IDownloadProgress progress, IProgress<double> progressReporter, long? fileSize, MemoryStream streamDownload, string fileName)
         {
             switch (progress.Status)
@@ -317,9 +303,7 @@ namespace GalaxyRP_Launcher
                         {
                             progressValue = 100;
                         }
-                        // Update the ProgressBar on the UI thread
                         progressReporter.Report(progressValue);
-                        //progressBar1.Value = (int)(progress.BytesDownloaded * 100 / fileSize);
                         break;
                     }
                 case DownloadStatus.Completed:
@@ -348,6 +332,7 @@ namespace GalaxyRP_Launcher
             UnlockControls();
         }
 
+        //GalaxyRP (Alex): Updates the file details window by looking up a fileIndex in files.
         private void UpdateFileDetails(int fileIndex)
         {
             label_filename.Text = files[fileIndex].Name;
@@ -357,6 +342,7 @@ namespace GalaxyRP_Launcher
             label_last_changed.Text = files[fileIndex].ModifiedTime.ToString();
         }
 
+        //GalaxyRP (Alex): Things that happen once a user selects another item in listbox1
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateFileDetails(listBox1.SelectedIndex);
