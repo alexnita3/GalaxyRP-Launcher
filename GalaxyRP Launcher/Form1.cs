@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
@@ -18,9 +12,6 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.Download;
 using System.Reflection;
-using System.Windows;
-using System.Web.Script.Serialization;
-using System.Text.RegularExpressions;
 using File = System.IO.File;
 using Newtonsoft.Json;
 using System.Diagnostics;
