@@ -15,6 +15,7 @@ using System.Reflection;
 using File = System.IO.File;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace GalaxyRP_Launcher
 {
@@ -35,15 +36,13 @@ namespace GalaxyRP_Launcher
             tabControl1.TabPages[0].Text = "File Manager";
             tabControl1.TabPages[1].Text = "Launcher Settings";
 
-            if (File.Exists("launcher_config.cfg"))
-            {
-                string json = System.IO.File.ReadAllText("launcher_config.cfg");
-                GetSettingsFromConfig(json);
-            }
-            else
+            if (!File.Exists("launcher_config.cfg"))
             {
                 buildDefaultConfig();
+                
             }
+            string json = System.IO.File.ReadAllText("launcher_config.cfg");
+            GetSettingsFromConfig(json);
 
             label_filename.Text = "";
             label_filesize.Text = "";
@@ -415,7 +414,15 @@ namespace GalaxyRP_Launcher
 
         private void button3_Click(object sender, EventArgs e)
         {
-            saveConfig();
+            if (!Regex.IsMatch(textBox_resolution_x.Text, "^[0-9]*$") || !Regex.IsMatch(textBox_resolution_y.Text, "^[0-9]*$"))
+            {
+                MessageBox.Show("Resolution fields MUST be numbers.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                saveConfig();
+                RefreshControls();
+            }
         }
 
         private async void button5_Click(object sender, EventArgs e)
@@ -477,6 +484,7 @@ namespace GalaxyRP_Launcher
 
             Process.Start(startInfo);
         }
+
     }
     public class LauncherConfig
     {
