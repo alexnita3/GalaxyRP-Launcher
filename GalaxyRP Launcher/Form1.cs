@@ -199,7 +199,7 @@ namespace GalaxyRP_Launcher
                     "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));
             }
 
-            //GalaxyRP (Alex): When releasing, hard code the client secret in so that you don't have to share it.
+            //GalaxyRP (Alex): When releasing, hard code the client secret in so that you don't have to share it. NEVER EVER push a commit where this is shown.
             /*string clientSecrets = "";
 
             byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(clientSecrets);
