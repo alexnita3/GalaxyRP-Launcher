@@ -190,6 +190,7 @@ namespace GalaxyRP_Launcher
         private async Task<DriveService> CreateService()
         {
             UserCredential credential;
+#if DEBUG
             using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
             {
 
@@ -198,9 +199,11 @@ namespace GalaxyRP_Launcher
                     new[] { DriveService.Scope.DriveReadonly },
                     "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));
             }
-
+#endif
             //GalaxyRP (Alex): When releasing, hard code the client secret in so that you don't have to share it. NEVER EVER push a commit where this is shown.
-            /*string clientSecrets = "";
+
+#if !DEBUG
+            string clientSecrets = "";
 
             byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(clientSecrets);
             MemoryStream stream = new MemoryStream(byteArray);
@@ -208,7 +211,8 @@ namespace GalaxyRP_Launcher
             credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     new[] { DriveService.Scope.DriveReadonly },
-                    "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));*/
+                    "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));
+#endif
 
             DriveService service = new DriveService(new BaseClientService.Initializer()
             {
