@@ -86,6 +86,8 @@ namespace GalaxyRP_Launcher
                         files.RemoveAt(i);
                         i--;
                     }
+                    stream.Dispose();
+                    stream.Close();
                 }
             }
         }
