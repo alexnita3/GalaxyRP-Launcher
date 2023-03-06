@@ -59,6 +59,8 @@ namespace GalaxyRP_Launcher
             label_version_number.Text = "";
             label_author.Text = "";
             label_last_changed.Text = "";
+
+            RefreshControls();
         }
 
         void buildDefaultConfig()
@@ -128,14 +130,21 @@ namespace GalaxyRP_Launcher
             }
             textBox_other_arguments.Text = currentConfiguration.otherArguments;
 
-            comboBox_server_selection.Items.Add(currentConfiguration.serverName + " | " + currentConfiguration.serverIP);
+            comboBox_server_selection.Items.Clear();
+            if (currentConfiguration.serverIP != "")
+            {
+                comboBox_server_selection.Items.Add(currentConfiguration.server2Name + " | " + currentConfiguration.serverIP);
+            }
             if (currentConfiguration.serverIP2 != "")
             {
                 comboBox_server_selection.Items.Add(currentConfiguration.server2Name + " | " + currentConfiguration.serverIP2);
             }
-            comboBox_server_selection.Text = comboBox_server_selection.Items[0].ToString();
+            if (comboBox_server_selection.Items.Count > 0)
+            {
+                comboBox_server_selection.Text = comboBox_server_selection.Items[0].ToString();
+            }
         }
-
+        //GalaxyRP (Alex): Saves the current stored config in memory, and also writes it to the config file.
         void saveConfig()
         {
             currentConfiguration.serverIP = textBox_server_ip.Text;
@@ -152,12 +161,12 @@ namespace GalaxyRP_Launcher
             string json = JsonConvert.SerializeObject(currentConfiguration);
             //write string to file
             System.IO.File.WriteAllText("launcher_config.cfg", json);
+            GetSettingsFromConfig(json);
         }
 
         //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files, and that those files are updates that we don't have.
         IList<Google.Apis.Drive.v3.Data.File> FilterFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
         {
-
             for(int i = 0; i < originalFileList.Count; i++)
             {
                 if (originalFileList[i].FullFileExtension != "pk3")
@@ -294,6 +303,13 @@ namespace GalaxyRP_Launcher
             await Task.Run(() => request.Download(streamDownload));
         }
 
+        //GalaxyRP (Alex): Simply a shortcut to perform all the checks necessary to see if buttons that are active should still be active.
+        void RefreshControls()
+        {
+            LockControls();
+            UnlockControls();
+        }
+
         //GalaxyRP (Alex): Locks important buttons so that nothing interferes with the download process.
         void LockControls()
         {
@@ -308,18 +324,26 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Unlocks important buttons. Also takes care to not unlock buttons that require other actions to be performed first.
         void UnlockControls()
         {
-            button1.Enabled = true;
+            
             button4.Enabled = true;
             listBox1.Enabled = true;
             textBox_google_drive_link.Enabled = true;
 
-            if (listBox1.SelectedIndex != -1)
+            //GalaxyRP (Alex): Don't enable any of the google drive buttons if a valid google drive link was not provided.
+            if (currentConfiguration.googleDriveLink != "" && currentConfiguration.googleDriveLink.Length > 34)
             {
-                button2.Enabled = true;
-            }
-            if(listBox1.Items.Count != 0)
-            {
-                button5.Enabled = true;
+                button1.Enabled = true;
+
+                //GalaxyRP (Alex): Only enable download button if something was actually selected.
+                if (listBox1.SelectedIndex != -1)
+                {
+                    button2.Enabled = true;
+                }
+                //GalaxyRP (Alex): Only enable download all button if there's something to download.
+                if (listBox1.Items.Count != 0)
+                {
+                    button5.Enabled = true;
+                }
             }
         }
 
@@ -404,15 +428,43 @@ namespace GalaxyRP_Launcher
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
-            startInfo.Arguments = "+connect " + currentConfiguration.serverIP + " +set r_customwidth " + currentConfiguration.resolution_x + " +set r_customheight " + currentConfiguration.resolution_y + " " + currentConfiguration.otherArguments;
+            startInfo.Arguments = "";
+
+            if (currentConfiguration.resolution_x != 0 && currentConfiguration.resolution_x != 0)
+            {
+                startInfo.Arguments += " +set r_customwidth " + currentConfiguration.resolution_x + " +set r_customheight " + currentConfiguration.resolution_y + " ";
+            }
+
+            int selectedServerIndex = comboBox_server_selection.SelectedIndex;
+
+            if(selectedServerIndex == 0)
+            {
+                if(currentConfiguration.serverIP != "")
+                {
+                    startInfo.Arguments += " +connect " + currentConfiguration.serverIP + " ";
+                }
+            }
+            else
+            {
+                if (currentConfiguration.serverIP2 != "")
+                {
+                    startInfo.Arguments += " +connect " + currentConfiguration.serverIP2 + " ";
+                }
+            }
+
+            if (currentConfiguration.otherArguments != "")
+            {
+                startInfo.Arguments += currentConfiguration.otherArguments + " ";
+            }
 
             switch (currentConfiguration.clientMod)
             {
-                case "BaseJKA":
-                    startInfo.FileName = "jamp.exe";
-                    break;
                 case "OpenJK":
                     startInfo.FileName = "openjk.x86.exe";
+                    break;
+                case "BaseJKA":
+                default:
+                    startInfo.FileName = "jamp.exe";
                     break;
             }
 
