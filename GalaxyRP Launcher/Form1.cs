@@ -26,25 +26,6 @@ using Newtonsoft.Json;
 
 namespace GalaxyRP_Launcher
 {
-
-    public class LauncherConfig
-    {
-        
-        
-        //GalaxyRP (Alex): Full link that the user imputs in the settings tab. Needs to be trimmed before it's useable.
-        public string googleDriveLink { get; set; }
-        public int resolution_x { get; set; }
-        public int resolution_y { get; set; }
-        //GalaxyRP (Alex): Client mod to use when running the game. BaseJKA and OpenJK are so far the only valid options.
-        public string clientMod { get; set; }
-        public string serverIP { get; set; }
-        public string serverName { get; set; }
-        public string serverIP2 { get; set; }
-        public string server2Name { get; set; }
-        //GalaxyRP (Alex): Extra arguments to run with the game.
-        public string otherArguments { get; set; }
-    }
-
     public partial class Form1 : Form
     {
         //GalaxyRP (Alex): Location of the base folder.
@@ -62,16 +43,38 @@ namespace GalaxyRP_Launcher
             tabControl1.TabPages[0].Text = "File Manager";
             tabControl1.TabPages[1].Text = "Launcher Settings";
 
-            string json = System.IO.File.ReadAllText("launcher_config.cfg");
-            GetSettingsFromConfig(json);
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //JsonConvert.SerializeObject(currentConfiguration);
+            if (File.Exists("launcher_config.cfg"))
+            {
+                string json = System.IO.File.ReadAllText("launcher_config.cfg");
+                GetSettingsFromConfig(json);
+            }
+            else
+            {
+                buildDefaultConfig();
+            }
 
             label_filename.Text = "";
             label_filesize.Text = "";
             label_version_number.Text = "";
             label_author.Text = "";
             label_last_changed.Text = "";
+        }
+
+        void buildDefaultConfig()
+        {
+            currentConfiguration.serverIP = "";
+            currentConfiguration.serverName = "";
+            currentConfiguration.serverIP2 = "";
+            currentConfiguration.server2Name = "";
+            currentConfiguration.googleDriveLink = "";
+            currentConfiguration.clientMod = "";
+            currentConfiguration.resolution_x = 1280;
+            currentConfiguration.resolution_y = 720;
+            currentConfiguration.otherArguments = "";
+
+            string json = JsonConvert.SerializeObject(currentConfiguration);
+            //write string to file
+            System.IO.File.WriteAllText("launcher_config.cfg", json);
         }
 
         //GalaxyRP (Alex): Checks the checksum of each file against the ones in the cloud. (The ones stored in files that were grabbed via the api)
@@ -104,16 +107,6 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Reads the config json, and fills in all the variables and text fields in the app.
         void GetSettingsFromConfig(string json)
         {
-            /*currentConfiguration.resolution_x = Int32.Parse(dictionary["resolution_x"]);
-            currentConfiguration.resolution_y = Int32.Parse(dictionary["resolution_y"]);
-            currentConfiguration.clientMod = dictionary["clientMod"];
-            currentConfiguration.googleDriveLink = dictionary["googleDriveLink"];
-            currentConfiguration.serverIP = dictionary["serverIP"];
-            currentConfiguration.serverName = dictionary["serverName"];
-            currentConfiguration.serverIP2 = dictionary["serverIP2"];
-            currentConfiguration.server2Name = dictionary["server2Name"];
-            currentConfiguration.otherArguments = dictionary["custom_arguments"];*/
-
             currentConfiguration = JsonConvert.DeserializeObject<LauncherConfig>(json);
 
             textBox_resolution_x.Text = currentConfiguration.resolution_x.ToString();
@@ -124,7 +117,14 @@ namespace GalaxyRP_Launcher
             textBox_server_name_2.Text = currentConfiguration.server2Name;
             comboBox_client_mod.Text = currentConfiguration.clientMod;
             textBox_google_drive_link.Text = currentConfiguration.googleDriveLink;
-            googleDriveFolderId = currentConfiguration.googleDriveLink.Substring(currentConfiguration.googleDriveLink.Length - 33);
+            if (currentConfiguration.googleDriveLink.Length > 34)
+            {
+                googleDriveFolderId = currentConfiguration.googleDriveLink.Substring(currentConfiguration.googleDriveLink.Length - 33);
+            }
+            else
+            {
+                googleDriveFolderId = null;
+            }
             textBox_other_arguments.Text = currentConfiguration.otherArguments;
 
             comboBox_server_selection.Items.Add(currentConfiguration.serverName + " | " + currentConfiguration.serverIP);
@@ -398,5 +398,20 @@ namespace GalaxyRP_Launcher
             }
             UnlockControls();
         }
+    }
+    public class LauncherConfig
+    {
+        //GalaxyRP (Alex): Full link that the user imputs in the settings tab. Needs to be trimmed before it's useable.
+        public string googleDriveLink { get; set; }
+        public int resolution_x { get; set; }
+        public int resolution_y { get; set; }
+        //GalaxyRP (Alex): Client mod to use when running the game. BaseJKA and OpenJK are so far the only valid options.
+        public string clientMod { get; set; }
+        public string serverIP { get; set; }
+        public string serverName { get; set; }
+        public string serverIP2 { get; set; }
+        public string server2Name { get; set; }
+        //GalaxyRP (Alex): Extra arguments to run with the game.
+        public string otherArguments { get; set; }
     }
 }
