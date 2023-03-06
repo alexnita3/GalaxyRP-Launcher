@@ -217,6 +217,17 @@ namespace GalaxyRP_Launcher
                 listBox1.Items.Add(file.Name);
 
             }
+
+            if (listBox1.Items.Count > 0)
+            {
+                button5.Enabled = true;
+            }
+            else
+            {
+                button5.Enabled = false;
+                button2.Enabled = false;
+            }
+
             return files;
         }
 
@@ -229,8 +240,6 @@ namespace GalaxyRP_Launcher
         private async void StartDownloadAsync(string fileId)
         {
             DriveService service = await CreateService();
-
-            //var fileId = "1QETWTnkIp9q6O35Rm99qC6LsJ4Gdg3I5";
 
             progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
@@ -248,7 +257,6 @@ namespace GalaxyRP_Launcher
         private async Task DownloadAsync(IProgress<double>  progressReporter, string fileId)
         {
             DriveService service = await CreateService();
-            //LockControls();
 
             var streamDownload = new MemoryStream();
 
@@ -264,7 +272,6 @@ namespace GalaxyRP_Launcher
             // Execute download asynchronous
             await Task.Run(() => request.Download(streamDownload));
             GetFileList();
-            //UnlockControls();
         }
 
         void LockControls()
@@ -292,7 +299,10 @@ namespace GalaxyRP_Launcher
                 case DownloadStatus.Downloading:
                     {
                         double progressValue = Convert.ToDouble(progress.BytesDownloaded * 100 / fileSize);
-
+                        if(progressValue > 100)
+                        {
+                            progressValue = 100;
+                        }
                         // Update the ProgressBar on the UI thread
                         progressReporter.Report(progressValue);
                         //progressBar1.Value = (int)(progress.BytesDownloaded * 100 / fileSize);
@@ -318,20 +328,23 @@ namespace GalaxyRP_Launcher
 
         private void button2_Click(object sender, EventArgs e)
         {
-
             string selectedFileId = GetCurrentSelectedFileId();
 
             StartDownloadAsync(selectedFileId);
-            
+        }
+
+        private void UpdateFileDetails(int fileIndex)
+        {
+            label_filename.Text = files[fileIndex].Name;
+            label_filesize.Text = (files[fileIndex].Size / 1000000).ToString() + "MB";
+            label_version_number.Text = files[fileIndex].Version.ToString();
+            label_author.Text = files[fileIndex].Owners[0].DisplayName;
+            label_last_changed.Text = files[fileIndex].ModifiedTime.ToString();
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            label_filename.Text = files[listBox1.SelectedIndex].Name;
-            label_filesize.Text = (files[listBox1.SelectedIndex].Size / 1000000).ToString() + "MB";
-            label_version_number.Text = files[listBox1.SelectedIndex].Version.ToString();
-            label_author.Text = files[listBox1.SelectedIndex].Owners[0].DisplayName;
-            label_last_changed.Text = files[listBox1.SelectedIndex].ModifiedTime.ToString();
+            UpdateFileDetails(listBox1.SelectedIndex);
 
             button2.Enabled = true;
             button5.Enabled = true;
@@ -346,6 +359,7 @@ namespace GalaxyRP_Launcher
         {
             for(int i = 0; i < files.Count; i++)
             {
+                UpdateFileDetails(i);
                 StartDownloadAsync(files[i].Id);
             }
         }
