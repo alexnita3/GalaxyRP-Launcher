@@ -89,7 +89,7 @@ namespace GalaxyRP_Launcher
             // 
             this.button1.Location = new System.Drawing.Point(266, 141);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(138, 23);
+            this.button1.Size = new System.Drawing.Size(138, 32);
             this.button1.TabIndex = 1;
             this.button1.Text = "Check Updates";
             this.button1.UseVisualStyleBackColor = true;
@@ -100,7 +100,7 @@ namespace GalaxyRP_Launcher
             this.button2.Enabled = false;
             this.button2.Location = new System.Drawing.Point(445, 141);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(157, 23);
+            this.button2.Size = new System.Drawing.Size(157, 32);
             this.button2.TabIndex = 2;
             this.button2.Text = "Download Selected";
             this.button2.UseVisualStyleBackColor = true;
@@ -460,7 +460,7 @@ namespace GalaxyRP_Launcher
             this.button5.Enabled = false;
             this.button5.Location = new System.Drawing.Point(641, 141);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(138, 23);
+            this.button5.Size = new System.Drawing.Size(138, 32);
             this.button5.TabIndex = 7;
             this.button5.Text = "Download All";
             this.button5.UseVisualStyleBackColor = true;

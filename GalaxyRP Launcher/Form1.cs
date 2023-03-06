@@ -22,11 +22,40 @@ using System.Windows;
 using System.Web.Script.Serialization;
 using System.Text.RegularExpressions;
 using File = System.IO.File;
+using Newtonsoft.Json;
 
 namespace GalaxyRP_Launcher
 {
+
+    public class LauncherConfig
+    {
+        
+        
+        //GalaxyRP (Alex): Full link that the user imputs in the settings tab. Needs to be trimmed before it's useable.
+        public string googleDriveLink { get; set; }
+        public int resolution_x { get; set; }
+        public int resolution_y { get; set; }
+        //GalaxyRP (Alex): Client mod to use when running the game. BaseJKA and OpenJK are so far the only valid options.
+        public string clientMod { get; set; }
+        public string serverIP { get; set; }
+        public string serverName { get; set; }
+        public string serverIP2 { get; set; }
+        public string server2Name { get; set; }
+        //GalaxyRP (Alex): Extra arguments to run with the game.
+        public string otherArguments { get; set; }
+    }
+
     public partial class Form1 : Form
     {
+        //GalaxyRP (Alex): Location of the base folder.
+        string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
+        //GalaxyRP (Alex): This variable will store all the file metadata we get from Google drive.
+        public IList<Google.Apis.Drive.v3.Data.File> files { get; set; }
+        //GalaxyRP (Alex): Id of the drive folder we'll be interacting with.
+        public string googleDriveFolderId { get; set; }
+
+        LauncherConfig currentConfiguration = new LauncherConfig();
+
         public Form1()
         {
             InitializeComponent();
@@ -34,10 +63,9 @@ namespace GalaxyRP_Launcher
             tabControl1.TabPages[1].Text = "Launcher Settings";
 
             string json = System.IO.File.ReadAllText("launcher_config.cfg");
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            Dictionary<string, string> dic = serializer.Deserialize<Dictionary<string, string>>(json);
-
-            GetSettingsFromConfig(dic);
+            GetSettingsFromConfig(json);
+            //JavaScriptSerializer serializer = new JavaScriptSerializer();
+            //JsonConvert.SerializeObject(currentConfiguration);
 
             label_filename.Text = "";
             label_filesize.Text = "";
@@ -45,25 +73,6 @@ namespace GalaxyRP_Launcher
             label_author.Text = "";
             label_last_changed.Text = "";
         }
-
-        //GalaxyRP (Alex): This variable will store all the file metadata we get from Google drive.
-        IList<Google.Apis.Drive.v3.Data.File> files;
-        //GalaxyRP (Alex): Location of the base folder.
-        string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
-        //GalaxyRP (Alex): Id of the drive folder we'll be interacting with.
-        string googleDriveFolderId = "";
-        //GalaxyRP (Alex): Full link that the user imputs in the settings tab. Needs to be trimmed before it's useable.
-        string googleDriveLink = "";
-        int resolution_x = 0;
-        int resolution_y = 0;
-        //GalaxyRP (Alex): Client mod to use when running the game. BaseJKA and OpenJK are so far the only valid options.
-        string clientMod = "BaseJKA";
-        string serverIP = "";
-        string serverName = "";
-        string serverIP2 = "";
-        string server2Name = "";
-        //GalaxyRP (Alex): Extra arguments to run with the game.
-        string otherArguments = "";
 
         //GalaxyRP (Alex): Checks the checksum of each file against the ones in the cloud. (The ones stored in files that were grabbed via the api)
         void compareLocalFilesWithCloud()
@@ -93,35 +102,55 @@ namespace GalaxyRP_Launcher
         }
 
         //GalaxyRP (Alex): Reads the config json, and fills in all the variables and text fields in the app.
-        void GetSettingsFromConfig(Dictionary<string, string> dictionary)
+        void GetSettingsFromConfig(string json)
         {
-            resolution_x = Int32.Parse(dictionary["resolution_x"]);
-            resolution_y = Int32.Parse(dictionary["resolution_y"]);
-            clientMod = dictionary["clientMod"];
-            googleDriveLink = dictionary["googleDriveLink"];
-            serverIP = dictionary["serverIP"];
-            serverName = dictionary["serverName"];
-            serverIP2 = dictionary["serverIP2"];
-            server2Name = dictionary["server2Name"];
-            otherArguments = dictionary["custom_arguments"];
+            /*currentConfiguration.resolution_x = Int32.Parse(dictionary["resolution_x"]);
+            currentConfiguration.resolution_y = Int32.Parse(dictionary["resolution_y"]);
+            currentConfiguration.clientMod = dictionary["clientMod"];
+            currentConfiguration.googleDriveLink = dictionary["googleDriveLink"];
+            currentConfiguration.serverIP = dictionary["serverIP"];
+            currentConfiguration.serverName = dictionary["serverName"];
+            currentConfiguration.serverIP2 = dictionary["serverIP2"];
+            currentConfiguration.server2Name = dictionary["server2Name"];
+            currentConfiguration.otherArguments = dictionary["custom_arguments"];*/
 
-            textBox_resolution_x.Text = resolution_x.ToString();
-            textBox_resolution_y.Text = resolution_y.ToString();
-            textBox_server_ip.Text = serverIP;
-            textBox_server_name.Text = serverName;
-            textBox_server_ip_2.Text = serverIP2;
-            textBox_server_name_2.Text = server2Name;
-            comboBox_client_mod.Text = clientMod;
-            textBox_google_drive_link.Text = googleDriveLink;
-            googleDriveFolderId = googleDriveLink.Substring(googleDriveLink.Length - 33);
-            textBox_other_arguments.Text = otherArguments;
+            currentConfiguration = JsonConvert.DeserializeObject<LauncherConfig>(json);
 
-            comboBox_server_selection.Items.Add(serverName+ " | " + serverIP);
-            if (serverIP2 != "")
+            textBox_resolution_x.Text = currentConfiguration.resolution_x.ToString();
+            textBox_resolution_y.Text = currentConfiguration.resolution_y.ToString();
+            textBox_server_ip.Text = currentConfiguration.serverIP;
+            textBox_server_name.Text = currentConfiguration.serverName;
+            textBox_server_ip_2.Text = currentConfiguration.serverIP2;
+            textBox_server_name_2.Text = currentConfiguration.server2Name;
+            comboBox_client_mod.Text = currentConfiguration.clientMod;
+            textBox_google_drive_link.Text = currentConfiguration.googleDriveLink;
+            googleDriveFolderId = currentConfiguration.googleDriveLink.Substring(currentConfiguration.googleDriveLink.Length - 33);
+            textBox_other_arguments.Text = currentConfiguration.otherArguments;
+
+            comboBox_server_selection.Items.Add(currentConfiguration.serverName + " | " + currentConfiguration.serverIP);
+            if (currentConfiguration.serverIP2 != "")
             {
-                comboBox_server_selection.Items.Add(server2Name + " | " + serverIP2);
+                comboBox_server_selection.Items.Add(currentConfiguration.server2Name + " | " + currentConfiguration.serverIP2);
             }
             comboBox_server_selection.Text = comboBox_server_selection.Items[0].ToString();
+        }
+
+        void saveConfig()
+        {
+            currentConfiguration.serverIP = textBox_server_ip.Text;
+            currentConfiguration.serverName = textBox_server_name.Text;
+            currentConfiguration.serverIP2 = textBox_server_ip_2.Text;
+            currentConfiguration.server2Name = textBox_server_name_2.Text;
+            currentConfiguration.googleDriveLink = textBox_google_drive_link.Text;
+            currentConfiguration.clientMod = comboBox_client_mod.Text;
+            currentConfiguration.resolution_x = Int32.Parse(textBox_resolution_x.Text);
+            currentConfiguration.resolution_y = Int32.Parse(textBox_resolution_y.Text);
+            currentConfiguration.otherArguments = textBox_other_arguments.Text;
+
+
+            string json = JsonConvert.SerializeObject(currentConfiguration);
+            //write string to file
+            System.IO.File.WriteAllText("launcher_config.cfg", json);
         }
 
         //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files, and that those files are updates that we don't have.
@@ -354,7 +383,7 @@ namespace GalaxyRP_Launcher
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            saveConfig();
         }
 
         private async void button5_Click(object sender, EventArgs e)
