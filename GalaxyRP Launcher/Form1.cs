@@ -125,7 +125,7 @@ namespace GalaxyRP_Launcher
             comboBox_server_selection.Items.Clear();
             if (currentConfiguration.serverIP != "")
             {
-                comboBox_server_selection.Items.Add(currentConfiguration.server2Name + " | " + currentConfiguration.serverIP);
+                comboBox_server_selection.Items.Add(currentConfiguration.serverName + " | " + currentConfiguration.serverIP);
             }
             if (currentConfiguration.serverIP2 != "")
             {

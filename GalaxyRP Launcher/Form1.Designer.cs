@@ -263,6 +263,7 @@ namespace GalaxyRP_Launcher
             // 
             // comboBox_server_selection
             // 
+            this.comboBox_server_selection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_server_selection.FormattingEnabled = true;
             this.comboBox_server_selection.Location = new System.Drawing.Point(454, 231);
             this.comboBox_server_selection.Name = "comboBox_server_selection";
