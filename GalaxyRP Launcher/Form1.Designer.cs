@@ -34,6 +34,7 @@ namespace GalaxyRP_Launcher
             this.button2 = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label_filesize = new System.Windows.Forms.Label();
             this.label_last_changed = new System.Windows.Forms.Label();
             this.label_author = new System.Windows.Forms.Label();
             this.label_version_number = new System.Windows.Forms.Label();
@@ -45,30 +46,29 @@ namespace GalaxyRP_Launcher
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label_filesize = new System.Windows.Forms.Label();
-            this.textBox_server_ip = new System.Windows.Forms.TextBox();
-            this.textBox_google_drive_link = new System.Windows.Forms.TextBox();
-            this.comboBox_client_mod = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBox_resolution_x = new System.Windows.Forms.TextBox();
-            this.textBox_resolution_y = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             this.comboBox_server_selection = new System.Windows.Forms.ComboBox();
-            this.textBox_server_name = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBox_other_arguments = new System.Windows.Forms.TextBox();
             this.textBox_server_name_2 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox_server_ip_2 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox_other_arguments = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
+            this.textBox_server_name = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBox_resolution_y = new System.Windows.Forms.TextBox();
+            this.textBox_resolution_x = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.comboBox_client_mod = new System.Windows.Forms.ComboBox();
+            this.textBox_google_drive_link = new System.Windows.Forms.TextBox();
+            this.textBox_server_ip = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -131,6 +131,15 @@ namespace GalaxyRP_Launcher
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Details";
+            // 
+            // label_filesize
+            // 
+            this.label_filesize.AutoSize = true;
+            this.label_filesize.Location = new System.Drawing.Point(117, 39);
+            this.label_filesize.Name = "label_filesize";
+            this.label_filesize.Size = new System.Drawing.Size(46, 17);
+            this.label_filesize.TabIndex = 9;
+            this.label_filesize.Text = "label9";
             // 
             // label_last_changed
             // 
@@ -241,6 +250,35 @@ namespace GalaxyRP_Launcher
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // button5
+            // 
+            this.button5.Enabled = false;
+            this.button5.Location = new System.Drawing.Point(641, 141);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(138, 32);
+            this.button5.TabIndex = 7;
+            this.button5.Text = "Download All";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // comboBox_server_selection
+            // 
+            this.comboBox_server_selection.FormattingEnabled = true;
+            this.comboBox_server_selection.Location = new System.Drawing.Point(454, 231);
+            this.comboBox_server_selection.Name = "comboBox_server_selection";
+            this.comboBox_server_selection.Size = new System.Drawing.Size(325, 24);
+            this.comboBox_server_selection.TabIndex = 6;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(263, 231);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(185, 51);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Launch Game";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.label14);
@@ -269,6 +307,128 @@ namespace GalaxyRP_Launcher
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 211);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(131, 17);
+            this.label14.TabIndex = 18;
+            this.label14.Text = "Custom Arguments:";
+            // 
+            // textBox_other_arguments
+            // 
+            this.textBox_other_arguments.Location = new System.Drawing.Point(139, 208);
+            this.textBox_other_arguments.Name = "textBox_other_arguments";
+            this.textBox_other_arguments.Size = new System.Drawing.Size(643, 22);
+            this.textBox_other_arguments.TabIndex = 17;
+            // 
+            // textBox_server_name_2
+            // 
+            this.textBox_server_name_2.Location = new System.Drawing.Point(139, 91);
+            this.textBox_server_name_2.Name = "textBox_server_name_2";
+            this.textBox_server_name_2.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_name_2.TabIndex = 16;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 94);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(107, 17);
+            this.label12.TabIndex = 15;
+            this.label12.Text = "Server 2 Name:";
+            // 
+            // textBox_server_ip_2
+            // 
+            this.textBox_server_ip_2.Location = new System.Drawing.Point(139, 63);
+            this.textBox_server_ip_2.Name = "textBox_server_ip_2";
+            this.textBox_server_ip_2.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_ip_2.TabIndex = 14;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 66);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(82, 17);
+            this.label13.TabIndex = 13;
+            this.label13.Text = "Server 2 IP:";
+            // 
+            // textBox_server_name
+            // 
+            this.textBox_server_name.Location = new System.Drawing.Point(139, 35);
+            this.textBox_server_name.Name = "textBox_server_name";
+            this.textBox_server_name.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_name.TabIndex = 12;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 38);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(95, 17);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "Server Name:";
+            // 
+            // textBox_resolution_y
+            // 
+            this.textBox_resolution_y.Location = new System.Drawing.Point(235, 180);
+            this.textBox_resolution_y.Name = "textBox_resolution_y";
+            this.textBox_resolution_y.Size = new System.Drawing.Size(67, 22);
+            this.textBox_resolution_y.TabIndex = 10;
+            // 
+            // textBox_resolution_x
+            // 
+            this.textBox_resolution_x.Location = new System.Drawing.Point(139, 180);
+            this.textBox_resolution_x.Name = "textBox_resolution_x";
+            this.textBox_resolution_x.Size = new System.Drawing.Size(67, 22);
+            this.textBox_resolution_x.TabIndex = 9;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(212, 183);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(17, 17);
+            this.label10.TabIndex = 8;
+            this.label10.Text = "X";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 183);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(79, 17);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Resolution:";
+            // 
+            // comboBox_client_mod
+            // 
+            this.comboBox_client_mod.FormattingEnabled = true;
+            this.comboBox_client_mod.Items.AddRange(new object[] {
+            "BaseJKA",
+            "OpenJK",
+            "EternalJK (Experimental)"});
+            this.comboBox_client_mod.Location = new System.Drawing.Point(139, 149);
+            this.comboBox_client_mod.Name = "comboBox_client_mod";
+            this.comboBox_client_mod.Size = new System.Drawing.Size(121, 24);
+            this.comboBox_client_mod.TabIndex = 6;
+            // 
+            // textBox_google_drive_link
+            // 
+            this.textBox_google_drive_link.Location = new System.Drawing.Point(139, 120);
+            this.textBox_google_drive_link.Name = "textBox_google_drive_link";
+            this.textBox_google_drive_link.Size = new System.Drawing.Size(643, 22);
+            this.textBox_google_drive_link.TabIndex = 5;
+            // 
+            // textBox_server_ip
+            // 
+            this.textBox_server_ip.Location = new System.Drawing.Point(139, 7);
+            this.textBox_server_ip.Name = "textBox_server_ip";
+            this.textBox_server_ip.Size = new System.Drawing.Size(643, 22);
+            this.textBox_server_ip.TabIndex = 4;
             // 
             // label8
             // 
@@ -306,165 +466,6 @@ namespace GalaxyRP_Launcher
             this.button3.Text = "Save";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // label_filesize
-            // 
-            this.label_filesize.AutoSize = true;
-            this.label_filesize.Location = new System.Drawing.Point(117, 39);
-            this.label_filesize.Name = "label_filesize";
-            this.label_filesize.Size = new System.Drawing.Size(46, 17);
-            this.label_filesize.TabIndex = 9;
-            this.label_filesize.Text = "label9";
-            // 
-            // textBox_server_ip
-            // 
-            this.textBox_server_ip.Location = new System.Drawing.Point(139, 7);
-            this.textBox_server_ip.Name = "textBox_server_ip";
-            this.textBox_server_ip.Size = new System.Drawing.Size(643, 22);
-            this.textBox_server_ip.TabIndex = 4;
-            // 
-            // textBox_google_drive_link
-            // 
-            this.textBox_google_drive_link.Location = new System.Drawing.Point(139, 120);
-            this.textBox_google_drive_link.Name = "textBox_google_drive_link";
-            this.textBox_google_drive_link.Size = new System.Drawing.Size(643, 22);
-            this.textBox_google_drive_link.TabIndex = 5;
-            // 
-            // comboBox_client_mod
-            // 
-            this.comboBox_client_mod.FormattingEnabled = true;
-            this.comboBox_client_mod.Items.AddRange(new object[] {
-            "BaseJKA",
-            "OpenJK",
-            "EternalJK (Experimental)"});
-            this.comboBox_client_mod.Location = new System.Drawing.Point(139, 149);
-            this.comboBox_client_mod.Name = "comboBox_client_mod";
-            this.comboBox_client_mod.Size = new System.Drawing.Size(121, 24);
-            this.comboBox_client_mod.TabIndex = 6;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 183);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(79, 17);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "Resolution:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(212, 183);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(17, 17);
-            this.label10.TabIndex = 8;
-            this.label10.Text = "X";
-            // 
-            // textBox_resolution_x
-            // 
-            this.textBox_resolution_x.Location = new System.Drawing.Point(139, 180);
-            this.textBox_resolution_x.Name = "textBox_resolution_x";
-            this.textBox_resolution_x.Size = new System.Drawing.Size(67, 22);
-            this.textBox_resolution_x.TabIndex = 9;
-            // 
-            // textBox_resolution_y
-            // 
-            this.textBox_resolution_y.Location = new System.Drawing.Point(235, 180);
-            this.textBox_resolution_y.Name = "textBox_resolution_y";
-            this.textBox_resolution_y.Size = new System.Drawing.Size(67, 22);
-            this.textBox_resolution_y.TabIndex = 10;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(263, 231);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(185, 51);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Launch Game";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // comboBox_server_selection
-            // 
-            this.comboBox_server_selection.FormattingEnabled = true;
-            this.comboBox_server_selection.Location = new System.Drawing.Point(454, 231);
-            this.comboBox_server_selection.Name = "comboBox_server_selection";
-            this.comboBox_server_selection.Size = new System.Drawing.Size(325, 24);
-            this.comboBox_server_selection.TabIndex = 6;
-            // 
-            // textBox_server_name
-            // 
-            this.textBox_server_name.Location = new System.Drawing.Point(139, 35);
-            this.textBox_server_name.Name = "textBox_server_name";
-            this.textBox_server_name.Size = new System.Drawing.Size(643, 22);
-            this.textBox_server_name.TabIndex = 12;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 38);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(95, 17);
-            this.label11.TabIndex = 11;
-            this.label11.Text = "Server Name:";
-            // 
-            // textBox_server_name_2
-            // 
-            this.textBox_server_name_2.Location = new System.Drawing.Point(139, 91);
-            this.textBox_server_name_2.Name = "textBox_server_name_2";
-            this.textBox_server_name_2.Size = new System.Drawing.Size(643, 22);
-            this.textBox_server_name_2.TabIndex = 16;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 94);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(107, 17);
-            this.label12.TabIndex = 15;
-            this.label12.Text = "Server 2 Name:";
-            // 
-            // textBox_server_ip_2
-            // 
-            this.textBox_server_ip_2.Location = new System.Drawing.Point(139, 63);
-            this.textBox_server_ip_2.Name = "textBox_server_ip_2";
-            this.textBox_server_ip_2.Size = new System.Drawing.Size(643, 22);
-            this.textBox_server_ip_2.TabIndex = 14;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 66);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(82, 17);
-            this.label13.TabIndex = 13;
-            this.label13.Text = "Server 2 IP:";
-            // 
-            // textBox_other_arguments
-            // 
-            this.textBox_other_arguments.Location = new System.Drawing.Point(139, 208);
-            this.textBox_other_arguments.Name = "textBox_other_arguments";
-            this.textBox_other_arguments.Size = new System.Drawing.Size(643, 22);
-            this.textBox_other_arguments.TabIndex = 17;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 211);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(131, 17);
-            this.label14.TabIndex = 18;
-            this.label14.Text = "Custom Arguments:";
-            // 
-            // button5
-            // 
-            this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(641, 141);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(138, 32);
-            this.button5.TabIndex = 7;
-            this.button5.Text = "Download All";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Form1
             // 

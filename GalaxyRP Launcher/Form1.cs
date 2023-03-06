@@ -23,6 +23,7 @@ using System.Web.Script.Serialization;
 using System.Text.RegularExpressions;
 using File = System.IO.File;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace GalaxyRP_Launcher
 {
@@ -397,6 +398,25 @@ namespace GalaxyRP_Launcher
 
             }
             UnlockControls();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
+            startInfo.Arguments = "+connect " + currentConfiguration.serverIP + " +set r_customwidth " + currentConfiguration.resolution_x + " +set r_customheight " + currentConfiguration.resolution_y + " " + currentConfiguration.otherArguments;
+
+            switch (currentConfiguration.clientMod)
+            {
+                case "BaseJKA":
+                    startInfo.FileName = "jamp.exe";
+                    break;
+                case "OpenJK":
+                    startInfo.FileName = "openjk.x86.exe";
+                    break;
+            }
+
+            Process.Start(startInfo);
         }
     }
     public class LauncherConfig
