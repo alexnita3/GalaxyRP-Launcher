@@ -160,9 +160,11 @@ namespace GalaxyRP_Launcher
             return files[listBox1.SelectedIndex].Id;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-             GetFileList();
+            LockControls();
+            await GetFileList();
+            UnlockControls();
         }
         
         private async Task<DriveService> CreateService()
@@ -216,16 +218,6 @@ namespace GalaxyRP_Launcher
             {
                 listBox1.Items.Add(file.Name);
 
-            }
-
-            if (listBox1.Items.Count > 0)
-            {
-                button5.Enabled = true;
-            }
-            else
-            {
-                button5.Enabled = false;
-                button2.Enabled = false;
             }
 
             return files;
@@ -301,13 +293,16 @@ namespace GalaxyRP_Launcher
         {
             button1.Enabled = true;
             button4.Enabled = true;
-            button5.Enabled = true;
             listBox1.Enabled = true;
             textBox_google_drive_link.Enabled = true;
 
             if (listBox1.SelectedIndex != -1)
             {
                 button2.Enabled = true;
+            }
+            if(listBox1.Items.Count != 0)
+            {
+                button5.Enabled = true;
             }
         }
 
@@ -366,8 +361,7 @@ namespace GalaxyRP_Launcher
         {
             UpdateFileDetails(listBox1.SelectedIndex);
 
-            button2.Enabled = true;
-            button5.Enabled = true;
+            UnlockControls();
         }
 
         private void button3_Click(object sender, EventArgs e)
