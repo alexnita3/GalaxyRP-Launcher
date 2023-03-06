@@ -263,6 +263,8 @@ namespace GalaxyRP_Launcher
               new Progress<double>(value => progressBar1.Value =(int) value);
 
             await DownloadAsync(progressReporter, fileId);
+
+            await GetFileList();
         }
 
 
@@ -290,6 +292,7 @@ namespace GalaxyRP_Launcher
             button1.Enabled = false;
             button2.Enabled = false;
             button4.Enabled = false;
+            button5.Enabled = false;
             listBox1.Enabled = false;
             textBox_google_drive_link.Enabled = false;
         }
@@ -297,10 +300,15 @@ namespace GalaxyRP_Launcher
         void UnlockControls()
         {
             button1.Enabled = true;
-            button2.Enabled = true;
             button4.Enabled = true;
+            button5.Enabled = true;
             listBox1.Enabled = true;
             textBox_google_drive_link.Enabled = true;
+
+            if (listBox1.SelectedIndex != -1)
+            {
+                button2.Enabled = true;
+            }
         }
 
         private void ReportProgress(IDownloadProgress progress, IProgress<double> progressReporter, long? fileSize, MemoryStream streamDownload, string fileName)
@@ -337,11 +345,12 @@ namespace GalaxyRP_Launcher
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             string selectedFileId = GetCurrentSelectedFileId();
-
-            StartDownloadAsync(selectedFileId);
+            LockControls();
+            await StartDownloadAsync(selectedFileId);
+            UnlockControls();
         }
 
         private void UpdateFileDetails(int fileIndex)
@@ -368,11 +377,15 @@ namespace GalaxyRP_Launcher
 
         private async void button5_Click(object sender, EventArgs e)
         {
-            for(int i = 0; i < files.Count; i++)
+            LockControls();
+
+            while(listBox1.Items.Count != 0)
             {
-                UpdateFileDetails(i);
-                await StartDownloadAsync(files[i].Id);
+                UpdateFileDetails(0);
+                await StartDownloadAsync(files[0].Id);
+
             }
+            UnlockControls();
         }
     }
 }
