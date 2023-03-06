@@ -164,7 +164,7 @@ namespace GalaxyRP_Launcher
         {
              GetFileList();
         }
-
+        
         private async Task<DriveService> CreateService()
         {
             UserCredential credential;
@@ -236,8 +236,20 @@ namespace GalaxyRP_Launcher
             return (long)files[listBox1.SelectedIndex].Size;
         }
 
+        private long GetSizeOfItemWithId(string fileId)
+        {
+            for(int i = 0; i < files.Count; i++)
+            {
+                if(files[i].Id == fileId)
+                {
+                    return (long)files[i].Size;
+                }
+            }
+            return 0;
+        }
+
         // Asynchronous event handler
-        private async void StartDownloadAsync(string fileId)
+        private async Task StartDownloadAsync(string fileId)
         {
             DriveService service = await CreateService();
 
@@ -263,7 +275,7 @@ namespace GalaxyRP_Launcher
             var request = service.Files.Get(fileId);
             var file = request.Execute();
             //long? fileSize = file.Size;
-            long? fileSize = GetSizeOfSelectedItem();
+            long? fileSize = GetSizeOfItemWithId(fileId);
 
             // Report progress to UI via the captured UI's SynchronizationContext using IProgress<T>
             request.MediaDownloader.ProgressChanged +=
@@ -271,7 +283,6 @@ namespace GalaxyRP_Launcher
 
             // Execute download asynchronous
             await Task.Run(() => request.Download(streamDownload));
-            GetFileList();
         }
 
         void LockControls()
@@ -355,12 +366,12 @@ namespace GalaxyRP_Launcher
 
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private async void button5_Click(object sender, EventArgs e)
         {
             for(int i = 0; i < files.Count; i++)
             {
                 UpdateFileDetails(i);
-                StartDownloadAsync(files[i].Id);
+                await StartDownloadAsync(files[i].Id);
             }
         }
     }
