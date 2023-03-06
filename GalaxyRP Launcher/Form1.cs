@@ -38,6 +38,12 @@ namespace GalaxyRP_Launcher
             Dictionary<string, string> dic = serializer.Deserialize<Dictionary<string, string>>(json);
 
             GetSettingsFromConfig(dic);
+
+            label_filename.Text = "";
+            label_filesize.Text = "";
+            label_version_number.Text = "";
+            label_author.Text = "";
+            label_last_changed.Text = "";
         }
 
         IList<Google.Apis.Drive.v3.Data.File> files;
@@ -51,6 +57,7 @@ namespace GalaxyRP_Launcher
         string serverName = "";
         string serverIP2 = "";
         string server2Name = "";
+        string otherArguments = "";
 
         void compareLocalFilesWithCloud()
         {
@@ -106,6 +113,7 @@ namespace GalaxyRP_Launcher
             serverName = dictionary["serverName"];
             serverIP2 = dictionary["serverIP2"];
             server2Name = dictionary["server2Name"];
+            otherArguments = dictionary["custom_arguments"];
 
             textBox_resolution_x.Text = resolution_x.ToString();
             textBox_resolution_y.Text = resolution_y.ToString();
@@ -116,8 +124,8 @@ namespace GalaxyRP_Launcher
             comboBox_client_mod.Text = clientMod;
             textBox_google_drive_link.Text = googleDriveLink;
             googleDriveFolderId = googleDriveLink.Substring(googleDriveLink.Length - 33);
+            textBox_other_arguments.Text = otherArguments;
 
-            
             comboBox_server_selection.Items.Add(serverName+ " | " + serverIP);
             if (serverIP2 != "")
             {
@@ -304,6 +312,11 @@ namespace GalaxyRP_Launcher
             label_version_number.Text = files[listBox1.SelectedIndex].Version.ToString();
             label_author.Text = files[listBox1.SelectedIndex].Owners[0].DisplayName;
             label_last_changed.Text = files[listBox1.SelectedIndex].ModifiedTime.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
