@@ -68,6 +68,7 @@ namespace GalaxyRP_Launcher
             this.label13 = new System.Windows.Forms.Label();
             this.textBox_other_arguments = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -90,17 +91,18 @@ namespace GalaxyRP_Launcher
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(138, 23);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Check Files";
+            this.button1.Text = "Check Updates";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(672, 141);
+            this.button2.Enabled = false;
+            this.button2.Location = new System.Drawing.Point(445, 141);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(110, 23);
+            this.button2.Size = new System.Drawing.Size(157, 23);
             this.button2.TabIndex = 2;
-            this.button2.Text = "Download";
+            this.button2.Text = "Download Selected";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -223,6 +225,7 @@ namespace GalaxyRP_Launcher
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button5);
             this.tabPage1.Controls.Add(this.comboBox_server_selection);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.listBox1);
@@ -452,6 +455,17 @@ namespace GalaxyRP_Launcher
             this.label14.TabIndex = 18;
             this.label14.Text = "Custom Arguments:";
             // 
+            // button5
+            // 
+            this.button5.Enabled = false;
+            this.button5.Location = new System.Drawing.Point(641, 141);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(138, 23);
+            this.button5.TabIndex = 7;
+            this.button5.Text = "Download All";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -512,6 +526,7 @@ namespace GalaxyRP_Launcher
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox textBox_other_arguments;
+        private System.Windows.Forms.Button button5;
     }
 }
 

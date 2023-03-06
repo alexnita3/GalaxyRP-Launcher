@@ -162,7 +162,7 @@ namespace GalaxyRP_Launcher
 
         private void button1_Click(object sender, EventArgs e)
         {
-             var filelist = GetFileList();
+             GetFileList();
         }
 
         private async Task<DriveService> CreateService()
@@ -248,6 +248,7 @@ namespace GalaxyRP_Launcher
         private async Task DownloadAsync(IProgress<double>  progressReporter, string fileId)
         {
             DriveService service = await CreateService();
+            //LockControls();
 
             var streamDownload = new MemoryStream();
 
@@ -262,8 +263,27 @@ namespace GalaxyRP_Launcher
 
             // Execute download asynchronous
             await Task.Run(() => request.Download(streamDownload));
+            GetFileList();
+            //UnlockControls();
         }
 
+        void LockControls()
+        {
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button4.Enabled = false;
+            listBox1.Enabled = false;
+            textBox_google_drive_link.Enabled = false;
+        }
+
+        void UnlockControls()
+        {
+            button1.Enabled = true;
+            button2.Enabled = true;
+            button4.Enabled = true;
+            listBox1.Enabled = true;
+            textBox_google_drive_link.Enabled = true;
+        }
 
         private void ReportProgress(IDownloadProgress progress, IProgress<double> progressReporter, long? fileSize, MemoryStream streamDownload, string fileName)
         {
@@ -312,11 +332,22 @@ namespace GalaxyRP_Launcher
             label_version_number.Text = files[listBox1.SelectedIndex].Version.ToString();
             label_author.Text = files[listBox1.SelectedIndex].Owners[0].DisplayName;
             label_last_changed.Text = files[listBox1.SelectedIndex].ModifiedTime.ToString();
+
+            button2.Enabled = true;
+            button5.Enabled = true;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            for(int i = 0; i < files.Count; i++)
+            {
+                StartDownloadAsync(files[i].Id);
+            }
         }
     }
 }
