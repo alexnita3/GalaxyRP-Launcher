@@ -199,6 +199,17 @@ namespace GalaxyRP_Launcher
                     "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));
             }
 
+            //GalaxyRP (Alex): When releasing, hard code the client secret in so that you don't have to share it.
+            /*string clientSecrets = "";
+
+            byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(clientSecrets);
+            MemoryStream stream = new MemoryStream(byteArray);
+
+            credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    new[] { DriveService.Scope.DriveReadonly },
+                    "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));*/
+
             DriveService service = new DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
