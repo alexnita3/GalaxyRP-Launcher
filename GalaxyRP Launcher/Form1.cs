@@ -54,6 +54,7 @@ namespace GalaxyRP_Launcher
             RefreshControls();
         }
 
+        //GalaxyRP (Alex): Create an empty config file.
         void buildDefaultConfig()
         {
             currentConfiguration.serverIP = "";
