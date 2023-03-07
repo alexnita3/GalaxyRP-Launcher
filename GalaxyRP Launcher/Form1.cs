@@ -156,63 +156,6 @@ namespace GalaxyRP_Launcher
             GetSettingsFromConfig(json);
         }
 
-        //GalaxyRP (Alex): Makes a request for all subfolders inside the main folder and populates googleDriveSubfolderIds with the Ids.
-        private async Task GetSubfolderList()
-        {
-            DriveService service = await CreateService();
-
-            var testRequest = service.Files.List();
-            testRequest.SupportsAllDrives = true;
-            testRequest.SupportsTeamDrives = true;
-            testRequest.IncludeItemsFromAllDrives = true;
-            testRequest.Q = "mimeType='application/vnd.google-apps.folder' and parents in '" + googleDriveFolderId + "'";
-            testRequest.Fields = "*";
-
-            try
-            {
-                FileList filelist = testRequest.Execute();
-                files = filelist.Files;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-
-            foreach(Google.Apis.Drive.v3.Data.File file in files)
-            {
-                googleDriveSubfolderIds.Add(file.Id);
-            }
-        }
-
-        //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files, and that those files are updates that we don't have.
-        IList<Google.Apis.Drive.v3.Data.File> FilterFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
-        {
-            int i = 0;
-            while(i < originalFileList.Count)
-            {
-                Boolean changed = false;
-                if (originalFileList[i].FullFileExtension == null)
-                {
-                    originalFileList.RemoveAt(i);
-                    changed = true;
-                }else if (!originalFileList[i].FullFileExtension.Contains("pk3"))
-                {
-                    originalFileList.RemoveAt(i);
-                    changed = true;
-                }
-
-                if (!changed)
-                {
-                    i++;
-                }
-            }
-
-            compareLocalFilesWithCloud();
-
-            return originalFileList;
-        }
-
         //GalaxyRP (Alex): Return the Id of the file that's currently selected in listBox1
         private string GetCurrentSelectedFileId()
         {
@@ -264,6 +207,35 @@ namespace GalaxyRP_Launcher
             return service;
         }
 
+        //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files, and that those files are updates that we don't have.
+        IList<Google.Apis.Drive.v3.Data.File> FilterFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
+        {
+            int i = 0;
+            while (i < originalFileList.Count)
+            {
+                Boolean changed = false;
+                if (originalFileList[i].FullFileExtension == null)
+                {
+                    originalFileList.RemoveAt(i);
+                    changed = true;
+                }
+                else if (!originalFileList[i].FullFileExtension.Contains("pk3"))
+                {
+                    originalFileList.RemoveAt(i);
+                    changed = true;
+                }
+
+                if (!changed)
+                {
+                    i++;
+                }
+            }
+
+            compareLocalFilesWithCloud();
+
+            return originalFileList;
+        }
+
         //GalaxyRP (Alex): Searches google drive for all files, then applies a filter on those. Also fills in listBox1 with values.
         private async Task<IList<Google.Apis.Drive.v3.Data.File>> GetFileList()
         {
@@ -303,6 +275,35 @@ namespace GalaxyRP_Launcher
             }
 
             return files;
+        }
+
+        //GalaxyRP (Alex): Makes a request for all subfolders inside the main folder and populates googleDriveSubfolderIds with the Ids.
+        private async Task GetSubfolderList()
+        {
+            DriveService service = await CreateService();
+
+            var testRequest = service.Files.List();
+            testRequest.SupportsAllDrives = true;
+            testRequest.SupportsTeamDrives = true;
+            testRequest.IncludeItemsFromAllDrives = true;
+            testRequest.Q = "mimeType='application/vnd.google-apps.folder' and parents in '" + googleDriveFolderId + "'";
+            testRequest.Fields = "*";
+
+            try
+            {
+                FileList filelist = testRequest.Execute();
+                files = filelist.Files;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+            foreach (Google.Apis.Drive.v3.Data.File file in files)
+            {
+                googleDriveSubfolderIds.Add(file.Id);
+            }
         }
 
         //GalaxyRP (Alex): Given an Id, search files for the size in bytes of the item with that id.
