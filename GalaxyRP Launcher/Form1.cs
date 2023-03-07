@@ -165,7 +165,7 @@ namespace GalaxyRP_Launcher
         private async void button1_Click(object sender, EventArgs e)
         {
             LockControls();
-            await GetSubfolderList();
+            await GetSubfolderList(googleDriveFolderId);
             await GetFileList();
             UnlockControls();
         }
@@ -278,7 +278,7 @@ namespace GalaxyRP_Launcher
         }
 
         //GalaxyRP (Alex): Makes a request for all subfolders inside the main folder and populates googleDriveSubfolderIds with the Ids.
-        private async Task GetSubfolderList()
+        private async Task GetSubfolderList(string parentFolderId)
         {
             DriveService service = await CreateService();
 
@@ -286,7 +286,7 @@ namespace GalaxyRP_Launcher
             testRequest.SupportsAllDrives = true;
             testRequest.SupportsTeamDrives = true;
             testRequest.IncludeItemsFromAllDrives = true;
-            testRequest.Q = "mimeType='application/vnd.google-apps.folder' and parents in '" + googleDriveFolderId + "'";
+            testRequest.Q = "mimeType='application/vnd.google-apps.folder' and parents in '" + parentFolderId + "'";
             testRequest.Fields = "*";
 
             try
@@ -302,6 +302,7 @@ namespace GalaxyRP_Launcher
 
             foreach (Google.Apis.Drive.v3.Data.File file in files)
             {
+                await GetSubfolderList(file.Id);
                 googleDriveSubfolderIds.Add(file.Id);
             }
         }
