@@ -47,7 +47,6 @@ namespace GalaxyRP_Launcher
             label_filename.Text = "";
             label_filesize.Text = "";
             label_version_number.Text = "";
-            label_author.Text = "";
             label_last_changed.Text = "";
 
             RefreshControls();
@@ -400,7 +399,6 @@ namespace GalaxyRP_Launcher
             label_filename.Text = files[fileIndex].Name;
             label_filesize.Text = (files[fileIndex].Size / 1000000).ToString() + "MB";
             label_version_number.Text = files[fileIndex].Version.ToString();
-            label_author.Text = files[fileIndex].Owners[0].DisplayName;
             label_last_changed.Text = files[fileIndex].ModifiedTime.ToString();
         }
 

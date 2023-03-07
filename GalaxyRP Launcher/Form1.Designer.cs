@@ -36,11 +36,9 @@ namespace GalaxyRP_Launcher
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label_filesize = new System.Windows.Forms.Label();
             this.label_last_changed = new System.Windows.Forms.Label();
-            this.label_author = new System.Windows.Forms.Label();
             this.label_version_number = new System.Windows.Forms.Label();
             this.label_filename = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -117,11 +115,9 @@ namespace GalaxyRP_Launcher
             // 
             this.groupBox1.Controls.Add(this.label_filesize);
             this.groupBox1.Controls.Add(this.label_last_changed);
-            this.groupBox1.Controls.Add(this.label_author);
             this.groupBox1.Controls.Add(this.label_version_number);
             this.groupBox1.Controls.Add(this.label_filename);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
@@ -135,7 +131,7 @@ namespace GalaxyRP_Launcher
             // label_filesize
             // 
             this.label_filesize.AutoSize = true;
-            this.label_filesize.Location = new System.Drawing.Point(117, 39);
+            this.label_filesize.Location = new System.Drawing.Point(117, 46);
             this.label_filesize.Name = "label_filesize";
             this.label_filesize.Size = new System.Drawing.Size(46, 17);
             this.label_filesize.TabIndex = 9;
@@ -144,25 +140,16 @@ namespace GalaxyRP_Launcher
             // label_last_changed
             // 
             this.label_last_changed.AutoSize = true;
-            this.label_last_changed.Location = new System.Drawing.Point(117, 90);
+            this.label_last_changed.Location = new System.Drawing.Point(117, 99);
             this.label_last_changed.Name = "label_last_changed";
             this.label_last_changed.Size = new System.Drawing.Size(46, 17);
             this.label_last_changed.TabIndex = 8;
             this.label_last_changed.Text = "label9";
             // 
-            // label_author
-            // 
-            this.label_author.AutoSize = true;
-            this.label_author.Location = new System.Drawing.Point(117, 73);
-            this.label_author.Name = "label_author";
-            this.label_author.Size = new System.Drawing.Size(46, 17);
-            this.label_author.TabIndex = 7;
-            this.label_author.Text = "label8";
-            // 
             // label_version_number
             // 
             this.label_version_number.AutoSize = true;
-            this.label_version_number.Location = new System.Drawing.Point(117, 56);
+            this.label_version_number.Location = new System.Drawing.Point(117, 73);
             this.label_version_number.Name = "label_version_number";
             this.label_version_number.Size = new System.Drawing.Size(46, 17);
             this.label_version_number.TabIndex = 6;
@@ -180,25 +167,16 @@ namespace GalaxyRP_Launcher
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 90);
+            this.label5.Location = new System.Drawing.Point(7, 99);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 17);
             this.label5.TabIndex = 4;
             this.label5.Text = "Last Changed:";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 73);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(54, 17);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Author:";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 56);
+            this.label3.Location = new System.Drawing.Point(6, 73);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(114, 17);
             this.label3.TabIndex = 2;
@@ -207,7 +185,7 @@ namespace GalaxyRP_Launcher
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 39);
+            this.label2.Location = new System.Drawing.Point(7, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 17);
             this.label2.TabIndex = 1;
@@ -495,11 +473,9 @@ namespace GalaxyRP_Launcher
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label_last_changed;
-        private System.Windows.Forms.Label label_author;
         private System.Windows.Forms.Label label_version_number;
         private System.Windows.Forms.Label label_filename;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
