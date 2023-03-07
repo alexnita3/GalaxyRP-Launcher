@@ -24,11 +24,13 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Location of the base folder.
         string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
         //GalaxyRP (Alex): This variable will store all the file metadata we get from Google drive.
-        public IList<Google.Apis.Drive.v3.Data.File> files { get; set; }
+        public IList<Google.Apis.Drive.v3.Data.File> files;
         //GalaxyRP (Alex): Id of the drive folder we'll be interacting with.
-        public string googleDriveFolderId { get; set; }
+        public string googleDriveFolderId;
 
         LauncherConfig currentConfiguration = new LauncherConfig();
+
+        public List<string> googleDriveSubfolderIds = new List<string>();
 
         public Form1()
         {
@@ -154,15 +156,55 @@ namespace GalaxyRP_Launcher
             GetSettingsFromConfig(json);
         }
 
+        //GalaxyRP (Alex): Makes a request for all subfolders inside the main folder and populates googleDriveSubfolderIds with the Ids.
+        private async Task GetSubfolderList()
+        {
+            DriveService service = await CreateService();
+
+            var testRequest = service.Files.List();
+            testRequest.SupportsAllDrives = true;
+            testRequest.SupportsTeamDrives = true;
+            testRequest.IncludeItemsFromAllDrives = true;
+            testRequest.Q = "mimeType='application/vnd.google-apps.folder' and parents in '" + googleDriveFolderId + "'";
+            testRequest.Fields = "*";
+
+            try
+            {
+                FileList filelist = testRequest.Execute();
+                files = filelist.Files;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+            foreach(Google.Apis.Drive.v3.Data.File file in files)
+            {
+                googleDriveSubfolderIds.Add(file.Id);
+            }
+        }
+
         //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files, and that those files are updates that we don't have.
         IList<Google.Apis.Drive.v3.Data.File> FilterFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
         {
-            for(int i = 0; i < originalFileList.Count; i++)
+            int i = 0;
+            while(i < originalFileList.Count)
             {
-                if (!originalFileList[i].FullFileExtension.Contains("pk3"))
+                Boolean changed = false;
+                if (originalFileList[i].FullFileExtension == null)
                 {
                     originalFileList.RemoveAt(i);
-                    i--;
+                    changed = true;
+                }else if (!originalFileList[i].FullFileExtension.Contains("pk3"))
+                {
+                    originalFileList.RemoveAt(i);
+                    changed = true;
+                }
+
+                if (!changed)
+                {
+                    i++;
                 }
             }
 
@@ -180,6 +222,7 @@ namespace GalaxyRP_Launcher
         private async void button1_Click(object sender, EventArgs e)
         {
             LockControls();
+            await GetSubfolderList();
             await GetFileList();
             UnlockControls();
         }
@@ -233,6 +276,11 @@ namespace GalaxyRP_Launcher
             testRequest.Q = "parents in '" + googleDriveFolderId +"'";
             testRequest.Fields = "*";
 
+            foreach(string subfolderId in googleDriveSubfolderIds)
+            {
+                testRequest.Q += " or parents in '" + subfolderId + "'";
+            }
+
             try
             {
                 FileList filelist = testRequest.Execute();
@@ -240,7 +288,7 @@ namespace GalaxyRP_Launcher
             }
             catch (Exception e)
             {
-                int i = 0;
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
