@@ -50,6 +50,24 @@ Once you have your key, download and save it as:
 Then place it in the same folder as your debug app.
 
 
+## Tech Stack
+
+**IDE:** Visual Studio 2019
+
+**App:** WinForms
+
+**APIs:** [Google Drive API](https://developers.google.com/drive/api/guides/about-sdk)
+
+
+## Privacy Policy
+
+The only data I have access to about the users of this app are the number of api calls and the success rate of those calls.
+
+I do **NOT** have access to: private email addresses used with this, contents of the downloads, any of the settings used, any passwords, IPs and configs.
+
+I have never and will never use the information this app collects for any financial benefit, nor will I share it with anyone else, unless to help the development of this app.
+
+
 ## Authors
 
 - [@alexnita3](https://github.com/alexnita3)
