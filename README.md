@@ -4,6 +4,8 @@ A launcher made for the game Jedi Knight: Jedi Academy.
 
 The goal of this project is to create a JKA launcher that provides players with an easy way to manage their mods and connect to online servers. The launcher allows players to quickly and easily browse and update mods and pk3 files from a shared google drive. It also provides a streamlined interface for players to connect to online servers, making it easier join multiplayer matches. The launcher includes features such as one-click updates for all pk3s and a user-friendly interface that makes it easy for players of all skill levels to use. This project aims to enhance the gaming experience for players by simplifying the modding process and making online play more accessible.
 
+While this was made for [GalaxyRP](https://github.com/alexnita3/GalaxyRP), it will work with all JKA mods.
+
 
 ## Installation
 
@@ -48,8 +50,6 @@ Once you have your key, download and save it as:
 Then place it in the same folder as your debug app.
 
 
-
 ## Authors
 
 - [@alexnita3](https://github.com/alexnita3)
-
