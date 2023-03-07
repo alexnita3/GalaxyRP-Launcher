@@ -35,6 +35,13 @@ namespace GalaxyRP_Launcher
         public Form1()
         {
             InitializeComponent();
+#if !DEBUG
+            if (!detectJKA())
+            {
+                System.Environment.Exit(1);
+            }
+#endif
+
             tabControl1.TabPages[0].Text = "File Manager";
             tabControl1.TabPages[1].Text = "Launcher Settings";
 
@@ -52,6 +59,29 @@ namespace GalaxyRP_Launcher
             label_last_changed.Text = "";
 
             RefreshControls();
+        }
+
+        Boolean detectJKA() {
+
+            if (!Directory.Exists(filepath))
+            {
+                MessageBox.Show("Base folder was not detected. Please install the application in your GameData folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (!File.Exists("jamp.exe"))
+            {
+                MessageBox.Show("jamp.exe was not detected. Please install the application in your GameData folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (!filepath.Contains("GameData"))
+            {
+                MessageBox.Show("Application is not in the GameData folder. Please install the application in your GameData folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
         }
 
         //GalaxyRP (Alex): Create an empty config file.
