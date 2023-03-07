@@ -160,7 +160,7 @@ namespace GalaxyRP_Launcher
         {
             for(int i = 0; i < originalFileList.Count; i++)
             {
-                if (originalFileList[i].FullFileExtension != "pk3")
+                if (!originalFileList[i].FullFileExtension.Contains("pk3"))
                 {
                     originalFileList.RemoveAt(i);
                     i--;
