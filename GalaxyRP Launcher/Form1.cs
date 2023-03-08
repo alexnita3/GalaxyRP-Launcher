@@ -192,6 +192,17 @@ namespace GalaxyRP_Launcher
             return files[listBox1.SelectedIndex].Id;
         }
 
+        private void RefreshPk3UiList()
+        {
+            listBox1.Items.Clear();
+
+            foreach (Google.Apis.Drive.v3.Data.File file in files)
+            {
+                listBox1.Items.Add(file.Name);
+
+            }
+        }
+
         private async void button1_Click(object sender, EventArgs e)
         {
             LockControls();
@@ -201,13 +212,7 @@ namespace GalaxyRP_Launcher
                 await GetFileList();
             });
 
-            listBox1.Items.Clear();
-
-            foreach (Google.Apis.Drive.v3.Data.File file in files)
-            {
-                listBox1.Items.Add(file.Name);
-
-            }
+            RefreshPk3UiList();
 
             UnlockControls();
         }
@@ -369,8 +374,14 @@ namespace GalaxyRP_Launcher
               new Progress<double>(value => progressBar1.Value =(int) value);
 
             await DownloadAsync(progressReporter, fileId);
+            
+            await Task.Run(async () =>
+            {
+                await GetFileList();
+            });
 
-            await GetFileList();
+            RefreshPk3UiList();
+            
         }
 
         //GalaxyRP (Alex): Manages the ongoing download process.
