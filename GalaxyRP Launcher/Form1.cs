@@ -195,8 +195,20 @@ namespace GalaxyRP_Launcher
         private async void button1_Click(object sender, EventArgs e)
         {
             LockControls();
-            await GetSubfolderList(googleDriveFolderId);
-            await GetFileList();
+            await Task.Run(async () =>
+            {
+                await GetSubfolderList(googleDriveFolderId);
+                await GetFileList();
+            });
+
+            listBox1.Items.Clear();
+
+            foreach (Google.Apis.Drive.v3.Data.File file in files)
+            {
+                listBox1.Items.Add(file.Name);
+
+            }
+
             UnlockControls();
         }
 
@@ -295,14 +307,6 @@ namespace GalaxyRP_Launcher
 
 
             files = FilterFileList(files);
-
-            listBox1.Items.Clear();
-
-            foreach (Google.Apis.Drive.v3.Data.File file in files)
-            {
-                listBox1.Items.Add(file.Name);
-
-            }
 
             return files;
         }
