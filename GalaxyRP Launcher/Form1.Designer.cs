@@ -29,6 +29,7 @@ namespace GalaxyRP_Launcher
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -44,6 +45,7 @@ namespace GalaxyRP_Launcher
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label_task_status = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.comboBox_server_selection = new System.Windows.Forms.ComboBox();
             this.button4 = new System.Windows.Forms.Button();
@@ -67,7 +69,6 @@ namespace GalaxyRP_Launcher
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
-            this.label_task_status = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -229,6 +230,15 @@ namespace GalaxyRP_Launcher
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label_task_status
+            // 
+            this.label_task_status.Location = new System.Drawing.Point(266, 176);
+            this.label_task_status.Name = "label_task_status";
+            this.label_task_status.Size = new System.Drawing.Size(513, 17);
+            this.label_task_status.TabIndex = 8;
+            this.label_task_status.Text = "label4";
+            this.label_task_status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button5
             // 
@@ -448,15 +458,6 @@ namespace GalaxyRP_Launcher
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // label_task_status
-            // 
-            this.label_task_status.Location = new System.Drawing.Point(266, 176);
-            this.label_task_status.Name = "label_task_status";
-            this.label_task_status.Size = new System.Drawing.Size(513, 17);
-            this.label_task_status.TabIndex = 8;
-            this.label_task_status.Text = "label4";
-            this.label_task_status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -464,6 +465,7 @@ namespace GalaxyRP_Launcher
             this.ClientSize = new System.Drawing.Size(814, 341);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "GalaxyRP Launcher";
             this.groupBox1.ResumeLayout(false);
