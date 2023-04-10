@@ -57,8 +57,41 @@ namespace GalaxyRP_Launcher
             label_filesize.Text = "";
             label_version_number.Text = "";
             label_last_changed.Text = "";
+            reset_task_status_label();
 
             RefreshControls();
+        }
+
+        void reset_task_status_label()
+        {
+            label_task_status.Text = "Nothing to do.";
+        }
+
+        void update_task_status_downloading(int percentage)
+        {
+            if (percentage != 100)
+            {
+                label_task_status.Text = "Downloading..." + percentage.ToString() + "%";
+            }
+            else
+            {
+                label_task_status.Text = "File Downloaded...Writing to disk.";
+            }
+        }
+
+        void update_task_status_comparing()
+        {
+            label_task_status.Text = "Comparing your files to Google Drive, please be patient...";
+        }
+
+        void update_task_status_select_file_instruction()
+        {
+            label_task_status.Text = "Select a file and click 'Download Selected', or simply click 'Download All'.";
+        }
+
+        void update_task_status_launch_game_instruction()
+        {
+            label_task_status.Text = "Everything is up to date! You can launch your game safely.";
         }
 
         Boolean detectJKA() {
@@ -206,12 +239,13 @@ namespace GalaxyRP_Launcher
         private async void button1_Click(object sender, EventArgs e)
         {
             LockControls();
+            update_task_status_comparing();
             await Task.Run(async () =>
             {
                 await GetSubfolderList(googleDriveFolderId);
                 await GetFileList();
             });
-
+            
             RefreshPk3UiList();
 
             UnlockControls();
@@ -371,7 +405,10 @@ namespace GalaxyRP_Launcher
             //GalaxyRP (Alex): Creating an instance of Progress<T> captures the current 
             //GalaxyRP (Alex): SynchronizationContext (UI context) to prevent cross threading when updating the ProgressBar
             IProgress<double> progressReporter =
-              new Progress<double>(value => progressBar1.Value =(int) value);
+              new Progress<double>(value => { 
+                  progressBar1.Value = (int)value;
+                  update_task_status_downloading((int)value);
+              });
 
             await DownloadAsync(progressReporter, fileId);
             
@@ -444,6 +481,15 @@ namespace GalaxyRP_Launcher
                 {
                     button5.Enabled = true;
                 }
+            }
+
+            if (listBox1.Items.Count > 0)
+            {
+                update_task_status_select_file_instruction();
+            }
+            else
+            {
+                update_task_status_launch_game_instruction();
             }
         }
 
