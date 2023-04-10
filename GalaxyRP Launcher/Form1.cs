@@ -620,8 +620,14 @@ namespace GalaxyRP_Launcher
                     startInfo.FileName = "jamp.exe";
                     break;
             }
-
-            Process.Start(startInfo);
+            try
+            {
+                Process.Start(startInfo);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }
