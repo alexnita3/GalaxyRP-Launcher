@@ -57,14 +57,15 @@ namespace GalaxyRP_Launcher
             label_filesize.Text = "";
             label_version_number.Text = "";
             label_last_changed.Text = "";
-            reset_task_status_label();
 
             RefreshControls();
+
+            reset_task_status_label();
         }
 
         void reset_task_status_label()
         {
-            label_task_status.Text = "Nothing to do.";
+            label_task_status.Text = "Nothing to do. Click on 'Check Updates' to start syncing your pk3s.";
         }
 
         void update_task_status_downloading(int percentage)
@@ -561,6 +562,7 @@ namespace GalaxyRP_Launcher
             {
                 saveConfig();
                 RefreshControls();
+                reset_task_status_label();
             }
         }
 
