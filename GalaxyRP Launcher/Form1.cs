@@ -136,29 +136,46 @@ namespace GalaxyRP_Launcher
             System.IO.File.WriteAllText("launcher_config.cfg", json);
         }
 
+        List<String> getCompleteHashList()
+        {
+            List<String> hashList = new List<String>();
+            //GalaxyRP (Alex): Process the list of files found in the directory.
+            string[] fileEntries = Directory.GetFiles(filepath);
+
+            foreach (string fileName in fileEntries)
+            {
+                var md5 = System.Security.Cryptography.MD5.Create();
+                var stream = File.OpenRead(fileName);
+
+                var hash = md5.ComputeHash(stream);
+                //GalaxyRP (Alex): Format the string so that it matches the google drive API's
+                var md5String = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+
+                hashList.Add(md5String);
+
+                stream.Dispose();
+                stream.Close();
+            }
+
+            return hashList;
+
+        }
+
         //GalaxyRP (Alex): Checks the checksum of each file against the ones in the cloud. (The ones stored in files that were grabbed via the api)
         void compareLocalFilesWithCloud()
         {
-            for(int i = 0;i<files.Count;i++)
+            List<String> hashList = getCompleteHashList();
+
+            for (int i = 0; i < files.Count; i++)
             {
                 Google.Apis.Drive.v3.Data.File file = files[i];
 
-                // Process the list of files found in the directory.
-                string[] fileEntries = Directory.GetFiles(filepath);
-                foreach (string fileName in fileEntries)
+                //GalaxyRP (Alex): Compare the checksum of the files in the drive with the pre-processed list of existing files' checksums.
+                if (hashList.Contains(file.Md5Checksum))
                 {
-                    var md5 = System.Security.Cryptography.MD5.Create();
-                    var stream = File.OpenRead(fileName);
-
-                    var hash = md5.ComputeHash(stream);
-                    var md5String = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-                    if (md5String == file.Md5Checksum)
-                    {
-                        files.RemoveAt(i);
-                        i--;
-                    }
-                    stream.Dispose();
-                    stream.Close();
+                    //GalaxyRP (Alex): If user already has it, remove it form the list.
+                    files.RemoveAt(i);
+                    i--;
                 }
             }
         }
