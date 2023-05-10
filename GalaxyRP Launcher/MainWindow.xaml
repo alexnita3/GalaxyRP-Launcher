@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GalaxyRP_Launcher_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
+        Title="MainWindow" Height="463.058" Width="800" ResizeMode="NoResize">
     <Grid>
-        <TabControl x:Name="tabControl1" HorizontalAlignment="Left" Height="400" Margin="10,10,0,0" VerticalAlignment="Top" Width="774">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270*"/>
+            <ColumnDefinition Width="523*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="tabControl1" HorizontalAlignment="Left" Height="400" Margin="10,24,0,0" VerticalAlignment="Top" Width="774" Grid.ColumnSpan="2">
             <TabItem Header="File Manager">
                 <Grid Background="#FFE5E5E5">
                     <ListBox x:Name="listBox1" HorizontalAlignment="Left" Height="352" Margin="10,10,0,0" VerticalAlignment="Top" Width="241" SelectionChanged="listBox1_SelectionChanged"/>
@@ -47,7 +51,11 @@
                     <TextBox x:Name="textBox_resolution_x" HorizontalAlignment="Left" Height="23" Margin="173,199,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71"/>
                     <TextBox x:Name="textBox_resolution_y" HorizontalAlignment="Left" Height="23" Margin="292,199,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71"/>
                     <TextBox x:Name="textBox_google_drive_link" HorizontalAlignment="Left" Height="23" Margin="173,136,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="586"/>
-                    <ComboBox x:Name="comboBox_client_mod" HorizontalAlignment="Left" Margin="173,168,0,0" VerticalAlignment="Top" Width="190"/>
+                    <ComboBox x:Name="comboBox_client_mod" HorizontalAlignment="Left" Margin="173,168,0,0" VerticalAlignment="Top" Width="190">
+                        <ListBoxItem Content="Base JKA"/>
+                        <ListBoxItem Content="OpenJK"/>
+                        <ListBoxItem Content="EternalJK"/>
+                    </ComboBox>
                     <Button x:Name="button3" Content="Button" HorizontalAlignment="Left" Margin="346,298,0,0" VerticalAlignment="Top" Width="75" Click="button3_Click_1"/>
                 </Grid>
             </TabItem>

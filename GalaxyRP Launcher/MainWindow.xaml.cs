@@ -108,11 +108,13 @@ namespace GalaxyRP_Launcher
         void update_task_status_comparing()
         {
             label_task_status.Content = "Comparing your files to Google Drive, please be patient...";
+            this.progressBar1.IsIndeterminate = true;
         }
 
         void update_task_status_select_file_instruction()
         {
             label_task_status.Content = "Select a file and click 'Download Selected', or simply click 'Download All'.";
+            this.progressBar1.IsIndeterminate = false;
         }
 
         void update_task_status_launch_game_instruction()
@@ -206,6 +208,20 @@ namespace GalaxyRP_Launcher
             }
         }
 
+        void initializeClientModComboBox(string clientMod)
+        {
+            for(int i = 0; i < comboBox_client_mod.Items.Count; i++)
+            {
+                if(((ContentControl)comboBox_client_mod.Items[i]).Content.ToString() == clientMod)
+                {
+                    comboBox_client_mod.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            comboBox_client_mod.SelectedIndex = 0;
+        }
+
         //GalaxyRP (Alex): Reads the config json, and fills in all the variables and text fields in the app.
         void GetSettingsFromConfig(string json)
         {
@@ -217,7 +233,8 @@ namespace GalaxyRP_Launcher
             textBox_server_name.Text = currentConfiguration.serverName;
             textBox_server_ip_2.Text = currentConfiguration.serverIP2;
             textBox_server_name_2.Text = currentConfiguration.server2Name;
-            comboBox_client_mod.Text = currentConfiguration.clientMod;
+            initializeClientModComboBox(currentConfiguration.clientMod);
+            //comboBox_client_mod.Text = currentConfiguration.clientMod;
             textBox_google_drive_link.Text = currentConfiguration.googleDriveLink;
             if (currentConfiguration.googleDriveLink.Length > 34)
             {
@@ -648,7 +665,10 @@ namespace GalaxyRP_Launcher
                 case "OpenJK":
                     startInfo.FileName = "openjk.x86.exe";
                     break;
-                case "BaseJKA":
+                case "EternalJK":
+                    startInfo.FileName = "eternaljk.x86.exe";
+                    break;
+                case "Base JKA":
                 default:
                     startInfo.FileName = "jamp.exe";
                     break;
