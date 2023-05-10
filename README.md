@@ -56,7 +56,7 @@ Then place it in the same folder as your debug app.
 
 **IDE:** Visual Studio 2019
 
-**App:** WinForms
+**Frameword:** WPF, .NET 4.7
 
 **APIs:** [Google Drive API](https://developers.google.com/drive/api/guides/about-sdk)
 
