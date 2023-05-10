@@ -189,7 +189,6 @@ namespace GalaxyRP_Launcher
 
                 hashList.Add(md5String);
 
-                stream.Dispose();
                 stream.Close();
             }
 
@@ -315,7 +314,7 @@ namespace GalaxyRP_Launcher
             {
 
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
+                    GoogleClientSecrets.FromStream(stream).Secrets,
                     new[] { DriveService.Scope.DriveReadonly },
                     "user", CancellationToken.None, new FileDataStore("Drive.ListFiles"));
             }
@@ -620,7 +619,7 @@ namespace GalaxyRP_Launcher
             UnlockControls();
         }
 
-        private async void button1_Click_1(object sender, RoutedEventArgs e)
+        private void button1_Click_1(object sender, RoutedEventArgs e)
         {
             begin_search();
         }
