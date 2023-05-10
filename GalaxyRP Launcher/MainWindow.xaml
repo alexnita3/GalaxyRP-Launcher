@@ -18,31 +18,36 @@
         <TabControl x:Name="tabControl1" HorizontalAlignment="Left" Height="414" Margin="10,0,0,0" VerticalAlignment="Top" Width="774" Grid.ColumnSpan="2" Background="{x:Null}">
             <TabItem Header="File Manager">
                 <Grid x:Name="grid_file_manager" Background="#33FFFFFF">
-                    <Grid HorizontalAlignment="Left" Height="168" Margin="262,10,0,0" VerticalAlignment="Top" Width="502" Background="#FF2B2B2B"/>
-                    <Grid HorizontalAlignment="Left" Height="169" Margin="262,193,0,0" VerticalAlignment="Top" Width="502" Background="#FF2B2B2B"/>
-                    <ListBox x:Name="listBox1" HorizontalAlignment="Left" Height="352" Margin="10,10,0,0" VerticalAlignment="Top" Width="241" SelectionChanged="listBox1_SelectionChanged"/>
-                    <Button x:Name="button1" Content="Check Updates" HorizontalAlignment="Left" Margin="271,255,0,0" VerticalAlignment="Top" Width="142" Click="button1_Click_1" Height="31"/>
-                    <Button x:Name="button2" Content="Download Selected" HorizontalAlignment="Left" Margin="434,255,0,0" VerticalAlignment="Top" Width="147" Click="button2_Click_1" Height="31"/>
-                    <Button x:Name="button5" Content="Download All" HorizontalAlignment="Left" Margin="610,255,0,0" VerticalAlignment="Top" Width="149" Click="button5_Click_1" Height="31"/>
-                    <Label x:Name="label_task_status" Content="Label" HorizontalAlignment="Left" Margin="256,203,0,0" VerticalAlignment="Top" Width="503" HorizontalContentAlignment="Center" Height="24"/>
-                    <ProgressBar x:Name="progressBar1" HorizontalAlignment="Left" Height="10" Margin="271,235,0,0" VerticalAlignment="Top" Width="488" Visibility="Hidden"/>
-                    <Button x:Name="button4" Content="Launch Game" HorizontalAlignment="Left" Margin="271,300,0,0" VerticalAlignment="Top" Width="166" Height="50" Click="button4_Click_1"/>
-                    <ComboBox x:Name="comboBox_server_selection" HorizontalAlignment="Left" Margin="454,300,0,0" VerticalAlignment="Top" Width="305"/>
-                    <Label Content="Size:" HorizontalAlignment="Left" Margin="291,79,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Version Number:" HorizontalAlignment="Left" Margin="291,110,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Last Changed:" HorizontalAlignment="Left" Margin="291,141,0,0" VerticalAlignment="Top"/>
-                    <Label Content="File Name:" HorizontalAlignment="Left" Margin="291,48,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label_filename" Content="Label" HorizontalAlignment="Left" Margin="454,48,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label_filesize" Content="Label" HorizontalAlignment="Left" Margin="454,79,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label_version_number" Content="Label" HorizontalAlignment="Left" Margin="454,110,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label_last_changed" Content="Label" HorizontalAlignment="Left" Margin="454,141,0,0" VerticalAlignment="Top"/>
-                    <Label Content="File Information" HorizontalAlignment="Left" Margin="442,17,0,0" VerticalAlignment="Top" FontSize="20"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="29*"/>
+                        <ColumnDefinition Width="126*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid HorizontalAlignment="Left" Height="168" Margin="117.2,10,0,0" VerticalAlignment="Top" Width="502" Background="#FF2B2B2B" Grid.Column="1"/>
+                    <Grid HorizontalAlignment="Left" Height="169" Margin="117.2,193,0,0" VerticalAlignment="Top" Width="502" Background="#FF2B2B2B" Grid.Column="1"/>
+                    <ListBox x:Name="listBox1" HorizontalAlignment="Left" Height="352" Margin="10,10,0,0" VerticalAlignment="Top" Width="241" SelectionChanged="listBox1_SelectionChanged" Grid.ColumnSpan="2"/>
+                    <Button x:Name="button1" Content="Check Updates" HorizontalAlignment="Left" Margin="126.2,255,0,0" VerticalAlignment="Top" Width="142" Click="button1_Click_1" Height="31" Grid.Column="1"/>
+                    <Button x:Name="button2" Content="Download Selected" HorizontalAlignment="Left" Margin="289.2,255,0,0" VerticalAlignment="Top" Width="147" Click="button2_Click_1" Height="31" Grid.Column="1"/>
+                    <Button x:Name="button5" Content="Download All" HorizontalAlignment="Left" Margin="465.2,255,0,0" VerticalAlignment="Top" Width="149" Click="button5_Click_1" Height="31" Grid.Column="1"/>
+                    <Label x:Name="label_task_status" Content="Label" HorizontalAlignment="Left" Margin="111.2,203,0,0" VerticalAlignment="Top" Width="503" HorizontalContentAlignment="Center" Height="24" Grid.Column="1"/>
+                    <ProgressBar x:Name="progressBar1" HorizontalAlignment="Left" Height="10" Margin="126.2,235,0,0" VerticalAlignment="Top" Width="488" Visibility="Hidden" Grid.Column="1"/>
+                    <Button x:Name="button4" Content="Launch Game" HorizontalAlignment="Left" Margin="126.2,300,0,0" VerticalAlignment="Top" Width="166" Height="50" Click="button4_Click_1" Grid.Column="1"/>
+                    <ComboBox x:Name="comboBox_server_selection" HorizontalAlignment="Left" Margin="309.2,300,0,0" VerticalAlignment="Top" Width="305" Grid.Column="1"/>
+                    <Label Content="Size:" HorizontalAlignment="Left" Margin="146.2,79,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label Content="Version Number:" HorizontalAlignment="Left" Margin="146.2,110,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label Content="Last Changed:" HorizontalAlignment="Left" Margin="146.2,141,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label Content="File Name:" HorizontalAlignment="Left" Margin="146.2,48,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label x:Name="label_filename" Content="Label" HorizontalAlignment="Left" Margin="309.2,48,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label x:Name="label_filesize" Content="Label" HorizontalAlignment="Left" Margin="309.2,79,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label x:Name="label_version_number" Content="Label" HorizontalAlignment="Left" Margin="309.2,110,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label x:Name="label_last_changed" Content="Label" HorizontalAlignment="Left" Margin="309.2,141,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label Content="File Information" HorizontalAlignment="Left" Margin="297.2,17,0,0" VerticalAlignment="Top" FontSize="20" Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Launcher Settings">
                 <Grid x:Name="grid_settings" Background="#33FFFFFF">
                     <Grid HorizontalAlignment="Left" Height="355" Margin="9,10,0,0" VerticalAlignment="Top" Width="755" Background="#FF2B2B2B">
                         <Label Content="X" HorizontalAlignment="Left" Margin="264,247,0,0" VerticalAlignment="Top"/>
+                        <Label Content="© Alex Nita | https://github.com/alexnita3/" HorizontalAlignment="Left" Margin="518,329,0,0" VerticalAlignment="Top" FontSize="12" FontStyle="Italic"/>
                     </Grid>
                     <Label Content="Server IP" HorizontalAlignment="Left" Margin="19,34,0,0" VerticalAlignment="Top"/>
                     <Label Content="Server Name:" HorizontalAlignment="Left" Margin="19,71,0,0" VerticalAlignment="Top"/>
