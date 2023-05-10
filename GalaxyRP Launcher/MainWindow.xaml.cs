@@ -86,6 +86,11 @@ namespace GalaxyRP_Launcher
             RefreshControls();
 
             reset_task_status_label();
+
+            if(currentConfiguration.scanAutomatically == true && is_valid_drive_link(currentConfiguration.googleDriveLink))
+            {
+                begin_search();
+            }
         }
 
         void reset_task_status_label()
@@ -158,6 +163,7 @@ namespace GalaxyRP_Launcher
             currentConfiguration.resolution_x = 1280;
             currentConfiguration.resolution_y = 720;
             currentConfiguration.otherArguments = "";
+            currentConfiguration.scanAutomatically = false;
 
             string json = JsonConvert.SerializeObject(currentConfiguration);
             //write string to file
@@ -234,7 +240,8 @@ namespace GalaxyRP_Launcher
             textBox_server_ip_2.Text = currentConfiguration.serverIP2;
             textBox_server_name_2.Text = currentConfiguration.server2Name;
             initializeClientModComboBox(currentConfiguration.clientMod);
-            //comboBox_client_mod.Text = currentConfiguration.clientMod;
+            checkBox_scan_automatically.IsChecked = currentConfiguration.scanAutomatically;
+
             textBox_google_drive_link.Text = currentConfiguration.googleDriveLink;
             if (currentConfiguration.googleDriveLink.Length > 34)
             {
@@ -272,7 +279,7 @@ namespace GalaxyRP_Launcher
             currentConfiguration.resolution_x = Int32.Parse(textBox_resolution_x.Text);
             currentConfiguration.resolution_y = Int32.Parse(textBox_resolution_y.Text);
             currentConfiguration.otherArguments = textBox_other_arguments.Text;
-
+            currentConfiguration.scanAutomatically = (Boolean)checkBox_scan_automatically.IsChecked;
 
             string json = JsonConvert.SerializeObject(currentConfiguration);
             //write string to file
@@ -503,6 +510,15 @@ namespace GalaxyRP_Launcher
             textBox_google_drive_link.IsEnabled = false;
         }
 
+        Boolean is_valid_drive_link(string link)
+        {
+            if(link != "" && link.Length > 34)
+            {
+                return true;
+            }
+            return false;
+        }
+
         //GalaxyRP (Alex): Unlocks important buttons. Also takes care to not unlock buttons that require other actions to be performed first.
         void UnlockControls()
         {
@@ -512,7 +528,7 @@ namespace GalaxyRP_Launcher
             textBox_google_drive_link.IsEnabled = true;
 
             //GalaxyRP (Alex): Don't enable any of the google drive buttons if a valid google drive link was not provided.
-            if (currentConfiguration.googleDriveLink != "" && currentConfiguration.googleDriveLink.Length > 34)
+            if (is_valid_drive_link(currentConfiguration.googleDriveLink))
             {
                 button1.IsEnabled = true;
 
@@ -580,7 +596,7 @@ namespace GalaxyRP_Launcher
             label_last_changed.Content = files[fileIndex].ModifiedTime.ToString();
         }
 
-        private async void button1_Click_1(object sender, RoutedEventArgs e)
+        private async void begin_search()
         {
             LockControls();
             update_task_status_comparing();
@@ -593,6 +609,11 @@ namespace GalaxyRP_Launcher
             RefreshPk3UiList();
 
             UnlockControls();
+        }
+
+        private async void button1_Click_1(object sender, RoutedEventArgs e)
+        {
+            begin_search();
         }
 
         private async void button2_Click_1(object sender, RoutedEventArgs e)
@@ -713,6 +734,7 @@ namespace GalaxyRP_Launcher
         public string server2Name { get; set; }
         //GalaxyRP (Alex): Extra arguments to run with the game.
         public string otherArguments { get; set; }
+        public Boolean scanAutomatically { get; set; }
     }
 
 

@@ -15,22 +15,22 @@
             <TabItem Header="File Manager">
                 <Grid Background="#FFE5E5E5">
                     <ListBox x:Name="listBox1" HorizontalAlignment="Left" Height="352" Margin="10,10,0,0" VerticalAlignment="Top" Width="241" SelectionChanged="listBox1_SelectionChanged"/>
-                    <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="163" Margin="256,10,0,0" VerticalAlignment="Top" Width="503"/>
-                    <Button x:Name="button1" Content="Check Updates" HorizontalAlignment="Left" Margin="256,183,0,0" VerticalAlignment="Top" Width="142" Click="button1_Click_1"/>
-                    <Button x:Name="button2" Content="Download Selected" HorizontalAlignment="Left" Margin="434,183,0,0" VerticalAlignment="Top" Width="147" Click="button2_Click_1"/>
-                    <Button x:Name="button5" Content="Download All" HorizontalAlignment="Left" Margin="610,183,0,0" VerticalAlignment="Top" Width="149" Click="button5_Click_1"/>
-                    <Label x:Name="label_task_status" Content="Label" HorizontalAlignment="Left" Margin="256,218,0,0" VerticalAlignment="Top" Width="503" HorizontalContentAlignment="Center"/>
+                    <GroupBox Header="File Information" HorizontalAlignment="Left" Height="146" Margin="256,10,0,0" VerticalAlignment="Top" Width="503"/>
+                    <Button x:Name="button1" Content="Check Updates" HorizontalAlignment="Left" Margin="256,171,0,0" VerticalAlignment="Top" Width="142" Click="button1_Click_1" Height="31"/>
+                    <Button x:Name="button2" Content="Download Selected" HorizontalAlignment="Left" Margin="434,171,0,0" VerticalAlignment="Top" Width="147" Click="button2_Click_1" Height="31"/>
+                    <Button x:Name="button5" Content="Download All" HorizontalAlignment="Left" Margin="610,171,0,0" VerticalAlignment="Top" Width="149" Click="button5_Click_1" Height="31"/>
+                    <Label x:Name="label_task_status" Content="Label" HorizontalAlignment="Left" Margin="256,207,0,0" VerticalAlignment="Top" Width="503" HorizontalContentAlignment="Center" Height="37"/>
                     <ProgressBar x:Name="progressBar1" HorizontalAlignment="Left" Height="29" Margin="256,249,0,0" VerticalAlignment="Top" Width="503"/>
                     <Button x:Name="button4" Content="Launch Game" HorizontalAlignment="Left" Margin="271,300,0,0" VerticalAlignment="Top" Width="166" Height="50" Click="button4_Click_1"/>
                     <ComboBox x:Name="comboBox_server_selection" HorizontalAlignment="Left" Margin="454,300,0,0" VerticalAlignment="Top" Width="305"/>
                     <Label Content="Size:" HorizontalAlignment="Left" Margin="271,61,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Version Number:" HorizontalAlignment="Left" Margin="271,102,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Last Changed:" HorizontalAlignment="Left" Margin="271,133,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Version Number:" HorizontalAlignment="Left" Margin="271,92,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Last Changed:" HorizontalAlignment="Left" Margin="271,123,0,0" VerticalAlignment="Top"/>
                     <Label Content="File Name:" HorizontalAlignment="Left" Margin="271,30,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="label_filename" Content="Label" HorizontalAlignment="Left" Margin="434,30,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="label_filesize" Content="Label" HorizontalAlignment="Left" Margin="434,61,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label_version_number" Content="Label" HorizontalAlignment="Left" Margin="434,102,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label_last_changed" Content="Label" HorizontalAlignment="Left" Margin="434,133,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label_version_number" Content="Label" HorizontalAlignment="Left" Margin="434,92,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label_last_changed" Content="Label" HorizontalAlignment="Left" Margin="434,123,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Launcher Settings">
@@ -56,7 +56,9 @@
                         <ListBoxItem Content="OpenJK"/>
                         <ListBoxItem Content="EternalJK"/>
                     </ComboBox>
-                    <Button x:Name="button3" Content="Button" HorizontalAlignment="Left" Margin="346,298,0,0" VerticalAlignment="Top" Width="75" Click="button3_Click_1"/>
+                    <Button x:Name="button3" Content="Save Configuration" HorizontalAlignment="Left" Margin="319,333,0,0" VerticalAlignment="Top" Width="143" Click="button3_Click_1" Height="29"/>
+                    <CheckBox x:Name="checkBox_scan_automatically" Content="" HorizontalAlignment="Left" Margin="173,263,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Scan for new filed on start?" HorizontalAlignment="Left" Margin="10,258,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>
