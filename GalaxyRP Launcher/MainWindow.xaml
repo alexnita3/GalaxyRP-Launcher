@@ -48,6 +48,8 @@
                     <Grid HorizontalAlignment="Left" Height="355" Margin="9,10,0,0" VerticalAlignment="Top" Width="755" Background="#FF2B2B2B">
                         <Label Content="X" HorizontalAlignment="Left" Margin="264,247,0,0" VerticalAlignment="Top"/>
                         <Label Content="© Alex Nita | https://github.com/alexnita3/" HorizontalAlignment="Left" Margin="518,329,0,0" VerticalAlignment="Top" FontSize="12" FontStyle="Italic"/>
+                        <Label Content="Automatically download?" HorizontalAlignment="Left" Margin="466,247,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="checkBox_download_automatically" Content="" HorizontalAlignment="Left" Margin="635,241,0,0" VerticalAlignment="Top" Width="13"/>
                     </Grid>
                     <Label Content="Server IP" HorizontalAlignment="Left" Margin="19,34,0,0" VerticalAlignment="Top"/>
                     <Label Content="Server Name:" HorizontalAlignment="Left" Margin="19,71,0,0" VerticalAlignment="Top"/>
@@ -72,7 +74,7 @@
                     </ComboBox>
                     <Button x:Name="button3" Content="Save Configuration" HorizontalAlignment="Left" Margin="316,324,0,0" VerticalAlignment="Top" Width="143" Click="button3_Click_1" Height="32"/>
                     <CheckBox x:Name="checkBox_scan_automatically" Content="" HorizontalAlignment="Left" Margin="644,208,0,0" VerticalAlignment="Top" Height="46" Width="106"/>
-                    <Label Content="Scan for new files on start?" HorizontalAlignment="Left" Margin="465,222,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Scan for new files on start?" HorizontalAlignment="Left" Margin="474,220,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>

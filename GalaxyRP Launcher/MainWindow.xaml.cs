@@ -166,6 +166,7 @@ namespace GalaxyRP_Launcher
             currentConfiguration.resolution_y = 720;
             currentConfiguration.otherArguments = "";
             currentConfiguration.scanAutomatically = false;
+            currentConfiguration.downloadAutomatically = false;
 
             string json = JsonConvert.SerializeObject(currentConfiguration);
             //write string to file
@@ -242,6 +243,7 @@ namespace GalaxyRP_Launcher
             textBox_server_name_2.Text = currentConfiguration.server2Name;
             initializeClientModComboBox(currentConfiguration.clientMod);
             checkBox_scan_automatically.IsChecked = currentConfiguration.scanAutomatically;
+            checkBox_download_automatically.IsChecked = currentConfiguration.downloadAutomatically;
 
             textBox_google_drive_link.Text = currentConfiguration.googleDriveLink;
             if (currentConfiguration.googleDriveLink.Length > 34)
@@ -281,6 +283,7 @@ namespace GalaxyRP_Launcher
             currentConfiguration.resolution_y = Int32.Parse(textBox_resolution_y.Text);
             currentConfiguration.otherArguments = textBox_other_arguments.Text;
             currentConfiguration.scanAutomatically = (Boolean)checkBox_scan_automatically.IsChecked;
+            currentConfiguration.downloadAutomatically = (Boolean)checkBox_download_automatically.IsChecked;
 
             string json = JsonConvert.SerializeObject(currentConfiguration);
             //write string to file
@@ -617,6 +620,11 @@ namespace GalaxyRP_Launcher
             progressBar1.Visibility = Visibility.Hidden;
 
             UnlockControls();
+
+            if (currentConfiguration.downloadAutomatically == true)
+            {
+                download_all();
+            }
         }
 
         private void button1_Click_1(object sender, RoutedEventArgs e)
@@ -643,7 +651,7 @@ namespace GalaxyRP_Launcher
             UnlockControls();
         }
 
-        private async void button5_Click_1(object sender, RoutedEventArgs e)
+        private async void download_all()
         {
             LockControls();
 
@@ -654,6 +662,11 @@ namespace GalaxyRP_Launcher
 
             }
             UnlockControls();
+        }
+
+        private void button5_Click_1(object sender, RoutedEventArgs e)
+        {
+            download_all();
         }
 
         private void button4_Click_1(object sender, RoutedEventArgs e)
@@ -743,6 +756,8 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Extra arguments to run with the game.
         public string otherArguments { get; set; }
         public Boolean scanAutomatically { get; set; }
-    }
+
+        public Boolean downloadAutomatically { get; set; }
+}
 
 
