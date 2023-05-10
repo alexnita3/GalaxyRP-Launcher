@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO;
-using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
@@ -16,13 +24,19 @@ using File = System.IO.File;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Threading;
 
 namespace GalaxyRP_Launcher
 {
-    public partial class Form1 : Form
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
+
         //GalaxyRP (Alex): Location of the base folder.
-        string filepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
+        string filepath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
         //GalaxyRP (Alex): This variable will store all the file metadata we get from Google drive.
         public IList<Google.Apis.Drive.v3.Data.File> files;
         //GalaxyRP (Alex): Id of the drive folder we'll be interacting with.
@@ -32,7 +46,7 @@ namespace GalaxyRP_Launcher
 
         public List<string> googleDriveSubfolderIds = new List<string>();
 
-        public Form1()
+        public MainWindow()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
@@ -48,6 +62,7 @@ namespace GalaxyRP_Launcher
             };
 
             InitializeComponent();
+
 #if !DEBUG
             if (!detectJKA())
             {
@@ -55,21 +70,18 @@ namespace GalaxyRP_Launcher
             }
 #endif
 
-            tabControl1.TabPages[0].Text = "File Manager";
-            tabControl1.TabPages[1].Text = "Launcher Settings";
-
             if (!File.Exists("launcher_config.cfg"))
             {
                 buildDefaultConfig();
-                
+
             }
             string json = System.IO.File.ReadAllText("launcher_config.cfg");
             GetSettingsFromConfig(json);
 
-            label_filename.Text = "";
-            label_filesize.Text = "";
-            label_version_number.Text = "";
-            label_last_changed.Text = "";
+            label_filename.Content = "";
+            label_filesize.Content = "";
+            label_version_number.Content = "";
+            label_last_changed.Content = "";
 
             RefreshControls();
 
@@ -78,53 +90,54 @@ namespace GalaxyRP_Launcher
 
         void reset_task_status_label()
         {
-            label_task_status.Text = "Nothing to do. Click on 'Check Updates' to start syncing your pk3s.";
+            label_task_status.Content = "Nothing to do. Click on 'Check Updates' to start syncing your pk3s.";
         }
 
         void update_task_status_downloading(int percentage)
         {
             if (percentage != 100)
             {
-                label_task_status.Text = "Downloading..." + percentage.ToString() + "%";
+                label_task_status.Content = "Downloading..." + percentage.ToString() + "%";
             }
             else
             {
-                label_task_status.Text = "File Downloaded...Writing to disk.";
+                label_task_status.Content = "File Downloaded...Writing to disk.";
             }
         }
 
         void update_task_status_comparing()
         {
-            label_task_status.Text = "Comparing your files to Google Drive, please be patient...";
+            label_task_status.Content = "Comparing your files to Google Drive, please be patient...";
         }
 
         void update_task_status_select_file_instruction()
         {
-            label_task_status.Text = "Select a file and click 'Download Selected', or simply click 'Download All'.";
+            label_task_status.Content = "Select a file and click 'Download Selected', or simply click 'Download All'.";
         }
 
         void update_task_status_launch_game_instruction()
         {
-            label_task_status.Text = "Everything is up to date! You can launch your game safely.";
+            label_task_status.Content = "Everything is up to date! You can launch your game safely.";
         }
 
-        Boolean detectJKA() {
+        Boolean detectJKA()
+        {
 
             if (!Directory.Exists(filepath))
             {
-                MessageBox.Show("Base folder was not detected. Please install the application in your GameData folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Base folder was not detected. Please install the application in your GameData folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
             if (!File.Exists("jamp.exe"))
             {
-                MessageBox.Show("jamp.exe was not detected. Please install the application in your GameData folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("jamp.exe was not detected. Please install the application in your GameData folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
             if (!filepath.Contains("GameData"))
             {
-                MessageBox.Show("Application is not in the GameData folder. Please install the application in your GameData folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Application is not in the GameData folder. Please install the application in your GameData folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
@@ -267,21 +280,6 @@ namespace GalaxyRP_Launcher
             }
         }
 
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            LockControls();
-            update_task_status_comparing();
-            await Task.Run(async () =>
-            {
-                await GetSubfolderList(googleDriveFolderId);
-                await GetFileList();
-            });
-            
-            RefreshPk3UiList();
-
-            UnlockControls();
-        }
-
         //GalaxyRP (Alex): Connects to Google Drive via the api key.
         private async Task<DriveService> CreateService()
         {
@@ -357,10 +355,10 @@ namespace GalaxyRP_Launcher
             testRequest.SupportsAllDrives = true;
             testRequest.SupportsTeamDrives = true;
             testRequest.IncludeItemsFromAllDrives = true;
-            testRequest.Q = "parents in '" + googleDriveFolderId +"'";
+            testRequest.Q = "parents in '" + googleDriveFolderId + "'";
             testRequest.Fields = "*";
 
-            foreach(string subfolderId in googleDriveSubfolderIds)
+            foreach (string subfolderId in googleDriveSubfolderIds)
             {
                 testRequest.Q += " or parents in '" + subfolderId + "'";
             }
@@ -372,7 +370,7 @@ namespace GalaxyRP_Launcher
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
 
@@ -388,7 +386,6 @@ namespace GalaxyRP_Launcher
 
             var testRequest = service.Files.List();
             testRequest.SupportsAllDrives = true;
-            testRequest.SupportsTeamDrives = true;
             testRequest.IncludeItemsFromAllDrives = true;
             testRequest.Q = "mimeType='application/vnd.google-apps.folder' and parents in '" + parentFolderId + "'";
             testRequest.Fields = "*";
@@ -400,7 +397,7 @@ namespace GalaxyRP_Launcher
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
 
@@ -414,9 +411,9 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Given an Id, search files for the size in bytes of the item with that id.
         private long GetSizeOfItemWithId(string fileId)
         {
-            for(int i = 0; i < files.Count; i++)
+            for (int i = 0; i < files.Count; i++)
             {
-                if(files[i].Id == fileId)
+                if (files[i].Id == fileId)
                 {
                     return (long)files[i].Size;
                 }
@@ -436,24 +433,24 @@ namespace GalaxyRP_Launcher
             //GalaxyRP (Alex): Creating an instance of Progress<T> captures the current 
             //GalaxyRP (Alex): SynchronizationContext (UI context) to prevent cross threading when updating the ProgressBar
             IProgress<double> progressReporter =
-              new Progress<double>(value => { 
+              new Progress<double>(value => {
                   progressBar1.Value = (int)value;
                   update_task_status_downloading((int)value);
               });
 
             await DownloadAsync(progressReporter, fileId);
-            
+
             await Task.Run(async () =>
             {
                 await GetFileList();
             });
 
             RefreshPk3UiList();
-            
+
         }
 
         //GalaxyRP (Alex): Manages the ongoing download process.
-        private async Task DownloadAsync(IProgress<double>  progressReporter, string fileId)
+        private async Task DownloadAsync(IProgress<double> progressReporter, string fileId)
         {
             DriveService service = await CreateService();
 
@@ -481,36 +478,36 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Locks important buttons so that nothing interferes with the download process.
         void LockControls()
         {
-            button1.Enabled = false;
-            button2.Enabled = false;
-            button4.Enabled = false;
-            button5.Enabled = false;
-            listBox1.Enabled = false;
-            textBox_google_drive_link.Enabled = false;
+            button1.IsEnabled = false;
+            button2.IsEnabled = false;
+            button4.IsEnabled = false;
+            button5.IsEnabled = false;
+            listBox1.IsEnabled = false;
+            textBox_google_drive_link.IsEnabled = false;
         }
-        
+
         //GalaxyRP (Alex): Unlocks important buttons. Also takes care to not unlock buttons that require other actions to be performed first.
         void UnlockControls()
         {
-            
-            button4.Enabled = true;
-            listBox1.Enabled = true;
-            textBox_google_drive_link.Enabled = true;
+
+            button4.IsEnabled = true;
+            listBox1.IsEnabled = true;
+            textBox_google_drive_link.IsEnabled = true;
 
             //GalaxyRP (Alex): Don't enable any of the google drive buttons if a valid google drive link was not provided.
             if (currentConfiguration.googleDriveLink != "" && currentConfiguration.googleDriveLink.Length > 34)
             {
-                button1.Enabled = true;
+                button1.IsEnabled = true;
 
                 //GalaxyRP (Alex): Only enable download button if something was actually selected.
                 if (listBox1.SelectedIndex != -1)
                 {
-                    button2.Enabled = true;
+                    button2.IsEnabled = true;
                 }
                 //GalaxyRP (Alex): Only enable download all button if there's something to download.
                 if (listBox1.Items.Count != 0)
                 {
-                    button5.Enabled = true;
+                    button5.IsEnabled = true;
                 }
             }
 
@@ -532,7 +529,7 @@ namespace GalaxyRP_Launcher
                 case DownloadStatus.Downloading:
                     {
                         double progressValue = Convert.ToDouble(progress.BytesDownloaded * 100 / fileSize);
-                        if(progressValue > 100)
+                        if (progressValue > 100)
                         {
                             progressValue = 100;
                         }
@@ -557,7 +554,31 @@ namespace GalaxyRP_Launcher
             }
         }
 
-        private async void button2_Click(object sender, EventArgs e)
+        //GalaxyRP (Alex): Updates the file details window by looking up a fileIndex in files.
+        private void UpdateFileDetails(int fileIndex)
+        {
+            label_filename.Content = files[fileIndex].Name;
+            label_filesize.Content = (files[fileIndex].Size / 1000000).ToString() + "MB";
+            label_version_number.Content = files[fileIndex].Version.ToString();
+            label_last_changed.Content = files[fileIndex].ModifiedTime.ToString();
+        }
+
+        private async void button1_Click_1(object sender, RoutedEventArgs e)
+        {
+            LockControls();
+            update_task_status_comparing();
+            await Task.Run(async () =>
+            {
+                await GetSubfolderList(googleDriveFolderId);
+                await GetFileList();
+            });
+
+            RefreshPk3UiList();
+
+            UnlockControls();
+        }
+
+        private async void button2_Click_1(object sender, RoutedEventArgs e)
         {
             string selectedFileId = GetCurrentSelectedFileId();
             LockControls();
@@ -565,42 +586,22 @@ namespace GalaxyRP_Launcher
             UnlockControls();
         }
 
-        //GalaxyRP (Alex): Updates the file details window by looking up a fileIndex in files.
-        private void UpdateFileDetails(int fileIndex)
-        {
-            label_filename.Text = files[fileIndex].Name;
-            label_filesize.Text = (files[fileIndex].Size / 1000000).ToString() + "MB";
-            label_version_number.Text = files[fileIndex].Version.ToString();
-            label_last_changed.Text = files[fileIndex].ModifiedTime.ToString();
-        }
-
         //GalaxyRP (Alex): Things that happen once a user selects another item in listbox1
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (listBox1.Items.Count == 0)
+                return;
+
             UpdateFileDetails(listBox1.SelectedIndex);
 
             UnlockControls();
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (!Regex.IsMatch(textBox_resolution_x.Text, "^[0-9]*$") || !Regex.IsMatch(textBox_resolution_y.Text, "^[0-9]*$"))
-            {
-                MessageBox.Show("Resolution fields MUST be numbers.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                saveConfig();
-                RefreshControls();
-                reset_task_status_label();
-            }
-        }
-
-        private async void button5_Click(object sender, EventArgs e)
+        private async void button5_Click_1(object sender, RoutedEventArgs e)
         {
             LockControls();
 
-            while(listBox1.Items.Count != 0)
+            while (listBox1.Items.Count != 0)
             {
                 UpdateFileDetails(0);
                 await StartDownloadAsync(files[0].Id);
@@ -609,7 +610,7 @@ namespace GalaxyRP_Launcher
             UnlockControls();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click_1(object sender, RoutedEventArgs e)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
@@ -622,9 +623,9 @@ namespace GalaxyRP_Launcher
 
             int selectedServerIndex = comboBox_server_selection.SelectedIndex;
 
-            if(selectedServerIndex == 0)
+            if (selectedServerIndex == 0)
             {
-                if(currentConfiguration.serverIP != "")
+                if (currentConfiguration.serverIP != "")
                 {
                     startInfo.Arguments += " +connect " + currentConfiguration.serverIP + " ";
                 }
@@ -658,10 +659,25 @@ namespace GalaxyRP_Launcher
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        private void button3_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (!Regex.IsMatch(textBox_resolution_x.Text, "^[0-9]*$") || !Regex.IsMatch(textBox_resolution_y.Text, "^[0-9]*$"))
+            {
+                MessageBox.Show("Resolution fields MUST be numbers.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                saveConfig();
+                RefreshControls();
+                reset_task_status_label();
+                MessageBox.Show("The configuration changes were saved!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+    }
     }
     public class LauncherConfig
     {
@@ -678,4 +694,5 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Extra arguments to run with the game.
         public string otherArguments { get; set; }
     }
-}
+
+

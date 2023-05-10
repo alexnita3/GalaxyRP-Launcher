@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33214.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyRP Launcher", "GalaxyRP Launcher\GalaxyRP Launcher.csproj", "{BC802617-C13D-4AD2-9A4F-8DCADF7330E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyRP Launcher", "GalaxyRP Launcher\GalaxyRP Launcher.csproj", "{0B84420F-8F24-4030-A533-6771C05BA47A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BC802617-C13D-4AD2-9A4F-8DCADF7330E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC802617-C13D-4AD2-9A4F-8DCADF7330E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC802617-C13D-4AD2-9A4F-8DCADF7330E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC802617-C13D-4AD2-9A4F-8DCADF7330E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B84420F-8F24-4030-A533-6771C05BA47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B84420F-8F24-4030-A533-6771C05BA47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B84420F-8F24-4030-A533-6771C05BA47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B84420F-8F24-4030-A533-6771C05BA47A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {59D4E51A-4018-452C-AA8A-68BD40539506}
+		SolutionGuid = {63B7C214-106A-4D61-B9CA-9B4DFC6B27A7}
 	EndGlobalSection
 EndGlobal
