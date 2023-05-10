@@ -102,10 +102,12 @@ namespace GalaxyRP_Launcher
         {
             if (percentage != 100)
             {
+                progressBar1.IsIndeterminate = false;
                 label_task_status.Content = "Downloading..." + percentage.ToString() + "%";
             }
             else
             {
+                progressBar1.IsIndeterminate = true;
                 label_task_status.Content = "File Downloaded...Writing to disk.";
             }
         }
@@ -448,6 +450,8 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): ASYNCHRONOUS Given a file id, starts to download it from Google Drive.
         private async Task StartDownloadAsync(string fileId)
         {
+            progressBar1.Visibility = Visibility.Visible;
+
             DriveService service = await CreateService();
 
             progressBar1.Minimum = 0;
@@ -468,6 +472,8 @@ namespace GalaxyRP_Launcher
             {
                 await GetFileList();
             });
+
+            progressBar1.Visibility = Visibility.Hidden;
 
             RefreshPk3UiList();
 
@@ -598,6 +604,7 @@ namespace GalaxyRP_Launcher
 
         private async void begin_search()
         {
+            progressBar1.Visibility = Visibility.Visible;
             LockControls();
             update_task_status_comparing();
             await Task.Run(async () =>
@@ -607,6 +614,8 @@ namespace GalaxyRP_Launcher
             });
 
             RefreshPk3UiList();
+
+            progressBar1.Visibility = Visibility.Hidden;
 
             UnlockControls();
         }
