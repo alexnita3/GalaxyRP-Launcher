@@ -46,11 +46,11 @@
             <TabItem Header="Launcher Settings">
                 <Grid x:Name="grid_settings" Background="#33FFFFFF">
                     <Grid HorizontalAlignment="Left" Height="355" Margin="9,10,0,0" VerticalAlignment="Top" Width="755" Background="#FF2B2B2B">
-                        <Label Content="X" HorizontalAlignment="Left" Margin="264,247,0,0" VerticalAlignment="Top"/>
+                        <Label Content="X" HorizontalAlignment="Left" Margin="225,247,0,0" VerticalAlignment="Top"/>
                         <Label Content="© Alex Nita | https://github.com/alexnita3/" HorizontalAlignment="Left" Margin="518,329,0,0" VerticalAlignment="Top" FontSize="12" FontStyle="Italic"/>
-                        <Label Content="Automatically download?" HorizontalAlignment="Left" Margin="466,247,0,0" VerticalAlignment="Top"/>
-                        <CheckBox x:Name="checkBox_download_automatically" Content="" HorizontalAlignment="Left" Margin="635,241,0,0" VerticalAlignment="Top" Width="13"/>
-                        <TextBox HorizontalAlignment="Left" Margin="183,166,0,0" TextWrapping="Wrap" Text="https://drive.google.com/drive/u/folders/" VerticalAlignment="Top" Width="276" IsEnabled="False"/>
+                        <Label Content="Automatically download?" HorizontalAlignment="Left" Margin="561,248,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="checkBox_download_automatically" Content="" Margin="722,241,0,0" VerticalAlignment="Top" Width="13"/>
+                        <TextBox HorizontalAlignment="Left" Margin="146,166,0,0" TextWrapping="Wrap" Text="https://drive.google.com/drive/u/folders/" VerticalAlignment="Top" Width="276" IsEnabled="False"/>
                     </Grid>
                     <Label Content="Server IP" HorizontalAlignment="Left" Margin="19,34,0,0" VerticalAlignment="Top"/>
                     <Label Content="Server Name:" HorizontalAlignment="Left" Margin="19,71,0,0" VerticalAlignment="Top"/>
@@ -60,22 +60,22 @@
                     <Label Content="Client mod:" HorizontalAlignment="Left" Margin="19,220,0,0" VerticalAlignment="Top"/>
                     <Label Content="Resolution:" HorizontalAlignment="Left" Margin="19,256,0,0" VerticalAlignment="Top"/>
                     <Label Content="Custom Arguments:" HorizontalAlignment="Left" Margin="19,293,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="textBox_server_ip" HorizontalAlignment="Left" Height="23" Margin="191,28,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="559"/>
-                    <TextBox x:Name="textBox_server_name" HorizontalAlignment="Left" Height="23" Margin="191,65,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="559"/>
-                    <TextBox x:Name="textBox_server_ip_2" HorizontalAlignment="Left" Height="23" Margin="191,102,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="559"/>
-                    <TextBox x:Name="textBox_server_name_2" HorizontalAlignment="Left" Height="23" Margin="191,139,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="559"/>
-                    <TextBox x:Name="textBox_other_arguments" HorizontalAlignment="Left" Height="23" Margin="191,287,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="559"/>
-                    <TextBox x:Name="textBox_resolution_x" HorizontalAlignment="Left" Height="23" Margin="191,250,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71"/>
-                    <TextBox x:Name="textBox_resolution_y" HorizontalAlignment="Left" Height="23" Margin="292,250,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71"/>
-                    <TextBox x:Name="textBox_google_drive_link" HorizontalAlignment="Left" Height="23" Margin="474,176,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="276"/>
-                    <ComboBox x:Name="comboBox_client_mod" HorizontalAlignment="Left" Margin="191,213,0,0" VerticalAlignment="Top" Width="190">
+                    <TextBox x:Name="textBox_server_ip" HorizontalAlignment="Left" Height="23" Margin="155,28,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="595"/>
+                    <TextBox x:Name="textBox_server_name" HorizontalAlignment="Left" Height="23" Margin="155,65,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="595"/>
+                    <TextBox x:Name="textBox_server_ip_2" HorizontalAlignment="Left" Height="23" Margin="155,102,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="595"/>
+                    <TextBox x:Name="textBox_server_name_2" HorizontalAlignment="Left" Height="23" Margin="155,139,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="595"/>
+                    <TextBox x:Name="textBox_other_arguments" HorizontalAlignment="Left" Height="23" Margin="155,287,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="595"/>
+                    <TextBox x:Name="textBox_resolution_x" HorizontalAlignment="Left" Height="23" Margin="155,250,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71"/>
+                    <TextBox x:Name="textBox_resolution_y" HorizontalAlignment="Left" Height="23" Margin="250,250,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="72"/>
+                    <TextBox x:Name="textBox_google_drive_link" HorizontalAlignment="Left" Height="23" Margin="435,176,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="315"/>
+                    <ComboBox x:Name="comboBox_client_mod" Margin="155,213,0,0" Width="190">
                         <ListBoxItem Content="Base JKA"/>
                         <ListBoxItem Content="OpenJK"/>
                         <ListBoxItem Content="EternalJK"/>
                     </ComboBox>
                     <Button x:Name="button3" Content="Save Configuration" HorizontalAlignment="Left" Margin="316,324,0,0" VerticalAlignment="Top" Width="143" Click="button3_Click_1" Height="32"/>
-                    <CheckBox x:Name="checkBox_scan_automatically" Content="" HorizontalAlignment="Left" Margin="644,208,0,0" VerticalAlignment="Top" Height="46" Width="106"/>
-                    <Label Content="Scan for new files on start?" HorizontalAlignment="Left" Margin="474,220,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="checkBox_scan_automatically" Content="" Margin="731,208,0,0" VerticalAlignment="Top" Height="46" Width="106"/>
+                    <Label Content="Scan for new files on start?" HorizontalAlignment="Left" Margin="561,222,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>
