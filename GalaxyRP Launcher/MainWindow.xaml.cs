@@ -384,6 +384,7 @@ namespace GalaxyRP_Launcher
             testRequest.SupportsTeamDrives = true;
             testRequest.IncludeItemsFromAllDrives = true;
             testRequest.Q = "parents in '" + googleDriveFolderId + "'";
+            testRequest.PageSize = 1000;
             testRequest.Fields = "*";
 
             foreach (string subfolderId in googleDriveSubfolderIds)
@@ -394,7 +395,18 @@ namespace GalaxyRP_Launcher
             try
             {
                 FileList filelist = testRequest.Execute();
+                testRequest.PageToken = filelist.NextPageToken;
                 files = filelist.Files;
+                while (testRequest.PageToken != null)
+                {
+                    filelist = testRequest.Execute();
+
+                    foreach (Google.Apis.Drive.v3.Data.File file in filelist.Files)
+                    {
+                        files.Add(file);
+                    }
+                    testRequest.PageToken = filelist.NextPageToken;
+                }
             }
             catch (Exception e)
             {
