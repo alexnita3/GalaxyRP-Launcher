@@ -237,9 +237,9 @@ namespace GalaxyRP_Launcher
             checkBox_download_automatically.IsChecked = currentConfiguration.downloadAutomatically;
 
             textBox_google_drive_link.Text = currentConfiguration.googleDriveLink;
-            if (currentConfiguration.googleDriveLink.Length > 34)
+            if (is_valid_drive_link(currentConfiguration.googleDriveLink))
             {
-                googleDriveFolderId = currentConfiguration.googleDriveLink.Substring(currentConfiguration.googleDriveLink.Length - 33);
+                googleDriveFolderId = GetGoogleDriveFolderIdFromString(currentConfiguration.googleDriveLink)[0].Value;
             }
             else
             {
@@ -527,9 +527,23 @@ namespace GalaxyRP_Launcher
             textBox_google_drive_link.IsEnabled = false;
         }
 
+
+        MatchCollection GetGoogleDriveFolderIdFromString(string fullString)
+        {
+            string pattern = @"[-\w]{25,}";
+            MatchCollection matches;
+
+            Regex defaultRegex = new Regex(pattern);
+            matches = defaultRegex.Matches(fullString);
+
+            return matches;
+        }
+
         Boolean is_valid_drive_link(string link)
         {
-            if(link != "" && link.Length > 34)
+            MatchCollection matches = GetGoogleDriveFolderIdFromString(link);
+
+            if (matches.Count > 0 && matches[0].Value == link)
             {
                 return true;
             }
@@ -739,6 +753,10 @@ namespace GalaxyRP_Launcher
             if (!Regex.IsMatch(textBox_resolution_x.Text, "^[0-9]*$") || !Regex.IsMatch(textBox_resolution_y.Text, "^[0-9]*$"))
             {
                 MessageBox.Show("Resolution fields MUST be numbers.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else if (!is_valid_drive_link(textBox_google_drive_link.Text))
+            {
+                MessageBox.Show("The Google Drive link provided is in the wrong format. An example of a valid value is 1Rw36z4WWnKRLwYkunzRRzuffrX1WJy8G .", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {

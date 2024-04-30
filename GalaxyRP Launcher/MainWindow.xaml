@@ -50,6 +50,7 @@
                         <Label Content="© Alex Nita | https://github.com/alexnita3/" HorizontalAlignment="Left" Margin="518,329,0,0" VerticalAlignment="Top" FontSize="12" FontStyle="Italic"/>
                         <Label Content="Automatically download?" HorizontalAlignment="Left" Margin="466,247,0,0" VerticalAlignment="Top"/>
                         <CheckBox x:Name="checkBox_download_automatically" Content="" HorizontalAlignment="Left" Margin="635,241,0,0" VerticalAlignment="Top" Width="13"/>
+                        <TextBox HorizontalAlignment="Left" Margin="183,166,0,0" TextWrapping="Wrap" Text="https://drive.google.com/drive/u/folders/" VerticalAlignment="Top" Width="276" IsEnabled="False"/>
                     </Grid>
                     <Label Content="Server IP" HorizontalAlignment="Left" Margin="19,34,0,0" VerticalAlignment="Top"/>
                     <Label Content="Server Name:" HorizontalAlignment="Left" Margin="19,71,0,0" VerticalAlignment="Top"/>
@@ -66,7 +67,7 @@
                     <TextBox x:Name="textBox_other_arguments" HorizontalAlignment="Left" Height="23" Margin="191,287,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="559"/>
                     <TextBox x:Name="textBox_resolution_x" HorizontalAlignment="Left" Height="23" Margin="191,250,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71"/>
                     <TextBox x:Name="textBox_resolution_y" HorizontalAlignment="Left" Height="23" Margin="292,250,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71"/>
-                    <TextBox x:Name="textBox_google_drive_link" HorizontalAlignment="Left" Height="23" Margin="191,176,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="559"/>
+                    <TextBox x:Name="textBox_google_drive_link" HorizontalAlignment="Left" Height="23" Margin="474,176,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="276"/>
                     <ComboBox x:Name="comboBox_client_mod" HorizontalAlignment="Left" Margin="191,213,0,0" VerticalAlignment="Top" Width="190">
                         <ListBoxItem Content="Base JKA"/>
                         <ListBoxItem Content="OpenJK"/>
