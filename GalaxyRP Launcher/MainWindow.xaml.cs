@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Threading;
-
+using System.Linq;
 namespace GalaxyRP_Launcher
 {
     /// <summary>
@@ -30,8 +30,12 @@ namespace GalaxyRP_Launcher
         string filepath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\base";
         //GalaxyRP (Alex): This variable will store all the file metadata we get from Google drive.
         public IList<Google.Apis.Drive.v3.Data.File> files;
+        //GalaxyRP (Alex): This will store the filenames of files that will be removed, if the option is active.
+        public List<String> filesToBeDeleted;
         //GalaxyRP (Alex): Id of the drive folder we'll be interacting with.
         public string googleDriveFolderId;
+        public string deletionIndicator = "🗑️";
+        public string downloadIndicator = "✅";
 
         LauncherConfig currentConfiguration = new LauncherConfig();
 
@@ -74,9 +78,17 @@ namespace GalaxyRP_Launcher
             label_version_number.Content = "";
             label_last_changed.Content = "";
 
+            button6.IsEnabled = false;
+            button6.Visibility = Visibility.Hidden;
+
             RefreshControls();
 
             reset_task_status_label();
+
+            if(currentConfiguration.removeExtraFiles == true)
+            {
+                button5.Content = "Sync All";
+            }
 
             if(currentConfiguration.scanAutomatically == true && is_valid_drive_link(currentConfiguration.googleDriveLink))
             {
@@ -188,6 +200,41 @@ namespace GalaxyRP_Launcher
 
         }
 
+        List<String> getFilesToBeDeleted(IList<Google.Apis.Drive.v3.Data.File> googleDriveCompleteFileList)
+        {
+
+            List<String> filesToBeIgnored = new List<string> { "assets0.pk3", "assets1.pk3", "assets2.pk3", "assets3.pk3" };
+
+            List<String> filesOnHardDrive = Directory.GetFiles(filepath).ToList<String>();
+            List<String> googleDriveFileNames = new List<String>();
+            List<String> filesToDelete = new List<String>();
+
+            foreach (Google.Apis.Drive.v3.Data.File driveFile in googleDriveCompleteFileList)
+            {
+                googleDriveFileNames.Add(driveFile.Name);
+            }
+
+            for (int i = 0;i < filesOnHardDrive.Count; i++)
+            {
+                filesOnHardDrive[i] = filesOnHardDrive[i].Replace(filepath + "\\", "");
+            }
+
+            filesToDelete = filesOnHardDrive.Except(googleDriveFileNames).ToList();
+
+            filesToDelete = filesToDelete.Except(filesToBeIgnored).ToList();
+
+            for (int i = 0; i < filesToDelete.Count; i++)
+            {
+                if (!filesToDelete[i].Contains(".pk3")) 
+                {
+                    filesToDelete.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            return filesToDelete;
+        }
+
         //GalaxyRP (Alex): Checks the checksum of each file against the ones in the cloud. (The ones stored in files that were grabbed via the api)
         void compareLocalFilesWithCloud()
         {
@@ -235,6 +282,7 @@ namespace GalaxyRP_Launcher
             initializeClientModComboBox(currentConfiguration.clientMod);
             checkBox_scan_automatically.IsChecked = currentConfiguration.scanAutomatically;
             checkBox_download_automatically.IsChecked = currentConfiguration.downloadAutomatically;
+            checkBox_delete_extra_files.IsChecked = currentConfiguration.removeExtraFiles;
 
             textBox_google_drive_link.Text = currentConfiguration.googleDriveLink;
             if (is_valid_drive_link(currentConfiguration.googleDriveLink))
@@ -275,8 +323,9 @@ namespace GalaxyRP_Launcher
             currentConfiguration.otherArguments = textBox_other_arguments.Text;
             currentConfiguration.scanAutomatically = (Boolean)checkBox_scan_automatically.IsChecked;
             currentConfiguration.downloadAutomatically = (Boolean)checkBox_download_automatically.IsChecked;
+            currentConfiguration.removeExtraFiles = (Boolean)checkBox_delete_extra_files.IsChecked;
 
-            string json = JsonConvert.SerializeObject(currentConfiguration);
+            string json = JsonConvert.SerializeObject(currentConfiguration, Formatting.Indented);
             //write string to file
             System.IO.File.WriteAllText("launcher_config.cfg", json);
             GetSettingsFromConfig(json);
@@ -294,8 +343,22 @@ namespace GalaxyRP_Launcher
 
             foreach (Google.Apis.Drive.v3.Data.File file in files)
             {
-                listBox1.Items.Add(file.Name);
+                listBox1.Items.Add(downloadIndicator + file.Name);
 
+            }
+
+            if (currentConfiguration.removeExtraFiles == true)
+            {
+                foreach (String fileToBeDeleted in filesToBeDeleted)
+                {
+                    listBox1.Items.Add(deletionIndicator + fileToBeDeleted);
+                }
+            }
+
+            label_number_of_files_to_download.Content = files.Count.ToString();
+            if (currentConfiguration.removeExtraFiles == true)
+            {
+                label_number_of_files_to_delete.Content = filesToBeDeleted.Count.ToString();
             }
         }
 
@@ -336,7 +399,7 @@ namespace GalaxyRP_Launcher
             return service;
         }
 
-        //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files, and that those files are updates that we don't have.
+        //GalaxyRP (Alex): Filters the response form Google drive, and makes sure we only get pk3 files.
         IList<Google.Apis.Drive.v3.Data.File> FilterFileList(IList<Google.Apis.Drive.v3.Data.File> originalFileList)
         {
             int i = 0;
@@ -365,8 +428,6 @@ namespace GalaxyRP_Launcher
                     i++;
                 }
             }
-
-            compareLocalFilesWithCloud();
 
             return originalFileList;
         }
@@ -412,6 +473,13 @@ namespace GalaxyRP_Launcher
 
 
             files = FilterFileList(files);
+
+            if (currentConfiguration.removeExtraFiles == true)
+            {
+                filesToBeDeleted = getFilesToBeDeleted(files);
+            }
+
+            compareLocalFilesWithCloud();
 
             return files;
         }
@@ -582,6 +650,7 @@ namespace GalaxyRP_Launcher
             else
             {
                 update_task_status_launch_game_instruction();
+                button2.IsEnabled = false;
             }
         }
 
@@ -618,6 +687,24 @@ namespace GalaxyRP_Launcher
             }
         }
 
+        private Boolean isFileToBeDownloaded()
+        {
+            if (listBox1.SelectedValue.ToString().Contains(downloadIndicator))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private Boolean isFileToBeDeleted()
+        {
+            if (listBox1.SelectedValue.ToString().Contains(deletionIndicator))
+            {
+                return true;
+            }
+            return false;
+        }
+
         //GalaxyRP (Alex): Updates the file details window by looking up a fileIndex in files.
         private void UpdateFileDetails(int fileIndex)
         {
@@ -625,6 +712,26 @@ namespace GalaxyRP_Launcher
             label_filesize.Content = (files[fileIndex].Size / 1000000).ToString() + "MB";
             label_version_number.Content = files[fileIndex].Version.ToString();
             label_last_changed.Content = files[fileIndex].ModifiedTime.ToString();
+
+            
+        }
+        
+        private void UpdateFileToBeDeleted(string filename)
+        {
+            label_filename.Content = filename;
+            label_filesize.Content = "";
+            label_version_number.Content = "";
+            label_last_changed.Content = "";
+
+            button2.IsEnabled = false;
+        }
+
+        private void DeleteFilesNotOnDrive()
+        {
+            foreach (String fileToBeDeleted in filesToBeDeleted)
+            {
+                File.Delete(Path.Combine(filepath, fileToBeDeleted));
+            }
         }
 
         private async void begin_search()
@@ -646,6 +753,7 @@ namespace GalaxyRP_Launcher
 
             if (currentConfiguration.downloadAutomatically == true)
             {
+                button2.IsEnabled = false;
                 download_all();
             }
         }
@@ -659,6 +767,10 @@ namespace GalaxyRP_Launcher
         {
             string selectedFileId = GetCurrentSelectedFileId();
             LockControls();
+            if (currentConfiguration.removeExtraFiles == true)
+            {
+                DeleteFilesNotOnDrive();
+            }
             await StartDownloadAsync(selectedFileId);
             UnlockControls();
         }
@@ -669,9 +781,29 @@ namespace GalaxyRP_Launcher
             if (listBox1.Items.Count == 0)
                 return;
 
-            UpdateFileDetails(listBox1.SelectedIndex);
+            if (isFileToBeDownloaded())
+            {
+                UpdateFileDetails(listBox1.SelectedIndex);
+
+                button2.IsEnabled = true;
+                button2.Visibility = Visibility.Visible;
+
+                button6.IsEnabled = false;
+                button6.Visibility = Visibility.Hidden;
+            }
 
             UnlockControls();
+
+            if (isFileToBeDeleted())
+            {
+                UpdateFileToBeDeleted(listBox1.SelectedValue.ToString().Replace(deletionIndicator, ""));
+                
+                button2.IsEnabled = false;
+                button2.Visibility = Visibility.Hidden;
+
+                button6.IsEnabled = true;
+                button6.Visibility = Visibility.Visible;
+            }
         }
 
         private async void download_all()
@@ -689,6 +821,11 @@ namespace GalaxyRP_Launcher
 
         private void button5_Click_1(object sender, RoutedEventArgs e)
         {
+            if (currentConfiguration.removeExtraFiles == true)
+            {
+                DeleteFilesNotOnDrive();
+            }
+            button2.IsEnabled = false;
             download_all();
         }
 
@@ -766,6 +903,15 @@ namespace GalaxyRP_Launcher
                 MessageBox.Show("The configuration changes were saved!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
+        private void button6_Click(object sender, RoutedEventArgs e)
+        {
+            string filename = listBox1.SelectedValue.ToString().Replace(deletionIndicator, "");
+
+            File.Delete(Path.Combine(filepath, filename));
+            filesToBeDeleted.Remove(filename);
+            RefreshPk3UiList();
+        }
     }
     }
     public class LauncherConfig
@@ -783,8 +929,8 @@ namespace GalaxyRP_Launcher
         //GalaxyRP (Alex): Extra arguments to run with the game.
         public string otherArguments { get; set; }
         public Boolean scanAutomatically { get; set; }
-
         public Boolean downloadAutomatically { get; set; }
+        public Boolean removeExtraFiles { get; set; }
 }
 
 
