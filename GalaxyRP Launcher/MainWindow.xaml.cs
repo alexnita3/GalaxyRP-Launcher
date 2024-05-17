@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Threading;
 using System.Linq;
+
 namespace GalaxyRP_Launcher
 {
     /// <summary>
