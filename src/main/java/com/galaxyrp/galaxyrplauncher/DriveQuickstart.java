@@ -30,6 +30,11 @@ import java.util.regex.Pattern;
 
 /* class to demonstrate use of Drive files list API */
 public class DriveQuickstart {
+    @FunctionalInterface
+    public interface DownloadProgressListener {
+        void onProgress(long downloadedBytes, long totalBytes);
+    }
+
     /**
      * Application name.
      */
@@ -149,11 +154,19 @@ public class DriveQuickstart {
 
     public static void downloadFile(String fileId, Path destination)
             throws IOException, GeneralSecurityException {
-        downloadFile(fileId, destination, progress -> {
+        downloadFileWithProgress(fileId, destination, (downloadedBytes, totalBytes) -> {
         });
     }
 
     public static void downloadFile(String fileId, Path destination, Consumer<Double> progressListener)
+            throws IOException, GeneralSecurityException {
+        downloadFileWithProgress(fileId, destination,
+                (downloadedBytes, totalBytes) -> progressListener.accept(
+                        totalBytes > 0 ? (double) downloadedBytes / totalBytes : 0));
+    }
+
+    public static void downloadFileWithProgress(
+            String fileId, Path destination, DownloadProgressListener progressListener)
             throws IOException, GeneralSecurityException {
         if (fileId == null || fileId.isBlank()) {
             throw new IllegalArgumentException("Google Drive file ID cannot be blank.");
@@ -176,6 +189,13 @@ public class DriveQuickstart {
         }
 
         try (OutputStream outputStream = Files.newOutputStream(destination)) {
+            File metadata = service.files()
+                    .get(fileId)
+                    .setFields("size, mimeType")
+                    .setSupportsAllDrives(true)
+                    .execute();
+            long totalBytes = metadata.getSize() == null ? -1 : metadata.getSize();
+
             Drive.Files.Get request = service.files()
                     .get(fileId)
                     .setAlt("media")
@@ -185,7 +205,9 @@ public class DriveQuickstart {
                     .setChunkSize(256 * 1024)
                     .setProgressListener(
                     (MediaHttpDownloaderProgressListener) downloader ->
-                            progressListener.accept(downloader.getProgress()));
+                            progressListener.onProgress(
+                                    downloader.getNumBytesDownloaded(),
+                                    totalBytes));
             request.executeMediaAndDownloadTo(outputStream);
         } catch (GoogleJsonResponseException e) {
             if (e.getStatusCode() == 403) {

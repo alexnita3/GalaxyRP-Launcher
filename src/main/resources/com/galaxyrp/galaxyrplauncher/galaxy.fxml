@@ -46,6 +46,7 @@
                                             <ChoiceBox fx:id="serverSelectDropDownList" layoutX="203.0" layoutY="109.0" prefWidth="150.0" />
                                     <ProgressBar fx:id="downloadProgressBar" layoutX="18.0" layoutY="41.0" prefHeight="18.0" prefWidth="336.0" progress="0.0" />
                                     <Label fx:id="statusLabel" layoutX="169.0" layoutY="14.0" text="Status" />
+                                    <Label fx:id="downloadStatusLabel" layoutX="170.0" layoutY="42.0" text="100%" textAlignment="CENTER" />
                                         </children>
                                     </Pane>
                                 </children>

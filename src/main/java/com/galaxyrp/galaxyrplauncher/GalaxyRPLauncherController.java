@@ -37,6 +37,7 @@ public class GalaxyRPLauncherController {
     public ChoiceBox serverSelectDropDownList;
     public ListView<String> cloudFileList;
     public ProgressBar downloadProgressBar;
+    public Label downloadStatusLabel;
 
     List<File> googleDriveFiles;
 
@@ -110,19 +111,42 @@ public class GalaxyRPLauncherController {
         if (downloadSelectedButton != null) {
             downloadSelectedButton.setDisable(true);
         }
+        if (downloadStatusLabel != null) {
+            downloadStatusLabel.setText("Starting download...");
+        }
 
         Thread downloadThread = new Thread(() -> {
             try {
                 Path destination = Paths.get("downloads", sanitizeFileName(fileName));
-                DriveQuickstart.downloadFile(selectedFile.getId(), destination, progress ->
-                        Platform.runLater(() -> {
-                            if (downloadProgressBar != null) {
-                                downloadProgressBar.setProgress(progress);
-                            }
-                        }));
+                long startTime = System.nanoTime();
+                DriveQuickstart.downloadFileWithProgress(selectedFile.getId(), destination,
+                        (downloadedBytes, totalBytes) -> {
+                    double progress = totalBytes > 0
+                            ? (double) downloadedBytes / totalBytes
+                            : 0;
+                    double elapsedSeconds = (System.nanoTime() - startTime) / 1_000_000_000.0;
+                    double bytesPerSecond = elapsedSeconds > 0
+                            ? downloadedBytes / elapsedSeconds
+                            : 0;
+                    String status = totalBytes > 0
+                            ? String.format("%.0f%% - %.2f MB/s", progress * 100, bytesPerSecond / 1_048_576)
+                            : String.format("%.2f MB/s", bytesPerSecond / 1_048_576);
+
+                    Platform.runLater(() -> {
+                        if (downloadProgressBar != null) {
+                            downloadProgressBar.setProgress(progress);
+                        }
+                        if (downloadStatusLabel != null) {
+                            downloadStatusLabel.setText(status);
+                        }
+                    });
+                });
                 Platform.runLater(() -> {
                     if (downloadProgressBar != null) {
                         downloadProgressBar.setProgress(1);
+                    }
+                    if (downloadStatusLabel != null) {
+                        downloadStatusLabel.setText("100% - Complete");
                     }
                     if (downloadSelectedButton != null) {
                         downloadSelectedButton.setDisable(false);
@@ -133,6 +157,9 @@ public class GalaxyRPLauncherController {
                 Platform.runLater(() -> {
                     if (downloadProgressBar != null) {
                         downloadProgressBar.setProgress(0);
+                    }
+                    if (downloadStatusLabel != null) {
+                        downloadStatusLabel.setText("Download failed");
                     }
                     if (downloadSelectedButton != null) {
                         downloadSelectedButton.setDisable(false);
