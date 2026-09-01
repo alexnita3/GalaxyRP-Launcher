@@ -31,6 +31,10 @@ import java.util.regex.Pattern;
 
 /* class to demonstrate use of Drive files list API */
 public class GoogleDriveAdapter {
+    private static final int KILOBYTE = 1024;
+    private static final int MEGABYTE = KILOBYTE * KILOBYTE;
+    private static final int MAX_DOWNLOAD_CHUNK_SIZE = 32 * MEGABYTE;
+
     @FunctionalInterface
     public interface DownloadProgressListener {
         void onProgress(long downloadedBytes, long totalBytes);
@@ -260,7 +264,7 @@ public class GoogleDriveAdapter {
                     .setSupportsAllDrives(true);
             request.getMediaHttpDownloader()
                     .setDirectDownloadEnabled(false)
-                    .setChunkSize(8 * 1024 * 1024)
+                    .setChunkSize(getChunkSize(totalBytes))
                     .setProgressListener(
                     (MediaHttpDownloaderProgressListener) downloader ->
                             progressListener.onProgress(
@@ -277,6 +281,25 @@ public class GoogleDriveAdapter {
             }
             throw e;
         }
+    }
+
+    private static int getChunkSize(long totalBytes) {
+        if (totalBytes <= 0) {
+            return 8 * MEGABYTE;
+        }
+        if (totalBytes <= 4L * MEGABYTE) {
+            return (int) Math.max(KILOBYTE, totalBytes);
+        }
+        if (totalBytes <= 64L * MEGABYTE) {
+            return 4 * MEGABYTE;
+        }
+        if (totalBytes <= 512L * MEGABYTE) {
+            return 8 * MEGABYTE;
+        }
+        if (totalBytes <= 2L * 1024 * MEGABYTE) {
+            return 16 * MEGABYTE;
+        }
+        return MAX_DOWNLOAD_CHUNK_SIZE;
     }
 
     private static String sanitizeFileName(String fileName) {
