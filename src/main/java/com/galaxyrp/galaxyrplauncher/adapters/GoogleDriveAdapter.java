@@ -22,7 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -156,7 +155,7 @@ public class GoogleDriveAdapter {
         return allFiles;
     }
 
-    public static List<Path> downloadFilesWithProgress(
+    public static void downloadFilesWithProgress(
             List<File> files,
             Path destinationDirectory,
             DownloadProgressListener progressListener)
@@ -172,7 +171,6 @@ public class GoogleDriveAdapter {
         }
 
         Files.createDirectories(destinationDirectory);
-        List<Path> downloadedFiles = new ArrayList<>();
 
         for (File file : files) {
             if (file == null || file.getId() == null || file.getId().isBlank()) {
@@ -189,10 +187,8 @@ public class GoogleDriveAdapter {
             }
             progressListener.onProgress(0, totalBytes);
             downloadFileWithProgress(file.getId(), destination, progressListener);
-            downloadedFiles.add(destination);
         }
 
-        return downloadedFiles;
     }
 
     public static void downloadFileWithProgress(
