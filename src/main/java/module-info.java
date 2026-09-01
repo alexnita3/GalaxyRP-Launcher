@@ -12,4 +12,10 @@ module com.galaxyrp.galaxyrplauncher {
 
     opens com.galaxyrp.galaxyrplauncher to javafx.fxml;
     exports com.galaxyrp.galaxyrplauncher;
+    exports com.galaxyrp.galaxyrplauncher.services;
+    opens com.galaxyrp.galaxyrplauncher.services to javafx.fxml;
+    exports com.galaxyrp.galaxyrplauncher.exceptions;
+    opens com.galaxyrp.galaxyrplauncher.exceptions to javafx.fxml;
+    exports com.galaxyrp.galaxyrplauncher.enums;
+    opens com.galaxyrp.galaxyrplauncher.enums to javafx.fxml;
 }

@@ -1,4 +1,6 @@
-package com.galaxyrp.galaxyrplauncher;
+package com.galaxyrp.galaxyrplauncher.exceptions;
+
+import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
 
 public class LauncherErrorException extends RuntimeException {
     public LauncherErrorException(String message, String action, GalaxyRPLauncherController controller) {

@@ -1,5 +1,8 @@
 package com.galaxyrp.galaxyrplauncher;
 
+import com.galaxyrp.galaxyrplauncher.exceptions.LauncherErrorException;
+import com.galaxyrp.galaxyrplauncher.services.DownloadProgressService;
+import com.galaxyrp.galaxyrplauncher.services.GoogleDriveService;
 import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -44,21 +47,13 @@ public class GalaxyRPLauncherController {
     public void onDownloadAllButtonClick() {
         System.out.println("Download All Button clicked");
 
-        String folderLink;
-        if (googleDriveLinkTextBox == null) {
-            folderLink = "";
-        } else {
-            folderLink = googleDriveLinkTextBox.getText();
-        }
-
-        DownloadProgress progressView =
-                new DownloadProgress(downloadProgressBar, downloadStatusLabel, downloadAllButton);
+        DownloadProgressService progressView =
+                new DownloadProgressService(downloadProgressBar, downloadStatusLabel, downloadAllButton);
         progressView.begin();
 
         Thread downloadAllThread = new Thread(() -> {
             try {
-                googleDriveFiles = DriveQuickstart.listFilesFromFolder(folderLink);
-                DriveQuickstart.downloadFilesWithProgress(
+                GoogleDriveService.downloadFilesWithProgress(
                         googleDriveFiles, Paths.get("downloads"), progressView::update);
                 progressView.complete();
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
@@ -91,7 +86,7 @@ public class GalaxyRPLauncherController {
                 } else {
                     folderLink = googleDriveLinkTextBox.getText();
                 }
-                googleDriveFiles = DriveQuickstart.listFilesFromFolder(folderLink);
+                googleDriveFiles = GoogleDriveService.listFilesFromFolder(folderLink);
 
                 List<String> fileNames = googleDriveFiles.stream()
                         .map(com.google.api.services.drive.model.File::getName)
@@ -123,14 +118,14 @@ public class GalaxyRPLauncherController {
             return;
         }
 
-        DownloadProgress progressView =
-                new DownloadProgress(downloadProgressBar, downloadStatusLabel, downloadSelectedButton);
+        DownloadProgressService progressView =
+                new DownloadProgressService(downloadProgressBar, downloadStatusLabel, downloadSelectedButton);
         progressView.begin();
 
         Runnable downloadTask = () -> {
             try {
                 Path destination = Paths.get("downloads", sanitizeFileName(fileName));
-                DriveQuickstart.downloadFileWithProgress(selectedFile.getId(), destination,
+                GoogleDriveService.downloadFileWithProgress(selectedFile.getId(), destination,
                         progressView::update);
                 progressView.complete();
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {

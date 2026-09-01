@@ -1,17 +1,17 @@
-package com.galaxyrp.galaxyrplauncher;
+package com.galaxyrp.galaxyrplauncher.services;
 
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 
-public class DownloadProgress {
+public class DownloadProgressService {
     private final ProgressBar progressBar;
     private final Label statusLabel;
     private final Button downloadButton;
     private long startTime;
 
-    public DownloadProgress(
+    public DownloadProgressService(
             ProgressBar progressBar, Label statusLabel, Button downloadButton) {
         this.progressBar = progressBar;
         this.statusLabel = statusLabel;
@@ -27,9 +27,6 @@ public class DownloadProgress {
             }
             if (statusLabel != null) {
                 statusLabel.setText("Starting download...");
-            }
-            if (downloadButton != null) {
-                downloadButton.setDisable(true);
             }
         });
     }
@@ -76,9 +73,6 @@ public class DownloadProgress {
             if (statusLabel != null) {
                 statusLabel.setText("100% - Complete");
             }
-            if (downloadButton != null) {
-                downloadButton.setDisable(false);
-            }
         });
     }
 
@@ -89,9 +83,6 @@ public class DownloadProgress {
             }
             if (statusLabel != null) {
                 statusLabel.setText("Download failed");
-            }
-            if (downloadButton != null) {
-                downloadButton.setDisable(false);
             }
         });
     }
