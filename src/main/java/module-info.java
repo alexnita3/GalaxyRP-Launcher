@@ -9,6 +9,7 @@ module com.galaxyrp.galaxyrplauncher {
     requires com.google.api.client.extensions.java6.auth;
     requires com.google.api.client.auth;
     requires jdk.httpserver;
+    requires static lombok;
 
     opens com.galaxyrp.galaxyrplauncher to javafx.fxml;
     exports com.galaxyrp.galaxyrplauncher;

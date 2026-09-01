@@ -75,7 +75,7 @@
                                             <TextField fx:id="resolutionXTextBox" layoutX="177.0" layoutY="171.0" prefHeight="25.0" prefWidth="48.0" />
                                             <TextField fx:id="customArgumentsTextBox" layoutX="177.0" layoutY="196.0" />
                                             <Label layoutX="233.0" layoutY="175.0" text="X" />
-                                            <TextField fx:id="ResolutionYTestBox" layoutX="251.0" layoutY="171.0" prefHeight="25.0" prefWidth="48.0" />
+                                            <TextField fx:id="resolutionYTextBox" layoutX="251.0" layoutY="171.0" prefHeight="25.0" prefWidth="48.0" />
                                             <ChoiceBox fx:id="clientModDropDown" layoutX="176.0" layoutY="146.0" prefWidth="150.0" />
                                             <CheckBox fx:id="scanOnStartCheckBox" layoutX="376.0" layoutY="150.0" mnemonicParsing="false" text="Scan for new files on start?" />
                                             <CheckBox fx:id="automaticallyDownloadCheckBox" layoutX="376.0" layoutY="175.0" mnemonicParsing="false" text="Automatically download?" />

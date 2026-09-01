@@ -1,14 +1,12 @@
 package com.galaxyrp.galaxyrplauncher;
 
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
-import com.galaxyrp.galaxyrplauncher.services.AsyncActionService;
-import com.galaxyrp.galaxyrplauncher.services.DownloadService;
-import com.galaxyrp.galaxyrplauncher.services.InterfaceUpdateService;
-import com.galaxyrp.galaxyrplauncher.services.SearchService;
+import com.galaxyrp.galaxyrplauncher.services.*;
 import com.google.api.services.drive.model.File;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.IOException;
 import java.util.List;
 
 public class GalaxyRPLauncherController {
@@ -21,7 +19,7 @@ public class GalaxyRPLauncherController {
     public TextField customArgumentsTextBox;
     public ChoiceBox clientModDropDown;
     public CheckBox scanOnStartCheckBox;
-    public TextField ResolutionYTestBox;
+    public TextField resolutionYTextBox;
     public CheckBox automaticallyDownloadCheckBox;
     public Label fileNameLabel;
     public Label fileSizeLabel;
@@ -38,16 +36,22 @@ public class GalaxyRPLauncherController {
     public Label statusLabel;
 
     public List<File> googleDriveFiles;
+    public LauncherConfiguration launcherConfiguration;
+
     private AsyncActionService asyncActionService;
     private SearchService searchService;
     private DownloadService downloadService;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         asyncActionService = new AsyncActionService(this);
         searchService = new SearchService(this);
         downloadService = new DownloadService(this);
         InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
+
+        ConfigurationFileService configurationFileService = new ConfigurationFileService();
+        this.launcherConfiguration = configurationFileService.loadConfigurationFile();
+        InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
     }
 
     @FXML

@@ -1,6 +1,7 @@
 package com.galaxyrp.galaxyrplauncher.services;
 
 import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
+import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
@@ -77,6 +78,20 @@ public class InterfaceUpdateService {
         controller.fileSizeLabel.setText(file.getSize() / 1000000 + " MB"); //We want to display MB
         controller.fileVersionNumberLabel.setText(String.valueOf(file.getVersion()));
         controller.fileLastChangedLabel.setText(String.valueOf(file.getModifiedTime()));
+    }
+
+    public static void displayConfigurationValues(GalaxyRPLauncherController controller, LauncherConfiguration configuration) {
+        controller.server1IpTextBox.setText(configuration.getServerIp());
+        controller.server2IpTextBox.setText(configuration.getServer2Ip());
+        controller.server1NameTextBox.setText(configuration.getServerName());
+        controller.server2NameTextBox.setText(configuration.getServer2Name());
+        controller.googleDriveLinkTextBox.setText(configuration.getGoogleDriveLink());
+        //controller.clientModDropDown.setValue(configuration.getClientMod());
+        controller.resolutionXTextBox.setText(String.valueOf(configuration.getResolutionX()));
+        controller.resolutionYTextBox.setText(String.valueOf(configuration.getResolutionY()));
+        controller.customArgumentsTextBox.setText(configuration.getCustomArguments());
+        controller.scanOnStartCheckBox.setSelected(configuration.isScanOnStartup());
+        controller.automaticallyDownloadCheckBox.setSelected(configuration.isAutoDownload());
     }
 
 }
