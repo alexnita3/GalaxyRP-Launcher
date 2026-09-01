@@ -60,11 +60,13 @@ public class GalaxyRPLauncherController {
     public void onCheckUpdateButtonClick() {
         Thread driveThread = new Thread(() -> {
             try {
-                String folderLink = googleDriveLinkTextBox != null ? googleDriveLinkTextBox.getText() : null;
-                googleDriveFiles =
-                        folderLink == null || folderLink.isBlank()
-                                ? DriveQuickstart.listFilesFromFolder(googleDriveLinkTextBox.getText())
-                                : DriveQuickstart.listFilesFromFolder(folderLink);
+                String folderLink;
+                if (googleDriveLinkTextBox == null) {
+                    folderLink = "";
+                } else {
+                    folderLink = googleDriveLinkTextBox.getText();
+                }
+                googleDriveFiles = DriveQuickstart.listFilesFromFolder(folderLink);
 
                 List<String> fileNames = googleDriveFiles.stream()
                         .map(com.google.api.services.drive.model.File::getName)
@@ -86,7 +88,7 @@ public class GalaxyRPLauncherController {
     @FXML
     public void onDownloadSelectedButtonClick() {
         int selectedIndex = cloudFileList.getSelectionModel().getSelectedIndex();
-        if (HelperMethods.canSelectedFileBeDownloaded(selectedIndex, googleDriveFiles)) {
+        if (!HelperMethods.canSelectedFileBeDownloaded(selectedIndex, googleDriveFiles)) {
             return;
         }
 

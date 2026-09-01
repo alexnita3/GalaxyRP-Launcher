@@ -161,8 +161,15 @@ public class DriveQuickstart {
     public static void downloadFile(String fileId, Path destination, Consumer<Double> progressListener)
             throws IOException, GeneralSecurityException {
         downloadFileWithProgress(fileId, destination,
-                (downloadedBytes, totalBytes) -> progressListener.accept(
-                        totalBytes > 0 ? (double) downloadedBytes / totalBytes : 0));
+                (downloadedBytes, totalBytes) -> {
+                    double progress;
+                    if (totalBytes > 0) {
+                        progress = (double) downloadedBytes / totalBytes;
+                    } else {
+                        progress = 0;
+                    }
+                    progressListener.accept(progress);
+                });
     }
 
     public static void downloadFileWithProgress(
@@ -194,7 +201,12 @@ public class DriveQuickstart {
                     .setFields("size, mimeType")
                     .setSupportsAllDrives(true)
                     .execute();
-            long totalBytes = metadata.getSize() == null ? -1 : metadata.getSize();
+            long totalBytes;
+            if (metadata.getSize() == null) {
+                totalBytes = -1;
+            } else {
+                totalBytes = metadata.getSize();
+            }
 
             Drive.Files.Get request = service.files()
                     .get(fileId)

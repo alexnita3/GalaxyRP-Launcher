@@ -35,16 +35,28 @@ public class DownloadProgress {
     }
 
     public void update(long downloadedBytes, long totalBytes) {
-        double progress = totalBytes > 0
-                ? (double) downloadedBytes / totalBytes
-                : 0;
+        double progress;
+        if (totalBytes > 0) {
+            progress = (double) downloadedBytes / totalBytes;
+        } else {
+            progress = 0;
+        }
+
         double elapsedSeconds = (System.nanoTime() - startTime) / 1_000_000_000.0;
-        double bytesPerSecond = elapsedSeconds > 0
-                ? downloadedBytes / elapsedSeconds
-                : 0;
-        String status = totalBytes > 0
-                ? String.format("%.0f%% - %.2f MB/s", progress * 100, bytesPerSecond / 1_048_576)
-                : String.format("%.2f MB/s", bytesPerSecond / 1_048_576);
+        double bytesPerSecond;
+        if (elapsedSeconds > 0) {
+            bytesPerSecond = downloadedBytes / elapsedSeconds;
+        } else {
+            bytesPerSecond = 0;
+        }
+
+        String status;
+        if (totalBytes > 0) {
+            status = String.format(
+                    "%.0f%% - %.2f MB/s", progress * 100, bytesPerSecond / 1_048_576);
+        } else {
+            status = String.format("%.2f MB/s", bytesPerSecond / 1_048_576);
+        }
 
         Platform.runLater(() -> {
             if (progressBar != null) {
