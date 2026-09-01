@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -89,13 +90,22 @@ public class GalaxyRPLauncherController {
 
     @FXML
     public void onDownloadSelectedButtonClick() {
+        int selectedIndex = cloudFileList.getSelectionModel().getSelectedIndex();
+        if (selectedIndex == -1 || googleDriveFiles == null
+                || selectedIndex >= googleDriveFiles.size()) {
+            return;
+        }
+
+        File selectedFile = googleDriveFiles.get(selectedIndex);
+        String fileName = selectedFile.getName();
+        if (fileName == null || fileName.isBlank()) {
+            return;
+        }
+
         Thread downloadThread = new Thread(() -> {
             try {
-                if(cloudFileList.getSelectionModel().getSelectedIndex() != -1) {
-                    int index = cloudFileList.getSelectionModel().getSelectedIndex();
-                    File selectedFile = googleDriveFiles.get(index);
-                    DriveQuickstart.downloadFile(selectedFile.getId(), Paths.get(""));
-                }
+                Path destination = Paths.get("downloads", sanitizeFileName(fileName));
+                DriveQuickstart.downloadFile(selectedFile.getId(), destination);
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
                 e.printStackTrace();
                 Platform.runLater(() -> {
@@ -108,5 +118,9 @@ public class GalaxyRPLauncherController {
         });
         downloadThread.setDaemon(true);
         downloadThread.start();
+    }
+
+    private static String sanitizeFileName(String fileName) {
+        return fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
     }
 }

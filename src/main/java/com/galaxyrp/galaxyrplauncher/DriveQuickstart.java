@@ -5,6 +5,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -107,6 +108,7 @@ public class DriveQuickstart {
                     .setFields("nextPageToken, files(id, name, mimeType, webViewLink, size, modifiedTime, version)")
                     .setPageSize(1000)
                     .setPageToken(pageToken)
+                    .setSupportsAllDrives(true)
                     .execute();
 
             List<File> children = result.getFiles();
@@ -166,7 +168,17 @@ public class DriveQuickstart {
             service.files()
                     .get(fileId)
                     .setAlt("media")
+                    .setSupportsAllDrives(true)
                     .executeMediaAndDownloadTo(outputStream);
+        } catch (GoogleJsonResponseException e) {
+            if (e.getStatusCode() == 403) {
+                throw new IOException(
+                        "The signed-in Google account does not have permission to download file "
+                                + fileId
+                                + ". Share the file with that account, or authorize the correct account.",
+                        e);
+            }
+            throw e;
         }
     }
 
