@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -172,6 +173,34 @@ public class DriveQuickstart {
                 });
     }
 
+    public static List<Path> downloadFiles(List<File> files, Path destinationDirectory)
+            throws IOException, GeneralSecurityException {
+        if (files == null) {
+            throw new IllegalArgumentException("File list cannot be null.");
+        }
+        if (destinationDirectory == null) {
+            throw new IllegalArgumentException("Destination directory cannot be null.");
+        }
+
+        Files.createDirectories(destinationDirectory);
+        List<Path> downloadedFiles = new ArrayList<>();
+
+        for (File file : files) {
+            if (file == null || file.getId() == null || file.getId().isBlank()) {
+                throw new IllegalArgumentException("File list contains a file without an ID.");
+            }
+            if (file.getName() == null || file.getName().isBlank()) {
+                throw new IllegalArgumentException("File list contains a file without a name.");
+            }
+
+            Path destination = destinationDirectory.resolve(sanitizeFileName(file.getName()));
+            downloadFile(file.getId(), destination);
+            downloadedFiles.add(destination);
+        }
+
+        return downloadedFiles;
+    }
+
     public static void downloadFileWithProgress(
             String fileId, Path destination, DownloadProgressListener progressListener)
             throws IOException, GeneralSecurityException {
@@ -231,6 +260,10 @@ public class DriveQuickstart {
             }
             throw e;
         }
+    }
+
+    private static String sanitizeFileName(String fileName) {
+        return fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
     }
 
     public static void listAllFiles(String... args) throws IOException, GeneralSecurityException {

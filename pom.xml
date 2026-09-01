@@ -73,8 +73,11 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>jlink</goal>
+                        </goals>
                         <configuration>
                             <mainClass>com.galaxyrp.galaxyrplauncher/com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherApplication
                             </mainClass>
@@ -91,6 +94,28 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.5</version>
+                <executions>
+                    <execution>
+                        <id>package-windows-installer</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jpackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <name>GalaxyRPLauncher</name>
+                    <appVersion>1.0.0</appVersion>
+                    <vendor>GalaxyRP</vendor>
+                    <type>EXE</type>
+                    <appImage>${project.build.directory}/app</appImage>
+                    <destination>${project.build.directory}/installer</destination>
+                </configuration>
             </plugin>
         </plugins>
     </build>

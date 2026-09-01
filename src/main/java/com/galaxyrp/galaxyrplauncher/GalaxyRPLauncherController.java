@@ -43,6 +43,24 @@ public class GalaxyRPLauncherController {
     @FXML
     public void onDownloadAllButtonClick() {
         System.out.println("Download All Button clicked");
+
+        String folderLink;
+        if (googleDriveLinkTextBox == null) {
+            folderLink = "";
+        } else {
+            folderLink = googleDriveLinkTextBox.getText();
+        }
+
+        Thread downloadAllThread = new Thread(() -> {
+            try {
+                googleDriveFiles = DriveQuickstart.listFilesFromFolder(folderLink);
+                DriveQuickstart.downloadFiles(googleDriveFiles, Paths.get("downloads"));
+            } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
+                throw new LauncherErrorException(e.getMessage(), "download all", this);
+            }
+        }, "google-drive-download-all");
+        downloadAllThread.setDaemon(true);
+        downloadAllThread.start();
     }
 
     @FXML
