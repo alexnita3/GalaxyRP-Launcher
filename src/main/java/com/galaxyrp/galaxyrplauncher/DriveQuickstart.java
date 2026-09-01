@@ -97,6 +97,32 @@ public class DriveQuickstart {
         return null;
     }
 
+    private static void collectFilesRecursively(Drive service, String folderId, List<File> allFiles)
+            throws IOException {
+        String pageToken = null;
+        do {
+            FileList result = service.files().list()
+                    .setQ("'" + folderId + "' in parents and trashed = false")
+                    .setFields("nextPageToken, files(id, name, mimeType, webViewLink)")
+                    .setPageSize(1000)
+                    .setPageToken(pageToken)
+                    .execute();
+
+            List<File> children = result.getFiles();
+            if (children != null) {
+                for (File child : children) {
+                    if ("application/vnd.google-apps.folder".equals(child.getMimeType())) {
+                        collectFilesRecursively(service, child.getId(), allFiles);
+                    } else {
+                        allFiles.add(child);
+                    }
+                }
+            }
+
+            pageToken = result.getNextPageToken();
+        } while (pageToken != null && !pageToken.isEmpty());
+    }
+
     public static List<File> listFilesFromFolder(String folderLink) throws IOException, GeneralSecurityException {
         String folderId = extractFolderId(folderLink);
         if (folderId == null || folderId.isBlank()) {
@@ -108,14 +134,9 @@ public class DriveQuickstart {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        FileList result = service.files().list()
-                .setQ("'" + folderId + "' in parents and trashed = false")
-                .setFields("nextPageToken, files(id, name, mimeType, webViewLink)")
-                .setPageSize(1000)
-                .execute();
-
-        List<File> files = result.getFiles();
-        return files == null ? Collections.emptyList() : files;
+        List<File> allFiles = new java.util.ArrayList<>();
+        collectFilesRecursively(service, folderId, allFiles);
+        return allFiles;
     }
 
     public static void listAllFiles(String... args) throws IOException, GeneralSecurityException {
