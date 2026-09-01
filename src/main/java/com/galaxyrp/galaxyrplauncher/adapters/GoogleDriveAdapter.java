@@ -39,6 +39,16 @@ public class GoogleDriveAdapter {
         void onProgress(long downloadedBytes, long totalBytes);
     }
 
+    @FunctionalInterface
+    public interface FileDownloadedListener {
+        void onFileDownloaded(File file) throws IOException;
+    }
+
+    @FunctionalInterface
+    public interface FileDownloadStartedListener {
+        void onFileDownloadStarted(File file);
+    }
+
     /**
      * Application name.
      */
@@ -166,6 +176,38 @@ public class GoogleDriveAdapter {
             Path destinationDirectory,
             DownloadProgressListener progressListener)
             throws IOException, GeneralSecurityException {
+        downloadFilesWithProgress(
+                files,
+                destinationDirectory,
+                progressListener,
+                file -> {
+                },
+                file -> {
+                });
+    }
+
+    public static void downloadFilesWithProgress(
+            List<File> files,
+            Path destinationDirectory,
+            DownloadProgressListener progressListener,
+            FileDownloadedListener fileDownloadedListener)
+            throws IOException, GeneralSecurityException {
+        downloadFilesWithProgress(
+                files,
+                destinationDirectory,
+                progressListener,
+                file -> {
+                },
+                fileDownloadedListener);
+    }
+
+    public static void downloadFilesWithProgress(
+            List<File> files,
+            Path destinationDirectory,
+            DownloadProgressListener progressListener,
+            FileDownloadStartedListener fileDownloadStartedListener,
+            FileDownloadedListener fileDownloadedListener)
+            throws IOException, GeneralSecurityException {
         if (files == null) {
             throw new IllegalArgumentException("File list cannot be null.");
         }
@@ -174,6 +216,12 @@ public class GoogleDriveAdapter {
         }
         if (progressListener == null) {
             throw new IllegalArgumentException("Progress listener cannot be null.");
+        }
+        if (fileDownloadedListener == null) {
+            throw new IllegalArgumentException("File downloaded listener cannot be null.");
+        }
+        if (fileDownloadStartedListener == null) {
+            throw new IllegalArgumentException("File download started listener cannot be null.");
         }
 
         Files.createDirectories(destinationDirectory);
@@ -187,12 +235,14 @@ public class GoogleDriveAdapter {
             }
 
             Path destination = destinationDirectory.resolve(sanitizeFileName(file.getName()));
+            fileDownloadStartedListener.onFileDownloadStarted(file);
             long totalBytes = -1;
             if (file.getSize() != null) {
                 totalBytes = file.getSize();
             }
             progressListener.onProgress(0, totalBytes);
             downloadFileWithProgress(file.getId(), destination, progressListener);
+            fileDownloadedListener.onFileDownloaded(file);
         }
 
     }
