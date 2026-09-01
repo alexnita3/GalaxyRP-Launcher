@@ -1,5 +1,6 @@
 package com.galaxyrp.galaxyrplauncher.adapters;
 
+import com.galaxyrp.galaxyrplauncher.services.FileComparisonService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -115,7 +116,7 @@ public class GoogleDriveAdapter {
         do {
             FileList result = service.files().list()
                     .setQ("'" + folderId + "' in parents and trashed = false")
-                    .setFields("nextPageToken, files(id, name, mimeType, webViewLink, size, modifiedTime, version)")
+                    .setFields("nextPageToken, files(id, name, mimeType, webViewLink, size, md5Checksum, modifiedTime, version)")
                     .setPageSize(1000)
                     .setPageToken(pageToken)
                     .setSupportsAllDrives(true)
@@ -152,7 +153,12 @@ public class GoogleDriveAdapter {
         for(File file : allFiles) {
             System.out.println(file.getName());
         }
-        return allFiles;
+
+        FileComparisonService fileComparisonService = new FileComparisonService();
+
+        List<File> filteredFiles = fileComparisonService.getDifferentFiles(allFiles);
+
+        return filteredFiles;
     }
 
     public static void downloadFilesWithProgress(
