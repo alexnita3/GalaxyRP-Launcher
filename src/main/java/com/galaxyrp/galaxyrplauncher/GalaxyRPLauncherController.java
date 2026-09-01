@@ -50,6 +50,7 @@ public class GalaxyRPLauncherController {
         InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
 
         ConfigurationFileService configurationFileService = new ConfigurationFileService();
+        configurationFileService.initializeConfigurationFile();
         this.launcherConfiguration = configurationFileService.loadConfigurationFile();
         InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
     }

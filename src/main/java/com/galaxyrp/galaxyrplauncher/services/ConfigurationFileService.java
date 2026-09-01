@@ -1,11 +1,9 @@
 package com.galaxyrp.galaxyrplauncher.services;
 
-import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
 import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
 import com.google.api.client.json.gson.GsonFactory;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,10 +14,10 @@ public class ConfigurationFileService {
     private static final String CONFIGURATION_FILE_NAME = "GalaxyRP_Launcher_config.config";
 
     private boolean doesConfigurationFileExist() {
-        return Files.isRegularFile(Path.of(CONFIGURATION_FILE_NAME));
+        return Files.isRegularFile(getConfigurationFilePath());
     }
 
-    private void initializeNewConfigurationFile() throws IOException {
+    public void initializeConfigurationFile() throws IOException {
         if (!doesConfigurationFileExist()) {
             LauncherConfiguration launcherConfiguration = new LauncherConfiguration();
             saveConfigurationFile(launcherConfiguration);
@@ -27,23 +25,22 @@ public class ConfigurationFileService {
     }
 
     public void saveConfigurationFile(LauncherConfiguration configuration) throws IOException {
-        if (doesConfigurationFileExist()) {
+        String configurationJson =
+                GsonFactory.getDefaultInstance().toString(configuration);
 
-            String configurationJson =
-                    GsonFactory.getDefaultInstance().toString(configuration);
-
-            Files.writeString(
-                    Path.of(CONFIGURATION_FILE_NAME),
-                    configurationJson,
-                    StandardCharsets.UTF_8,
-                    StandardOpenOption.CREATE_NEW);
-        }
+        Files.writeString(
+                getConfigurationFilePath(),
+                configurationJson,
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     public LauncherConfiguration loadConfigurationFile() throws IOException {
         LauncherConfiguration launcherConfiguration = new LauncherConfiguration();
         if (doesConfigurationFileExist()) {
-            String configurationJson = Files.readString(Path.of(CONFIGURATION_FILE_NAME), StandardCharsets.UTF_8);
+            String configurationJson = Files.readString(
+                    getConfigurationFilePath(), StandardCharsets.UTF_8);
             launcherConfiguration = GsonFactory.getDefaultInstance().fromString(configurationJson, LauncherConfiguration.class);
         }
         return launcherConfiguration;
@@ -51,5 +48,11 @@ public class ConfigurationFileService {
 
     public void applyConfiguration(LauncherConfiguration configuration) {
 
+    }
+
+    private static Path getConfigurationFilePath() {
+        return Paths.get(System.getProperty("user.dir"))
+                .toAbsolutePath()
+                .resolve(CONFIGURATION_FILE_NAME);
     }
 }

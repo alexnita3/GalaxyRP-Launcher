@@ -39,5 +39,6 @@ build/
 .DS_Store
 
 /credentials.json
+/GalaxyRP_Launcher_config.config
 
 /tokens
