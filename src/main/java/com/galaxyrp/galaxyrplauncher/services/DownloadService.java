@@ -42,7 +42,7 @@ public class DownloadService {
         progressView.begin();
         GoogleDriveAdapter.downloadFilesWithProgress(
                 controller.googleDriveFiles,
-                Paths.get("downloads"),
+                Paths.get("GameData"),
                 progressView::update,
                 this::selectFileForDownload,
                 file -> filterDownloadedFiles());
@@ -51,7 +51,7 @@ public class DownloadService {
     public void downloadSelected() throws IOException, GeneralSecurityException {
         progressView.begin();
         Path destination = Paths.get(
-                "downloads", sanitizeFileName(selectedFile.getName()));
+                "GameData", sanitizeFileName(selectedFile.getName()));
         GoogleDriveAdapter.downloadFileWithProgress(
                 selectedFile.getId(), destination, progressView::update);
         filterDownloadedFiles();
