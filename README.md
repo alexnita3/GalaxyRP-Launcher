@@ -33,9 +33,38 @@ Settings Screen:
 ![App Screenshot](https://i.imgur.com/UaZ5olN.png)
 
 
+## Tech Stack
+
+**IDE:** Intellij IDEA
+
+**Framework:** JavaFX
+
+**APIs:** [Google Drive API](https://developers.google.com/drive/api/guides/about-sdk)
+
+
+## Privacy Policy
+
+The only data I have access to about the users of this app are the number of api calls and the success rate of those calls.
+
+I do **NOT** have access to: private email addresses used with this, contents of the downloads, any of the settings used, any passwords, IPs and configs.
+
+I have never and will never use the information this app collects for any financial benefit, nor will I share it with anyone else, unless to help the development of this app.
+
+
+## Getting started with development
+
+- Download Intellij IDEA
+- Create a Google auth account, and generate a set of credentials
+- Fork the repository, and then close it somewhere on your computer
+- Make your changes
+- Run the maven clean package commands
+- Your jar file will be in `/target/`
+
 ## Google Drive API
 
 If you plan to compile and run this yourself, you will need to generate your own google drive API Oauth2.0 keys.
+
+You can find instructions for that here: https://developers.google.com/workspace/drive/api/quickstart/java
 
 #### Oauth key service name:
 
@@ -50,24 +79,6 @@ Once you have your key, download and save it as:
 ```
 
 Then place it in the same folder as your debug app.
-
-
-## Tech Stack
-
-**IDE:** Visual Studio 2019
-
-**Frameword:** WPF, .NET 4.7
-
-**APIs:** [Google Drive API](https://developers.google.com/drive/api/guides/about-sdk)
-
-
-## Privacy Policy
-
-The only data I have access to about the users of this app are the number of api calls and the success rate of those calls.
-
-I do **NOT** have access to: private email addresses used with this, contents of the downloads, any of the settings used, any passwords, IPs and configs.
-
-I have never and will never use the information this app collects for any financial benefit, nor will I share it with anyone else, unless to help the development of this app.
 
 
 ## Authors

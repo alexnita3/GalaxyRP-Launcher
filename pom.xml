@@ -12,6 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.12.1</junit.version>
+        <jpackage.skip>false</jpackage.skip>
     </properties>
 
     <dependencies>
@@ -79,29 +80,23 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
-                        <id>default-cli</id>
-                        <phase>prepare-package</phase>
+                        <phase>package</phase>
                         <goals>
-                            <goal>jlink</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <mainClass>com.galaxyrp.galaxyrplauncher/com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherApplication
-                            </mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
-                            <jlinkArgs>
-                                <arg>--add-modules</arg>
-                                <arg>jdk.httpserver</arg>
-                            </jlinkArgs>
-                            <noManPages>true</noManPages>
-                            <stripDebug>true</stripDebug>
-                            <noHeaderFiles>true</noHeaderFiles>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.galaxyrp.galaxyrplauncher.Launcher</mainClass>
+                                </transformer>
+                            </transformers>
                         </configuration>
                     </execution>
                 </executions>
@@ -120,12 +115,17 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <skip>${jpackage.skip}</skip>
                     <name>GalaxyRPLauncher</name>
                     <appVersion>1.0.0</appVersion>
                     <vendor>GalaxyRP</vendor>
                     <type>EXE</type>
-                    <appImage>${project.build.directory}/app</appImage>
+                    <input>${project.build.directory}</input>
                     <destination>${project.build.directory}/installer</destination>
+                    <mainJar>${project.build.finalName}.jar</mainJar>
+                    <mainClass>com.galaxyrp.galaxyrplauncher.Launcher</mainClass>
+                    <winMenu>true</winMenu>
+                    <winShortcut>true</winShortcut>
                 </configuration>
             </plugin>
         </plugins>

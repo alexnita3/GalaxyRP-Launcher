@@ -140,6 +140,15 @@ public class GalaxyRPLauncherController {
 
     @FXML
     public void onLaunchGameButtonClick() {
-
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    "openjk.x86.exe",
+                    launcherConfiguration.getCustomArguments()
+            );
+            //processBuilder.directory(new java.io.File(System.getProperty("user.dir")));
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
