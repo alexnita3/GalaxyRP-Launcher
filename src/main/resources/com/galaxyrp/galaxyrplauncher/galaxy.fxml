@@ -5,13 +5,13 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController">
 <children>
@@ -23,7 +23,7 @@
                         <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                 <children>
-                                    <ListView fx:id="cloudFileList" layoutX="12.0" layoutY="15.0" prefHeight="316.0" prefWidth="223.0" onMouseClicked="#displayFileDetails" />
+                                    <ListView fx:id="cloudFileList" layoutX="12.0" layoutY="15.0" onMouseClicked="#displayFileDetails" prefHeight="316.0" prefWidth="223.0" />
                                     <Pane layoutX="243.0" layoutY="15.0" prefHeight="149.0" prefWidth="371.0">
                                         <children>
                                             <Label layoutX="144.0" layoutY="14.0" text="File Information" />
@@ -39,11 +39,13 @@
                                     </Pane>
                                     <Pane layoutX="243.0" layoutY="182.0" prefHeight="149.0" prefWidth="371.0">
                                         <children>
-                                            <Button fx:id="downloadSelectedButton" layoutX="126.0" layoutY="50.0" mnemonicParsing="false" text="Download Selected" onAction="#onDownloadSelectedButtonClick"/>
-                                            <Button fx:id="checkUpdateButton" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" text="Check Updates" onAction="#onCheckUpdateButtonClick"/>
-                                            <Button fx:id="downloadAllButton" layoutX="261.0" layoutY="50.0" mnemonicParsing="false" text="Download All" onAction="#onDownloadAllButtonClick"/>
-                                            <Button fx:id="launchGameButton" layoutX="14.0" layoutY="96.0" mnemonicParsing="false" text="Launch Game" />
-                                            <ChoiceBox fx:id="serverSelectDropDownList" layoutX="198.0" layoutY="96.0" prefWidth="150.0" />
+                                            <Button fx:id="downloadSelectedButton" layoutX="126.0" layoutY="75.0" mnemonicParsing="false" onAction="#onDownloadSelectedButtonClick" text="Download Selected" />
+                                            <Button fx:id="checkUpdateButton" layoutX="17.0" layoutY="75.0" mnemonicParsing="false" onAction="#onCheckUpdateButtonClick" text="Check Updates" />
+                                            <Button fx:id="downloadAllButton" layoutX="266.0" layoutY="75.0" mnemonicParsing="false" onAction="#onDownloadAllButtonClick" text="Download All" />
+                                            <Button fx:id="launchGameButton" layoutX="21.0" layoutY="109.0" mnemonicParsing="false" text="Launch Game" />
+                                            <ChoiceBox fx:id="serverSelectDropDownList" layoutX="203.0" layoutY="109.0" prefWidth="150.0" />
+                                    <ProgressBar fx:id="downloadProgressBar" layoutX="18.0" layoutY="41.0" prefHeight="18.0" prefWidth="336.0" progress="0.0" />
+                                    <Label fx:id="statusLabel" layoutX="169.0" layoutY="14.0" text="Status" />
                                         </children>
                                     </Pane>
                                 </children>
