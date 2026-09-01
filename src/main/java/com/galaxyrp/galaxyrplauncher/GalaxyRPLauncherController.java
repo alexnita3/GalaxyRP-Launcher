@@ -2,6 +2,7 @@ package com.galaxyrp.galaxyrplauncher;
 
 import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -33,15 +34,27 @@ public class GalaxyRPLauncherController {
     public Button launchGameButton;
     public ChoiceBox serverSelectDropDownList;
     public ListView<String> cloudFileList;
-    @FXML
-    private Label welcomeText;
 
     List<File> googleDriveFiles;
 
     @FXML
     public void onDownloadAllButtonClick() {
         System.out.println("Download All Button clicked");
+    }
 
+    @FXML
+    public void displayFileDetails() {
+        if (cloudFileList.getSelectionModel().getSelectedIndex() != -1) {
+            int index = cloudFileList.getSelectionModel().getSelectedIndex();
+
+            File selectedFile = googleDriveFiles.get(index);
+
+            HelperMethods.updateFileDetailLabels(this, selectedFile);
+        }
+    }
+
+    @FXML
+    public void onCheckUpdateButtonClick() {
         Thread driveThread = new Thread(() -> {
             try {
                 String folderLink = googleDriveLinkTextBox != null ? googleDriveLinkTextBox.getText() : null;
@@ -71,16 +84,5 @@ public class GalaxyRPLauncherController {
         });
         driveThread.setDaemon(true);
         driveThread.start();
-    }
-
-    @FXML
-    public void displayFileDetails() {
-        if (cloudFileList.getSelectionModel().getSelectedIndex() != -1) {
-            int index = cloudFileList.getSelectionModel().getSelectedIndex();
-
-            File selectedFile = googleDriveFiles.get(index);
-
-            HelperMethods.updateFileDetailLabels(this, selectedFile);
-        }
     }
 }

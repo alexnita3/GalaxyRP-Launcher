@@ -40,7 +40,7 @@
                                     <Pane layoutX="243.0" layoutY="182.0" prefHeight="149.0" prefWidth="371.0">
                                         <children>
                                             <Button fx:id="downloadSelectedButton" layoutX="126.0" layoutY="50.0" mnemonicParsing="false" text="Download Selected" />
-                                            <Button fx:id="checkUpdateButton" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" text="Check Updates" />
+                                            <Button fx:id="checkUpdateButton" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" text="Check Updates" onAction="#onCheckUpdateButtonClick"/>
                                             <Button fx:id="downloadAllButton" layoutX="261.0" layoutY="50.0" mnemonicParsing="false" text="Download All" onAction="#onDownloadAllButtonClick"/>
                                             <Button fx:id="launchGameButton" layoutX="14.0" layoutY="96.0" mnemonicParsing="false" text="Launch Game" />
                                             <ChoiceBox fx:id="serverSelectDropDownList" layoutX="198.0" layoutY="96.0" prefWidth="150.0" />
