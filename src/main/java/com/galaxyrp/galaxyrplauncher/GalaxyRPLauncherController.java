@@ -1,8 +1,10 @@
 package com.galaxyrp.galaxyrplauncher;
 
+import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -34,6 +36,8 @@ public class GalaxyRPLauncherController {
     @FXML
     private Label welcomeText;
 
+    List<File> googleDriveFiles;
+
     @FXML
     public void onDownloadAllButtonClick() {
         System.out.println("Download All Button clicked");
@@ -41,12 +45,12 @@ public class GalaxyRPLauncherController {
         Thread driveThread = new Thread(() -> {
             try {
                 String folderLink = googleDriveLinkTextBox != null ? googleDriveLinkTextBox.getText() : null;
-                List<com.google.api.services.drive.model.File> files =
+                googleDriveFiles =
                         folderLink == null || folderLink.isBlank()
                                 ? DriveQuickstart.listFilesFromFolder(googleDriveLinkTextBox.getText())
                                 : DriveQuickstart.listFilesFromFolder(folderLink);
 
-                List<String> fileNames = files.stream()
+                List<String> fileNames = googleDriveFiles.stream()
                         .map(com.google.api.services.drive.model.File::getName)
                         .collect(Collectors.toList());
 
@@ -67,5 +71,16 @@ public class GalaxyRPLauncherController {
         });
         driveThread.setDaemon(true);
         driveThread.start();
+    }
+
+    @FXML
+    public void displayFileDetails() {
+        if (cloudFileList.getSelectionModel().getSelectedIndex() != -1) {
+            int index = cloudFileList.getSelectionModel().getSelectedIndex();
+
+            File selectedFile = googleDriveFiles.get(index);
+
+            HelperMethods.updateFileDetailLabels(this, selectedFile);
+        }
     }
 }
