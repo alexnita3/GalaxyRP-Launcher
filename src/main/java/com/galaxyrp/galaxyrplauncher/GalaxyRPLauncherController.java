@@ -36,6 +36,7 @@ public class GalaxyRPLauncherController {
     public ListView<String> cloudFileList;
     public ProgressBar downloadProgressBar;
     public Label downloadStatusLabel;
+    public Label statusLabel;
 
     List<File> googleDriveFiles;
 
@@ -75,13 +76,7 @@ public class GalaxyRPLauncherController {
                     }
                 });
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
-                e.printStackTrace();
-                Platform.runLater(() -> {
-                    if (cloudFileList != null) {
-                        cloudFileList.getItems().clear();
-                        cloudFileList.getItems().add("Google Drive error: " + e.getMessage());
-                    }
-                });
+                throw new LauncherErrorException(e.getMessage(), "get files", this);
             }
         });
         driveThread.setDaemon(true);
@@ -91,8 +86,7 @@ public class GalaxyRPLauncherController {
     @FXML
     public void onDownloadSelectedButtonClick() {
         int selectedIndex = cloudFileList.getSelectionModel().getSelectedIndex();
-        if (selectedIndex == -1 || googleDriveFiles == null
-                || selectedIndex >= googleDriveFiles.size()) {
+        if (HelperMethods.canSelectedFileBeDownloaded(selectedIndex, googleDriveFiles)) {
             return;
         }
 
@@ -113,14 +107,7 @@ public class GalaxyRPLauncherController {
                         progressView::update);
                 progressView.complete();
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
-                e.printStackTrace();
-                progressView.failed();
-                Platform.runLater(() -> {
-                    if (cloudFileList != null) {
-                        cloudFileList.getItems().clear();
-                        cloudFileList.getItems().add("Google Drive error: " + e.getMessage());
-                    }
-                });
+                throw new LauncherErrorException(e.getMessage(), "download", this);
             }
         };
         Thread downloadThread = new Thread(downloadTask, "google-drive-download");
