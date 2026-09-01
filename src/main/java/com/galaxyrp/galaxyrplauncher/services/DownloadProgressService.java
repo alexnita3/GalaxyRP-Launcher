@@ -1,21 +1,18 @@
 package com.galaxyrp.galaxyrplauncher.services;
 
 import javafx.application.Platform;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 
 public class DownloadProgressService {
     private final ProgressBar progressBar;
     private final Label statusLabel;
-    private final Button downloadButton;
     private long startTime;
 
     public DownloadProgressService(
-            ProgressBar progressBar, Label statusLabel, Button downloadButton) {
+            ProgressBar progressBar, Label statusLabel) {
         this.progressBar = progressBar;
         this.statusLabel = statusLabel;
-        this.downloadButton = downloadButton;
     }
 
     public void begin() {

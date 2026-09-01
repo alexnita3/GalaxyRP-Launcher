@@ -23,16 +23,14 @@ public class DownloadService {
     public void prepareAll() {
         progressView = new DownloadProgressService(
                 controller.downloadProgressBar,
-                controller.downloadStatusLabel,
-                controller.downloadAllButton);
+                controller.downloadStatusLabel);
     }
 
     public void prepareSelected(File file) {
         selectedFile = file;
         progressView = new DownloadProgressService(
                 controller.downloadProgressBar,
-                controller.downloadStatusLabel,
-                controller.downloadSelectedButton);
+                controller.downloadStatusLabel);
     }
 
     public void downloadAll() throws IOException, GeneralSecurityException {

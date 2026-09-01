@@ -25,7 +25,6 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -157,32 +156,6 @@ public class GoogleDriveAdapter {
         return allFiles;
     }
 
-    public static void downloadFile(String fileId, Path destination)
-            throws IOException, GeneralSecurityException {
-        downloadFileWithProgress(fileId, destination, (downloadedBytes, totalBytes) -> {
-        });
-    }
-
-    public static void downloadFile(String fileId, Path destination, Consumer<Double> progressListener)
-            throws IOException, GeneralSecurityException {
-        downloadFileWithProgress(fileId, destination,
-                (downloadedBytes, totalBytes) -> {
-                    double progress;
-                    if (totalBytes > 0) {
-                        progress = (double) downloadedBytes / totalBytes;
-                    } else {
-                        progress = 0;
-                    }
-                    progressListener.accept(progress);
-                });
-    }
-
-    public static List<Path> downloadFiles(List<File> files, Path destinationDirectory)
-            throws IOException, GeneralSecurityException {
-        return downloadFilesWithProgress(files, destinationDirectory, (downloadedBytes, totalBytes) -> {
-        });
-    }
-
     public static List<Path> downloadFilesWithProgress(
             List<File> files,
             Path destinationDirectory,
@@ -305,22 +278,5 @@ public class GoogleDriveAdapter {
     private static String sanitizeFileName(String fileName) {
         return fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
     }
-
-    public static void listAllFiles(String... args) throws IOException, GeneralSecurityException {
-        List<File> files = listFilesFromFolder("");
-        if (files.isEmpty()) {
-            System.out.println("No files found.");
-        } else {
-            System.out.println("Files:");
-            for (File file : files) {
-                System.out.printf("%s (%s)\n", file.getName(), file.getId());
-            }
-        }
-    }
-
-    public static void main(String... args) throws IOException, GeneralSecurityException {
-        listAllFiles();
-    }
-
 
 }
