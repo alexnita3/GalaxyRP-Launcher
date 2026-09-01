@@ -2,10 +2,8 @@ package com.galaxyrp.galaxyrplauncher;
 
 import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -104,73 +102,28 @@ public class GalaxyRPLauncherController {
             return;
         }
 
-        if (downloadProgressBar != null) {
-            downloadProgressBar.setProgress(0);
-            downloadProgressBar.setVisible(true);
-        }
-        if (downloadSelectedButton != null) {
-            downloadSelectedButton.setDisable(true);
-        }
-        if (downloadStatusLabel != null) {
-            downloadStatusLabel.setText("Starting download...");
-        }
+        DownloadProgress progressView =
+                new DownloadProgress(downloadProgressBar, downloadStatusLabel, downloadSelectedButton);
+        progressView.begin();
 
-        Thread downloadThread = new Thread(() -> {
+        Runnable downloadTask = () -> {
             try {
                 Path destination = Paths.get("downloads", sanitizeFileName(fileName));
-                long startTime = System.nanoTime();
                 DriveQuickstart.downloadFileWithProgress(selectedFile.getId(), destination,
-                        (downloadedBytes, totalBytes) -> {
-                    double progress = totalBytes > 0
-                            ? (double) downloadedBytes / totalBytes
-                            : 0;
-                    double elapsedSeconds = (System.nanoTime() - startTime) / 1_000_000_000.0;
-                    double bytesPerSecond = elapsedSeconds > 0
-                            ? downloadedBytes / elapsedSeconds
-                            : 0;
-                    String status = totalBytes > 0
-                            ? String.format("%.0f%% - %.2f MB/s", progress * 100, bytesPerSecond / 1_048_576)
-                            : String.format("%.2f MB/s", bytesPerSecond / 1_048_576);
-
-                    Platform.runLater(() -> {
-                        if (downloadProgressBar != null) {
-                            downloadProgressBar.setProgress(progress);
-                        }
-                        if (downloadStatusLabel != null) {
-                            downloadStatusLabel.setText(status);
-                        }
-                    });
-                });
-                Platform.runLater(() -> {
-                    if (downloadProgressBar != null) {
-                        downloadProgressBar.setProgress(1);
-                    }
-                    if (downloadStatusLabel != null) {
-                        downloadStatusLabel.setText("100% - Complete");
-                    }
-                    if (downloadSelectedButton != null) {
-                        downloadSelectedButton.setDisable(false);
-                    }
-                });
+                        progressView::update);
+                progressView.complete();
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
                 e.printStackTrace();
+                progressView.failed();
                 Platform.runLater(() -> {
-                    if (downloadProgressBar != null) {
-                        downloadProgressBar.setProgress(0);
-                    }
-                    if (downloadStatusLabel != null) {
-                        downloadStatusLabel.setText("Download failed");
-                    }
-                    if (downloadSelectedButton != null) {
-                        downloadSelectedButton.setDisable(false);
-                    }
                     if (cloudFileList != null) {
                         cloudFileList.getItems().clear();
                         cloudFileList.getItems().add("Google Drive error: " + e.getMessage());
                     }
                 });
             }
-        });
+        };
+        Thread downloadThread = new Thread(downloadTask, "google-drive-download");
         downloadThread.setDaemon(true);
         downloadThread.start();
     }
