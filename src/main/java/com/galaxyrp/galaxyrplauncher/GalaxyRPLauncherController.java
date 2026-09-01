@@ -1,10 +1,11 @@
 package com.galaxyrp.galaxyrplauncher;
 
 import com.galaxyrp.galaxyrplauncher.exceptions.LauncherErrorException;
+import com.galaxyrp.galaxyrplauncher.enums.UserAction;
+import com.galaxyrp.galaxyrplauncher.services.AsyncActionService;
 import com.galaxyrp.galaxyrplauncher.services.DownloadProgressService;
 import com.galaxyrp.galaxyrplauncher.services.GoogleDriveService;
 import com.galaxyrp.galaxyrplauncher.services.InterfaceUpdateService;
-import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -44,35 +45,38 @@ public class GalaxyRPLauncherController {
     public Label statusLabel;
 
     public List<File> googleDriveFiles;
+    private AsyncActionService asyncActionService;
+    private DownloadProgressService activeProgressView;
+    private File activeSelectedFile;
+    private String activeFileName;
+    private String activeActionName;
+
+    @FXML
+    public void initialize() {
+        asyncActionService = new AsyncActionService(this);
+        InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
+    }
 
     @FXML
     public void onDownloadAllButtonClick() {
         System.out.println("Download All Button clicked");
 
+        if (asyncActionService.isActionRunning()) {
+            return;
+        }
         if (googleDriveFiles == null || googleDriveFiles.isEmpty()) {
             InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
             return;
         }
 
-        InterfaceUpdateService.updateUserInterface(this, UserAction.PRESSED_DOWNLOAD_ALL);
-        DownloadProgressService progressView =
+        activeProgressView =
                 new DownloadProgressService(downloadProgressBar, downloadStatusLabel, downloadAllButton);
-        progressView.begin();
-
-        Thread downloadAllThread = new Thread(() -> {
-            try {
-                GoogleDriveService.downloadFilesWithProgress(
-                        googleDriveFiles, Paths.get("downloads"), progressView::update);
-                progressView.complete();
-                InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
-            } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
-                progressView.failed();
-                InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
-                throw new LauncherErrorException(e.getMessage(), "download all", this);
-            }
-        }, "google-drive-download-all");
-        downloadAllThread.setDaemon(true);
-        downloadAllThread.start();
+        activeActionName = "download all";
+        asyncActionService.run(
+                UserAction.PRESSED_DOWNLOAD_ALL,
+                this::downloadAllFiles,
+                this::downloadCompleted,
+                this::downloadFailed);
     }
 
     @FXML
@@ -88,42 +92,18 @@ public class GalaxyRPLauncherController {
 
     @FXML
     public void onCheckUpdateButtonClick() {
-        InterfaceUpdateService.updateUserInterface(this, UserAction.PRESSED_FILE_SEARCH);
-        Thread driveThread = new Thread(() -> {
-            try {
-                String folderLink;
-                if (googleDriveLinkTextBox == null) {
-                    folderLink = "";
-                } else {
-                    folderLink = googleDriveLinkTextBox.getText();
-                }
-                googleDriveFiles = GoogleDriveService.listFilesFromFolder(folderLink);
-
-                List<String> fileNames = googleDriveFiles.stream()
-                        .map(com.google.api.services.drive.model.File::getName)
-                        .collect(Collectors.toList());
-
-                Platform.runLater(() -> {
-                    if (cloudFileList != null) {
-                        cloudFileList.getItems().setAll(fileNames);
-                    }
-                });
-                if (googleDriveFiles.isEmpty()) {
-                    InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
-                } else {
-                    InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
-                }
-            } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
-                InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
-                throw new LauncherErrorException(e.getMessage(), "get files", this);
-            }
-        });
-        driveThread.setDaemon(true);
-        driveThread.start();
+        asyncActionService.run(
+                UserAction.PRESSED_FILE_SEARCH,
+                this::searchForFiles,
+                this::searchCompleted,
+                this::searchFailed);
     }
 
     @FXML
     public void onDownloadSelectedButtonClick() {
+        if (asyncActionService.isActionRunning()) {
+            return;
+        }
         int selectedIndex = cloudFileList.getSelectionModel().getSelectedIndex();
         if (!HelperMethods.canSelectedFileBeDownloaded(selectedIndex, googleDriveFiles)) {
             return;
@@ -135,27 +115,83 @@ public class GalaxyRPLauncherController {
             return;
         }
 
-        InterfaceUpdateService.updateUserInterface(this, UserAction.PRESSED_DOWNLOAD_SINGLE);
-        DownloadProgressService progressView =
+        activeSelectedFile = selectedFile;
+        activeFileName = fileName;
+        activeProgressView =
                 new DownloadProgressService(downloadProgressBar, downloadStatusLabel, downloadSelectedButton);
-        progressView.begin();
+        activeActionName = "download";
+        asyncActionService.run(
+                UserAction.PRESSED_DOWNLOAD_SINGLE,
+                this::downloadSelectedFile,
+                this::downloadCompleted,
+                this::downloadFailed);
+    }
 
-        Runnable downloadTask = () -> {
-            try {
-                Path destination = Paths.get("downloads", sanitizeFileName(fileName));
-                GoogleDriveService.downloadFileWithProgress(selectedFile.getId(), destination,
-                        progressView::update);
-                progressView.complete();
-                InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
-            } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
-                progressView.failed();
-                InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
-                throw new LauncherErrorException(e.getMessage(), "download", this);
-            }
-        };
-        Thread downloadThread = new Thread(downloadTask, "google-drive-download");
-        downloadThread.setDaemon(true);
-        downloadThread.start();
+    private void downloadAllFiles() throws IOException, GeneralSecurityException {
+        activeProgressView.begin();
+        GoogleDriveService.downloadFilesWithProgress(
+                googleDriveFiles, Paths.get("downloads"), activeProgressView::update);
+    }
+
+    private void downloadSelectedFile() throws IOException, GeneralSecurityException {
+        activeProgressView.begin();
+        Path destination = Paths.get("downloads", sanitizeFileName(activeFileName));
+        GoogleDriveService.downloadFileWithProgress(
+                activeSelectedFile.getId(), destination, activeProgressView::update);
+    }
+
+    private void downloadCompleted() {
+        activeProgressView.complete();
+        InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
+        clearActiveDownload();
+    }
+
+    private void downloadFailed(Exception exception) {
+        activeProgressView.failed();
+        InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
+        new LauncherErrorException(exception.getMessage(), activeActionName, this);
+        clearActiveDownload();
+    }
+
+    private void searchForFiles() throws IOException, GeneralSecurityException {
+        String folderLink;
+        if (googleDriveLinkTextBox == null) {
+            folderLink = "";
+        } else {
+            folderLink = googleDriveLinkTextBox.getText();
+        }
+        googleDriveFiles = GoogleDriveService.listFilesFromFolder(folderLink);
+
+        List<String> fileNames = googleDriveFiles.stream()
+                .map(com.google.api.services.drive.model.File::getName)
+                .collect(Collectors.toList());
+        Platform.runLater(() -> updateCloudFileList(fileNames));
+    }
+
+    private void updateCloudFileList(List<String> fileNames) {
+        if (cloudFileList != null) {
+            cloudFileList.getItems().setAll(fileNames);
+        }
+    }
+
+    private void searchCompleted() {
+        if (googleDriveFiles.isEmpty()) {
+            InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
+        } else {
+            InterfaceUpdateService.updateUserInterface(this, UserAction.IDLE);
+        }
+    }
+
+    private void searchFailed(Exception exception) {
+        InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
+        new LauncherErrorException(exception.getMessage(), "get files", this);
+    }
+
+    private void clearActiveDownload() {
+        activeProgressView = null;
+        activeSelectedFile = null;
+        activeFileName = null;
+        activeActionName = null;
     }
 
     private static String sanitizeFileName(String fileName) {
