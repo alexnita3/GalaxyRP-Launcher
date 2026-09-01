@@ -202,7 +202,7 @@ public class DriveQuickstart {
                     .setSupportsAllDrives(true);
             request.getMediaHttpDownloader()
                     .setDirectDownloadEnabled(false)
-                    .setChunkSize(256 * 1024)
+                    .setChunkSize(8 * 1024 * 1024)
                     .setProgressListener(
                     (MediaHttpDownloaderProgressListener) downloader ->
                             progressListener.onProgress(
