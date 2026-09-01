@@ -2,7 +2,7 @@ package com.galaxyrp.galaxyrplauncher.services;
 
 import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
 import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
-import com.galaxyrp.galaxyrplauncher.enums.GameMods;
+import com.galaxyrp.galaxyrplauncher.enums.ClientMods;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -68,7 +68,7 @@ public class ConfigurationFileService {
         configuration.setServer2Ip(controller.server2IpTextBox.getText());
         configuration.setServer2Name(controller.server2NameTextBox.getText());
         configuration.setGoogleDriveLink(controller.googleDriveLinkTextBox.getText());
-        configuration.setClientMod((GameMods) controller.clientModDropDown.getValue());
+        configuration.setClientMod((ClientMods) controller.clientModDropDown.getValue());
         configuration.setResolutionX(parseResolution(controller.resolutionXTextBox.getText(), "X"));
         configuration.setResolutionY(parseResolution(controller.resolutionYTextBox.getText(), "Y"));
         configuration.setCustomArguments(controller.customArgumentsTextBox.getText());

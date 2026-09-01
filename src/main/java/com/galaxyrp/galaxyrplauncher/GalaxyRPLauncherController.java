@@ -1,11 +1,9 @@
 package com.galaxyrp.galaxyrplauncher;
 
-import com.galaxyrp.galaxyrplauncher.enums.GameMods;
+import com.galaxyrp.galaxyrplauncher.enums.ClientMods;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.galaxyrp.galaxyrplauncher.services.*;
 import com.google.api.services.drive.model.File;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -61,8 +59,8 @@ public class GalaxyRPLauncherController {
         InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
 
 
-        clientModDropDown.getItems().add(0, GameMods.OPEN_JK);
-        clientModDropDown.getItems().add(1, GameMods.BASE_JKA);
+        clientModDropDown.getItems().add(0, ClientMods.OPEN_JK);
+        clientModDropDown.getItems().add(1, ClientMods.BASE_JKA);
     }
 
     @FXML

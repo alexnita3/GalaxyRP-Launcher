@@ -1,6 +1,6 @@
 package com.galaxyrp.galaxyrplauncher.enums;
 
-public enum GameMods {
+public enum ClientMods {
     BASE_JKA,
     OPEN_JK
 }
