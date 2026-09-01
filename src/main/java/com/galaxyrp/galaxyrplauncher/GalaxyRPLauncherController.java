@@ -61,11 +61,9 @@ public class GalaxyRPLauncherController {
         clientModDropDown.getItems().add(0, ClientMods.OPEN_JK);
         clientModDropDown.getItems().add(1, ClientMods.BASE_JKA);
 
-        if(launcherConfiguration.isScanOnStartup()){
+        if (launcherConfiguration.isScanOnStartup()) {
             onCheckUpdateButtonClick();
-        }
-
-        if(launcherConfiguration.isAutoDownload()){
+        } else if (launcherConfiguration.isAutoDownload()) {
             onDownloadAllButtonClick();
         }
     }

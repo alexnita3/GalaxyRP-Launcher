@@ -43,6 +43,9 @@ public class SearchService {
             InterfaceUpdateService.updateUserInterface(controller, UserAction.NOTHING_TO_DOWNLOAD);
         } else {
             InterfaceUpdateService.updateUserInterface(controller, UserAction.IDLE);
+            if (controller.launcherConfiguration.isAutoDownload()) {
+                controller.onDownloadAllButtonClick();
+            }
         }
     }
 

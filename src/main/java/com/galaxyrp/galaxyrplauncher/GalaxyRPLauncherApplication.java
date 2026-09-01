@@ -29,7 +29,7 @@ public class GalaxyRPLauncherApplication extends Application {
     }
 
     private boolean isGameDataFolderPresent() {
-        Path gameDataFolder = Paths.get("GameData");
+        Path gameDataFolder = Paths.get("base");
         return Files.isDirectory(gameDataFolder);
     }
 }

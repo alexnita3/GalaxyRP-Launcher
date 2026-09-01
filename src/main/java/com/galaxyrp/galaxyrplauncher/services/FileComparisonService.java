@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class FileComparisonService {
-    private static final Path DOWNLOADS_DIRECTORY = Paths.get("GameData");
+    private static final Path DOWNLOADS_DIRECTORY = Paths.get("base");
 
     public List<File> filterFiles(List<File> googleDriveFiles) throws IOException {
         googleDriveFiles = filterPk3Files(googleDriveFiles);

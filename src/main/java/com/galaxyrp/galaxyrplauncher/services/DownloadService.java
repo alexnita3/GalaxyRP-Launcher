@@ -20,6 +20,8 @@ public class DownloadService {
     private DownloadProgressService progressView;
     private File selectedFile;
 
+    private final String PK3_PATH = "base";
+
     public DownloadService(GalaxyRPLauncherController controller) {
         this.controller = controller;
         fileComparisonService = new FileComparisonService();
@@ -42,7 +44,7 @@ public class DownloadService {
         progressView.begin();
         GoogleDriveAdapter.downloadFilesWithProgress(
                 controller.googleDriveFiles,
-                Paths.get("GameData"),
+                Paths.get(PK3_PATH),
                 progressView::update,
                 this::selectFileForDownload,
                 file -> filterDownloadedFiles());
@@ -51,7 +53,7 @@ public class DownloadService {
     public void downloadSelected() throws IOException, GeneralSecurityException {
         progressView.begin();
         Path destination = Paths.get(
-                "GameData", sanitizeFileName(selectedFile.getName()));
+                PK3_PATH, sanitizeFileName(selectedFile.getName()));
         GoogleDriveAdapter.downloadFileWithProgress(
                 selectedFile.getId(), destination, progressView::update);
         filterDownloadedFiles();
