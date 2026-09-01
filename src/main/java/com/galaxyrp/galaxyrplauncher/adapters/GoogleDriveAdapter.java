@@ -1,4 +1,4 @@
-package com.galaxyrp.galaxyrplauncher.services;
+package com.galaxyrp.galaxyrplauncher.adapters;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -30,7 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /* class to demonstrate use of Drive files list API */
-public class GoogleDriveService {
+public class GoogleDriveAdapter {
     @FunctionalInterface
     public interface DownloadProgressListener {
         void onProgress(long downloadedBytes, long totalBytes);
