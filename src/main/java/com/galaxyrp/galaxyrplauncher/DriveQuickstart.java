@@ -103,7 +103,7 @@ public class DriveQuickstart {
         do {
             FileList result = service.files().list()
                     .setQ("'" + folderId + "' in parents and trashed = false")
-                    .setFields("nextPageToken, files(id, name, mimeType, webViewLink)")
+                    .setFields("nextPageToken, files(id, name, mimeType, webViewLink, size, modifiedTime, version)")
                     .setPageSize(1000)
                     .setPageToken(pageToken)
                     .execute();
