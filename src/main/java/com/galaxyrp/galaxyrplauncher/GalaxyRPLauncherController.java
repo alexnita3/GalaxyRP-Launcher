@@ -58,9 +58,16 @@ public class GalaxyRPLauncherController {
         this.launcherConfiguration = configurationFileService.loadConfigurationFile();
         InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
 
-
         clientModDropDown.getItems().add(0, ClientMods.OPEN_JK);
         clientModDropDown.getItems().add(1, ClientMods.BASE_JKA);
+
+        if(launcherConfiguration.isScanOnStartup()){
+            onCheckUpdateButtonClick();
+        }
+
+        if(launcherConfiguration.isAutoDownload()){
+            onDownloadAllButtonClick();
+        }
     }
 
     @FXML
