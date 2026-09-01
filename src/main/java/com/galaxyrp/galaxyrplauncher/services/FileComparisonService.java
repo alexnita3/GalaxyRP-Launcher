@@ -11,16 +11,36 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class FileComparisonService {
     private static final Path DOWNLOADS_DIRECTORY = Paths.get("downloads");
 
     public List<File> filterFiles(List<File> googleDriveFiles) throws IOException {
+        googleDriveFiles = filterPk3Files(googleDriveFiles);
         googleDriveFiles = getDifferentFiles(googleDriveFiles);
         return googleDriveFiles;
     }
 
-    public List<File> getDifferentFiles(List<File> googleDriveFiles)
+    private List<File> filterPk3Files(List<File> files) {
+        if (files == null) {
+            throw new IllegalArgumentException("File list cannot be null.");
+        }
+
+        List<File> pk3Files = new ArrayList<>();
+        for (File file : files) {
+            if (file == null || file.getName() == null) {
+                continue;
+            }
+
+            if (file.getName().toLowerCase(Locale.ROOT).endsWith(".pk3")) {
+                pk3Files.add(file);
+            }
+        }
+        return pk3Files;
+    }
+
+    private List<File> getDifferentFiles(List<File> googleDriveFiles)
             throws IOException {
         if (googleDriveFiles == null) {
             throw new IllegalArgumentException("Google Drive file list cannot be null.");

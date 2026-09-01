@@ -156,7 +156,7 @@ public class GoogleDriveAdapter {
 
         FileComparisonService fileComparisonService = new FileComparisonService();
 
-        List<File> filteredFiles = fileComparisonService.getDifferentFiles(allFiles);
+        List<File> filteredFiles = fileComparisonService.filterFiles(allFiles);
 
         return filteredFiles;
     }
