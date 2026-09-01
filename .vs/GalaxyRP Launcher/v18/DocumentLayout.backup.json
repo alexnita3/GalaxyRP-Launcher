@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Respositories\\GalaxyRP-Launcher\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|d:\\respositories\\galaxyrp-launcher\\galaxyrp launcher\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|solutionrelative:galaxyrp launcher\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|d:\\respositories\\galaxyrp-launcher\\galaxyrp launcher\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|solutionrelative:galaxyrp launcher\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|d:\\respositories\\galaxyrp-launcher\\galaxyrp launcher\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|solutionrelative:galaxyrp launcher\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|d:\\respositories\\galaxyrp-launcher\\galaxyrp launcher\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0B84420F-8F24-4030-A533-6771C05BA47A}|GalaxyRP Launcher\\GalaxyRP Launcher.csproj|solutionrelative:galaxyrp launcher\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "App.xaml",
+              "DocumentMoniker": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\App.xaml",
+              "RelativeDocumentMoniker": "GalaxyRP Launcher\\App.xaml",
+              "ToolTip": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\App.xaml",
+              "RelativeToolTip": "GalaxyRP Launcher\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-03T21:36:32.112Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\App.xaml.cs",
+              "RelativeDocumentMoniker": "GalaxyRP Launcher\\App.xaml.cs",
+              "ToolTip": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\App.xaml.cs",
+              "RelativeToolTip": "GalaxyRP Launcher\\App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T21:36:30.308Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "GalaxyRP Launcher\\MainWindow.xaml.cs",
+              "ToolTip": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\MainWindow.xaml.cs*",
+              "RelativeToolTip": "GalaxyRP Launcher\\MainWindow.xaml.cs*",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAgwCQAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T21:30:33.327Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "GalaxyRP Launcher\\MainWindow.xaml",
+              "ToolTip": "D:\\Respositories\\GalaxyRP-Launcher\\GalaxyRP Launcher\\MainWindow.xaml",
+              "RelativeToolTip": "GalaxyRP Launcher\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-03T21:32:21.738Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
