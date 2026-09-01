@@ -1,6 +1,5 @@
 package com.galaxyrp.galaxyrplauncher;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -36,6 +35,6 @@ public class GalaxyRPLauncherController {
     public void onDownloadAllButtonClick() throws GeneralSecurityException, IOException {
         System.out.println("Download All Button clicked");
 
-        DriveQuickstart.main();
+        DriveQuickstart.listAllFiles();
     }
 }

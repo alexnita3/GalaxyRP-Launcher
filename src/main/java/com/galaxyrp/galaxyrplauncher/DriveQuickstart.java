@@ -17,11 +17,12 @@ import com.google.api.services.drive.model.FileList;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /* class to demonstrate use of Drive files list API */
 public class DriveQuickstart {
@@ -59,12 +60,10 @@ public class DriveQuickstart {
 
         InputStream in = Files.newInputStream(Paths.get(CREDENTIALS_FILE_PATH));
 
-        //InputStream in = DriveQuickstart.class.getResourceAsStream("./credentials.json");
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
 
-        System.out.println("Found file!");
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -80,20 +79,48 @@ public class DriveQuickstart {
         return credential;
     }
 
-    public static void main(String... args) throws IOException, GeneralSecurityException {
-        // Build a new authorized API client service.
+    private static String extractFolderId(String folderLink) {
+        if (folderLink == null || folderLink.isBlank()) {
+            return null;
+        }
+
+        String cleaned = folderLink.trim();
+        Matcher matcher = Pattern.compile("(?:/folders/|[?&]id=)([A-Za-z0-9_-]+)").matcher(cleaned);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        if (cleaned.matches("[A-Za-z0-9_-]{10,}")) {
+            return cleaned;
+        }
+
+        return null;
+    }
+
+    public static List<File> listFilesFromFolder(String folderLink) throws IOException, GeneralSecurityException {
+        String folderId = extractFolderId(folderLink);
+        if (folderId == null || folderId.isBlank()) {
+            throw new IllegalArgumentException("Invalid Google Drive folder URL or ID: " + folderLink);
+        }
+
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        // Print the names and IDs for up to 10 files.
         FileList result = service.files().list()
-                .setPageSize(10)
-                .setFields("nextPageToken, files(id, name)")
+                .setQ("'" + folderId + "' in parents and trashed = false")
+                .setFields("nextPageToken, files(id, name, mimeType, webViewLink)")
+                .setPageSize(1000)
                 .execute();
+
         List<File> files = result.getFiles();
-        if (files == null || files.isEmpty()) {
+        return files == null ? Collections.emptyList() : files;
+    }
+
+    public static void listAllFiles(String... args) throws IOException, GeneralSecurityException {
+        List<File> files = listFilesFromFolder("");
+        if (files.isEmpty()) {
             System.out.println("No files found.");
         } else {
             System.out.println("Files:");
@@ -101,5 +128,9 @@ public class DriveQuickstart {
                 System.out.printf("%s (%s)\n", file.getName(), file.getId());
             }
         }
+    }
+
+    public static void main(String... args) throws IOException, GeneralSecurityException {
+        listAllFiles();
     }
 }
