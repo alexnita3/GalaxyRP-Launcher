@@ -2,6 +2,7 @@ package com.galaxyrp.galaxyrplauncher.services;
 
 import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
+import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
 
 public class InterfaceUpdateService {
@@ -69,6 +70,13 @@ public class InterfaceUpdateService {
         if (controller.statusLabel != null) {
             controller.statusLabel.setText(status);
         }
+    }
+
+    public static void updateFileDetailLabels(GalaxyRPLauncherController controller, File file) {
+        controller.fileNameLabel.setText(file.getName());
+        controller.fileSizeLabel.setText(file.getSize() / 1000000 + " MB"); //We want to display MB
+        controller.fileVersionNumberLabel.setText(String.valueOf(file.getVersion()));
+        controller.fileLastChangedLabel.setText(String.valueOf(file.getModifiedTime()));
     }
 
 }

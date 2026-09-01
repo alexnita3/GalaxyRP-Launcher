@@ -77,7 +77,7 @@ public class GalaxyRPLauncherController {
 
             File selectedFile = googleDriveFiles.get(index);
 
-            HelperMethods.updateFileDetailLabels(this, selectedFile);
+            InterfaceUpdateService.updateFileDetailLabels(this, selectedFile);
         }
     }
 
