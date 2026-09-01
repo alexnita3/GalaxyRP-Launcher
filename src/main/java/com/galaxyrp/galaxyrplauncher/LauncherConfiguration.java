@@ -1,5 +1,6 @@
 package com.galaxyrp.galaxyrplauncher;
 
+import com.galaxyrp.galaxyrplauncher.enums.GameMods;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ public class LauncherConfiguration {
     private String server2Ip;
     private String server2Name;
     private String googleDriveLink;
-    private String clientMod;
+    private GameMods clientMod;
     private int resolutionX;
     private int resolutionY;
     private String customArguments;

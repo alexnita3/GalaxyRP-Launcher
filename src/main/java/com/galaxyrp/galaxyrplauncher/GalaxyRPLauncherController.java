@@ -1,8 +1,10 @@
 package com.galaxyrp.galaxyrplauncher;
 
+import com.galaxyrp.galaxyrplauncher.enums.GameMods;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.galaxyrp.galaxyrplauncher.services.*;
 import com.google.api.services.drive.model.File;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -57,6 +59,10 @@ public class GalaxyRPLauncherController {
         configurationFileService.initializeConfigurationFile();
         this.launcherConfiguration = configurationFileService.loadConfigurationFile();
         InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
+
+
+        clientModDropDown.getItems().add(0, GameMods.OPEN_JK);
+        clientModDropDown.getItems().add(1, GameMods.BASE_JKA);
     }
 
     @FXML
@@ -127,5 +133,10 @@ public class GalaxyRPLauncherController {
     public void onApplyConfigButtonClick() throws IOException {
         ConfigurationFileService configurationFileService = new ConfigurationFileService();
         configurationFileService.applyConfiguration(this);
+    }
+
+    @FXML
+    public void onLaunchGameButtonClick() {
+
     }
 }

@@ -48,7 +48,6 @@ public class InterfaceUpdateService {
 
     private static void setEmptyState(GalaxyRPLauncherController controller) {
         controller.checkUpdateButton.setDisable(false);
-        controller.launchGameButton.setDisable(true);
         controller.downloadSelectedButton.setDisable(true);
         controller.downloadAllButton.setDisable(true);
         controller.cloudFileList.setDisable(true);
@@ -86,12 +85,15 @@ public class InterfaceUpdateService {
         controller.server1NameTextBox.setText(configuration.getServerName());
         controller.server2NameTextBox.setText(configuration.getServer2Name());
         controller.googleDriveLinkTextBox.setText(configuration.getGoogleDriveLink());
-        //controller.clientModDropDown.setValue(configuration.getClientMod());
+        controller.clientModDropDown.setValue(configuration.getClientMod());
         controller.resolutionXTextBox.setText(String.valueOf(configuration.getResolutionX()));
         controller.resolutionYTextBox.setText(String.valueOf(configuration.getResolutionY()));
         controller.customArgumentsTextBox.setText(configuration.getCustomArguments());
         controller.scanOnStartCheckBox.setSelected(configuration.isScanOnStartup());
         controller.automaticallyDownloadCheckBox.setSelected(configuration.isAutoDownload());
+
+        controller.serverSelectDropDownList.getItems().clear();
+        controller.serverSelectDropDownList.getItems().addAll(configuration.getServerIp(), configuration.getServer2Ip());
     }
 
 }

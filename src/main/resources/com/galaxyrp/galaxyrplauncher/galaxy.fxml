@@ -42,7 +42,7 @@
                                             <Button fx:id="downloadSelectedButton" layoutX="126.0" layoutY="75.0" mnemonicParsing="false" onAction="#onDownloadSelectedButtonClick" text="Download Selected" />
                                             <Button fx:id="checkUpdateButton" layoutX="17.0" layoutY="75.0" mnemonicParsing="false" onAction="#onCheckUpdateButtonClick" text="Check Updates" />
                                             <Button fx:id="downloadAllButton" layoutX="266.0" layoutY="75.0" mnemonicParsing="false" onAction="#onDownloadAllButtonClick" text="Download All" />
-                                            <Button fx:id="launchGameButton" layoutX="21.0" layoutY="109.0" mnemonicParsing="false" text="Launch Game" />
+                                            <Button fx:id="launchGameButton" layoutX="21.0" layoutY="109.0" mnemonicParsing="false" onAction="#onLaunchGameButtonClick" text="Launch Game" />
                                             <ChoiceBox fx:id="serverSelectDropDownList" layoutX="203.0" layoutY="109.0" prefWidth="150.0" />
                                     <ProgressBar fx:id="downloadProgressBar" layoutX="18.0" layoutY="41.0" prefHeight="18.0" prefWidth="336.0" progress="0.0" />
                                     <Label fx:id="statusLabel" layoutX="169.0" layoutY="14.0" text="Status" />
