@@ -49,6 +49,8 @@ public class GalaxyRPLauncherController {
         asyncActionService = new AsyncActionService(this);
         searchService = new SearchService(this);
         downloadService = new DownloadService(this);
+        cloudFileList.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> displayFileDetails());
         InterfaceUpdateService.updateUserInterface(this, UserAction.NOTHING_TO_DOWNLOAD);
 
         ConfigurationFileService configurationFileService = new ConfigurationFileService();
