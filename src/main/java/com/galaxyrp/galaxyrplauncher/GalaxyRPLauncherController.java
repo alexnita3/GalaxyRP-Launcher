@@ -51,11 +51,18 @@ public class GalaxyRPLauncherController {
             folderLink = googleDriveLinkTextBox.getText();
         }
 
+        DownloadProgress progressView =
+                new DownloadProgress(downloadProgressBar, downloadStatusLabel, downloadAllButton);
+        progressView.begin();
+
         Thread downloadAllThread = new Thread(() -> {
             try {
                 googleDriveFiles = DriveQuickstart.listFilesFromFolder(folderLink);
-                DriveQuickstart.downloadFiles(googleDriveFiles, Paths.get("downloads"));
+                DriveQuickstart.downloadFilesWithProgress(
+                        googleDriveFiles, Paths.get("downloads"), progressView::update);
+                progressView.complete();
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
+                progressView.failed();
                 throw new LauncherErrorException(e.getMessage(), "download all", this);
             }
         }, "google-drive-download-all");

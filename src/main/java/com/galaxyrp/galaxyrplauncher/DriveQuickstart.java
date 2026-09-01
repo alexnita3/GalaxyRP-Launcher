@@ -175,11 +175,23 @@ public class DriveQuickstart {
 
     public static List<Path> downloadFiles(List<File> files, Path destinationDirectory)
             throws IOException, GeneralSecurityException {
+        return downloadFilesWithProgress(files, destinationDirectory, (downloadedBytes, totalBytes) -> {
+        });
+    }
+
+    public static List<Path> downloadFilesWithProgress(
+            List<File> files,
+            Path destinationDirectory,
+            DownloadProgressListener progressListener)
+            throws IOException, GeneralSecurityException {
         if (files == null) {
             throw new IllegalArgumentException("File list cannot be null.");
         }
         if (destinationDirectory == null) {
             throw new IllegalArgumentException("Destination directory cannot be null.");
+        }
+        if (progressListener == null) {
+            throw new IllegalArgumentException("Progress listener cannot be null.");
         }
 
         Files.createDirectories(destinationDirectory);
@@ -194,7 +206,12 @@ public class DriveQuickstart {
             }
 
             Path destination = destinationDirectory.resolve(sanitizeFileName(file.getName()));
-            downloadFile(file.getId(), destination);
+            long totalBytes = -1;
+            if (file.getSize() != null) {
+                totalBytes = file.getSize();
+            }
+            progressListener.onProgress(0, totalBytes);
+            downloadFileWithProgress(file.getId(), destination, progressListener);
             downloadedFiles.add(destination);
         }
 
