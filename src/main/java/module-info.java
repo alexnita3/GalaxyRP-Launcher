@@ -10,8 +10,9 @@ module com.galaxyrp.galaxyrplauncher {
     requires com.google.api.client.auth;
     requires jdk.httpserver;
     requires static lombok;
+    requires com.google.gson;
 
-    opens com.galaxyrp.galaxyrplauncher to javafx.fxml;
+    opens com.galaxyrp.galaxyrplauncher to javafx.fxml, com.google.gson;
     exports com.galaxyrp.galaxyrplauncher;
     exports com.galaxyrp.galaxyrplauncher.services;
     opens com.galaxyrp.galaxyrplauncher.services to javafx.fxml;

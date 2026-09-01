@@ -3,6 +3,7 @@ package com.galaxyrp.galaxyrplauncher;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.galaxyrp.galaxyrplauncher.services.*;
 import com.google.api.services.drive.model.File;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -37,6 +38,7 @@ public class GalaxyRPLauncherController {
 
     public List<File> googleDriveFiles;
     public LauncherConfiguration launcherConfiguration;
+    public Button applyConfig;
 
     private AsyncActionService asyncActionService;
     private SearchService searchService;
@@ -119,4 +121,9 @@ public class GalaxyRPLauncherController {
                 exception -> downloadService.fail(exception, "download"));
     }
 
+    @FXML
+    public void onApplyConfigButtonClick() throws IOException {
+        ConfigurationFileService configurationFileService = new ConfigurationFileService();
+        configurationFileService.applyConfiguration(this);
+    }
 }

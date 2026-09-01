@@ -57,7 +57,7 @@
                         <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                 <children>
-                                    <Pane layoutX="15.0" layoutY="17.0" prefHeight="316.0" prefWidth="593.0">
+                                    <Pane layoutX="15.0" layoutY="17.0" prefHeight="326.0" prefWidth="593.0">
                                         <children>
                                             <Label layoutX="18.0" layoutY="23.0" text="Server IP:" />
                                             <Label layoutX="20.0" layoutY="48.0" text="Server Name:" />
@@ -79,6 +79,8 @@
                                             <ChoiceBox fx:id="clientModDropDown" layoutX="176.0" layoutY="146.0" prefWidth="150.0" />
                                             <CheckBox fx:id="scanOnStartCheckBox" layoutX="376.0" layoutY="150.0" mnemonicParsing="false" text="Scan for new files on start?" />
                                             <CheckBox fx:id="automaticallyDownloadCheckBox" layoutX="376.0" layoutY="175.0" mnemonicParsing="false" text="Automatically download?" />
+                                    <Button fx:id="applyConfig" layoutX="209.0" layoutY="249.0" mnemonicParsing="false" text="Apply Config" onAction="#onApplyConfigButtonClick" />
+                                    <Label layoutX="366.0" layoutY="304.0" text="© Alex Nita | https://github.com/alexnita3/" />
                                         </children>
                                     </Pane>
                                 </children>
