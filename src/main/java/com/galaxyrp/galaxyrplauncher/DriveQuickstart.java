@@ -136,6 +136,9 @@ public class DriveQuickstart {
 
         List<File> allFiles = new java.util.ArrayList<>();
         collectFilesRecursively(service, folderId, allFiles);
+        for(File file : allFiles) {
+            System.out.println(file.getName());
+        }
         return allFiles;
     }
 
