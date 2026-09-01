@@ -6,6 +6,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListener;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -23,6 +24,7 @@ import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -147,11 +149,20 @@ public class DriveQuickstart {
 
     public static void downloadFile(String fileId, Path destination)
             throws IOException, GeneralSecurityException {
+        downloadFile(fileId, destination, progress -> {
+        });
+    }
+
+    public static void downloadFile(String fileId, Path destination, Consumer<Double> progressListener)
+            throws IOException, GeneralSecurityException {
         if (fileId == null || fileId.isBlank()) {
             throw new IllegalArgumentException("Google Drive file ID cannot be blank.");
         }
         if (destination == null) {
             throw new IllegalArgumentException("Download destination cannot be null.");
+        }
+        if (progressListener == null) {
+            throw new IllegalArgumentException("Progress listener cannot be null.");
         }
 
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -165,11 +176,17 @@ public class DriveQuickstart {
         }
 
         try (OutputStream outputStream = Files.newOutputStream(destination)) {
-            service.files()
+            Drive.Files.Get request = service.files()
                     .get(fileId)
                     .setAlt("media")
-                    .setSupportsAllDrives(true)
-                    .executeMediaAndDownloadTo(outputStream);
+                    .setSupportsAllDrives(true);
+            request.getMediaHttpDownloader()
+                    .setDirectDownloadEnabled(false)
+                    .setChunkSize(256 * 1024)
+                    .setProgressListener(
+                    (MediaHttpDownloaderProgressListener) downloader ->
+                            progressListener.accept(downloader.getProgress()));
+            request.executeMediaAndDownloadTo(outputStream);
         } catch (GoogleJsonResponseException e) {
             if (e.getStatusCode() == 403) {
                 throw new IOException(

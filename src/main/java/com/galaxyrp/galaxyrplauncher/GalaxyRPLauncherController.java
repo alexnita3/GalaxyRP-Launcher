@@ -36,6 +36,7 @@ public class GalaxyRPLauncherController {
     public Button launchGameButton;
     public ChoiceBox serverSelectDropDownList;
     public ListView<String> cloudFileList;
+    public ProgressBar downloadProgressBar;
 
     List<File> googleDriveFiles;
 
@@ -102,13 +103,40 @@ public class GalaxyRPLauncherController {
             return;
         }
 
+        if (downloadProgressBar != null) {
+            downloadProgressBar.setProgress(0);
+            downloadProgressBar.setVisible(true);
+        }
+        if (downloadSelectedButton != null) {
+            downloadSelectedButton.setDisable(true);
+        }
+
         Thread downloadThread = new Thread(() -> {
             try {
                 Path destination = Paths.get("downloads", sanitizeFileName(fileName));
-                DriveQuickstart.downloadFile(selectedFile.getId(), destination);
+                DriveQuickstart.downloadFile(selectedFile.getId(), destination, progress ->
+                        Platform.runLater(() -> {
+                            if (downloadProgressBar != null) {
+                                downloadProgressBar.setProgress(progress);
+                            }
+                        }));
+                Platform.runLater(() -> {
+                    if (downloadProgressBar != null) {
+                        downloadProgressBar.setProgress(1);
+                    }
+                    if (downloadSelectedButton != null) {
+                        downloadSelectedButton.setDisable(false);
+                    }
+                });
             } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
                 e.printStackTrace();
                 Platform.runLater(() -> {
+                    if (downloadProgressBar != null) {
+                        downloadProgressBar.setProgress(0);
+                    }
+                    if (downloadSelectedButton != null) {
+                        downloadSelectedButton.setDisable(false);
+                    }
                     if (cloudFileList != null) {
                         cloudFileList.getItems().clear();
                         cloudFileList.getItems().add("Google Drive error: " + e.getMessage());
