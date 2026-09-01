@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,5 +85,28 @@ public class GalaxyRPLauncherController {
         });
         driveThread.setDaemon(true);
         driveThread.start();
+    }
+
+    @FXML
+    public void onDownloadSelectedButtonClick() {
+        Thread downloadThread = new Thread(() -> {
+            try {
+                if(cloudFileList.getSelectionModel().getSelectedIndex() != -1) {
+                    int index = cloudFileList.getSelectionModel().getSelectedIndex();
+                    File selectedFile = googleDriveFiles.get(index);
+                    DriveQuickstart.downloadFile(selectedFile.getId(), Paths.get(""));
+                }
+            } catch (IOException | GeneralSecurityException | IllegalArgumentException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    if (cloudFileList != null) {
+                        cloudFileList.getItems().clear();
+                        cloudFileList.getItems().add("Google Drive error: " + e.getMessage());
+                    }
+                });
+            }
+        });
+        downloadThread.setDaemon(true);
+        downloadThread.start();
     }
 }

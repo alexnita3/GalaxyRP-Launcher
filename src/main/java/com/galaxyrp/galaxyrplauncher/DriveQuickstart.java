@@ -17,6 +17,7 @@ import com.google.api.services.drive.model.FileList;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -44,7 +45,7 @@ public class DriveQuickstart {
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES =
-            Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY);
+            Collections.singletonList(DriveScopes.DRIVE_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
     /**
@@ -142,6 +143,33 @@ public class DriveQuickstart {
         return allFiles;
     }
 
+    public static void downloadFile(String fileId, Path destination)
+            throws IOException, GeneralSecurityException {
+        if (fileId == null || fileId.isBlank()) {
+            throw new IllegalArgumentException("Google Drive file ID cannot be blank.");
+        }
+        if (destination == null) {
+            throw new IllegalArgumentException("Download destination cannot be null.");
+        }
+
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        Path parent = destination.toAbsolutePath().getParent();
+        if (parent != null) {
+            Files.createDirectories(parent);
+        }
+
+        try (OutputStream outputStream = Files.newOutputStream(destination)) {
+            service.files()
+                    .get(fileId)
+                    .setAlt("media")
+                    .executeMediaAndDownloadTo(outputStream);
+        }
+    }
+
     public static void listAllFiles(String... args) throws IOException, GeneralSecurityException {
         List<File> files = listFilesFromFolder("");
         if (files.isEmpty()) {
@@ -157,4 +185,6 @@ public class DriveQuickstart {
     public static void main(String... args) throws IOException, GeneralSecurityException {
         listAllFiles();
     }
+
+
 }
