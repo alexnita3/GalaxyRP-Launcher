@@ -70,6 +70,40 @@ public class GoogleDriveAdapter {
             Collections.singletonList(DriveScopes.DRIVE_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
+    private static String resolveProjectRoot() {
+        String userDir = System.getProperty("user.dir");
+        if (userDir != null && !userDir.isBlank()) {
+            return userDir;
+        }
+        return Paths.get(".").toAbsolutePath().normalize().toString();
+    }
+
+    private static InputStream openCredentialStream() throws IOException {
+        List<Path> candidates = new java.util.ArrayList<>();
+
+        String customPath = System.getProperty("google.credentials.file", System.getProperty("credentials.file"));
+        if (customPath != null && !customPath.isBlank()) {
+            candidates.add(Paths.get(customPath));
+        }
+
+        String root = resolveProjectRoot();
+        candidates.add(Paths.get(root, "src", "main", "resources", CREDENTIALS_FILE_PATH));
+        candidates.add(Paths.get(root, CREDENTIALS_FILE_PATH));
+
+        for (Path candidate : candidates) {
+            if (Files.isRegularFile(candidate)) {
+                return Files.newInputStream(candidate);
+            }
+        }
+
+        InputStream classpathStream = GoogleDriveAdapter.class.getClassLoader().getResourceAsStream(CREDENTIALS_FILE_PATH);
+        if (classpathStream != null) {
+            return classpathStream;
+        }
+
+        throw new FileNotFoundException("Could not find Google Drive credentials file. Tried: " + candidates + ", and classpath resource: credentials.json");
+    }
+
     /**
      * Creates an authorized Credential object.
      *
@@ -80,26 +114,25 @@ public class GoogleDriveAdapter {
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
         // Load client secrets.
+        try (InputStream in = openCredentialStream()) {
+            if (in == null) {
+                throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+            }
 
-        InputStream in = Files.newInputStream(Paths.get(CREDENTIALS_FILE_PATH));
+            GoogleClientSecrets clientSecrets =
+                    GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
-        if (in == null) {
-            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+            // Build flow and trigger user authorization request.
+            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                    HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                    .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                    .setAccessType("offline")
+                    .build();
+            LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+            Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+            //returns an authorized Credential object.
+            return credential;
         }
-
-        GoogleClientSecrets clientSecrets =
-                GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
-        // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-        //returns an authorized Credential object.
-        return credential;
     }
 
     private static String extractFolderId(String folderLink) {

@@ -65,8 +65,7 @@ Setup:
 
 1. Clone the repository.
 2. Create your Google Drive OAuth client credentials in Google Cloud Console.
-3. Copy the credentials file in the root of the project.
-
+3. Save the downloaded `credentials.json` in `src/main/resources/credentials.json`.
 4. Build the project:
 
 ```powershell
@@ -84,6 +83,8 @@ java -jar .\target\GalaxyRPLauncher-1.0-SNAPSHOT.jar
 
 The generated jar and installer live under `target/`.
 
+Important: the launcher reads the credentials from a file, not from environment variables. The app will check `src/main/resources/credentials.json`.
+
 ## Google Drive API
 
 If you plan to compile and run this yourself, you will need your own Google Drive API OAuth 2.0 client credentials.
@@ -93,7 +94,8 @@ https://developers.google.com/workspace/drive/api/quickstart/java
 
 The app expects those credentials in the following form:
 
-- a packaged resource at `src/main/resources/credentials.json`
+- a file at `src/main/resources/credentials.json`
+- optionally a custom file path passed with `-Dgoogle.credentials.file=/path/to/credentials.json`
 
 The project uses a `credentials.json` structure like this:
 
@@ -111,7 +113,7 @@ The project uses a `credentials.json` structure like this:
 }
 ```
 
-Do not keep private OAuth secrets in source control. Prefer environment variables or a local `.gitignored` credentials file.
+Do not keep private OAuth secrets in source control. Keep the file local and gitignored, and place it under `src/main/resources/credentials.json` for the app to use during local development and packaging.
 
 
 ## Authors
