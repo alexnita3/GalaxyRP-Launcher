@@ -11,15 +11,15 @@ While this was made for [GalaxyRP](https://github.com/alexnita3/GalaxyRP), it wi
 
 ## Installation
 
-Download the latest release, and unzip the contents inside your GameData folder in your JKA installation. 
+Download the latest release and place the launcher in a location you can run it from. For a Java-based app, the easiest way is to use the generated executable or run the packaged JAR directly.
 
-To configure the mod manager, go into the settings tab, and paste a google drive folder link. A (mock) example of this is:
+To configure the mod manager, go into the settings tab and paste a Google Drive folder link. For example:
 
 ```bash
-  https://drive.google.com/drive/folders/1YiIL-g-fKshPeerjYFyIBgFTfd5jaa3N
+https://drive.google.com/drive/folders/1YiIL-g-fKshPeerjYFyIBgFTfd5jaa3N
 ```
 
-Anyone who wants to connect to the same google drive folder will need read AND write permissions on the folder.
+The folder must be shared with the Google account used by the OAuth credentials for this app, and users who need to share the same folder must have access to read and write files in that folder.
 
 
 ## Screenshots
@@ -53,32 +53,65 @@ I have never and will never use the information this app collects for any financ
 
 ## Getting started with development
 
-- Download Intellij IDEA
-- Create a Google auth account, and generate a set of credentials
-- Fork the repository, and then close it somewhere on your computer
-- Make your changes
-- Run the maven clean package commands
-- Your jar file will be in `/target/`
+Prerequisites:
+
+- JDK 24
+- IntelliJ IDEA or another Java IDE
+- Git
+- Maven wrapper included in the repo (`mvnw` / `mvnw.cmd`)
+- Optional: WiX Toolset if you want to generate a Windows `.exe` installer
+
+Setup:
+
+1. Clone the repository.
+2. Create your Google Drive OAuth client credentials in Google Cloud Console.
+3. Copy the credentials file in the root of the project.
+
+4. Build the project:
+
+```powershell
+cd GalaxyRP-Launcher
+.\mvnw clean package
+```
+
+5. Run the packaged jar:
+
+```powershell
+java -jar .\target\GalaxyRPLauncher-1.0-SNAPSHOT.jar
+```
+
+6. If you want an executable installer, install WiX and run the same package command with the installer step enabled. The project is configured to create a Windows EXE via `jpackage`.
+
+The generated jar and installer live under `target/`.
 
 ## Google Drive API
 
-If you plan to compile and run this yourself, you will need to generate your own google drive API Oauth2.0 keys.
+If you plan to compile and run this yourself, you will need your own Google Drive API OAuth 2.0 client credentials.
 
-You can find instructions for that here: https://developers.google.com/workspace/drive/api/quickstart/java
+Follow the official quickstart here:
+https://developers.google.com/workspace/drive/api/quickstart/java
 
-#### Oauth key service name:
+The app expects those credentials in the following form:
 
-```http
-  drive.googleapis.com
+- a packaged resource at `src/main/resources/credentials.json`
+
+The project uses a `credentials.json` structure like this:
+
+```json
+{
+  "installed": {
+    "client_id": "...",
+    "project_id": "...",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "...",
+    "redirect_uris": ["http://localhost"]
+  }
+}
 ```
 
-Once you have your key, download and save it as:
-
-```http
-  client_secrets.json
-```
-
-Then place it in the same folder as your debug app.
+Do not keep private OAuth secrets in source control. Prefer environment variables or a local `.gitignored` credentials file.
 
 
 ## Authors
