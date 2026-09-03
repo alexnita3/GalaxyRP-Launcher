@@ -1,7 +1,5 @@
 package com.galaxyrp.galaxyrplauncher.adapters;
 
-import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -52,16 +50,13 @@ public class ServerTrackerAdapter {
             throw new IOException("Unexpected Jedi Academy server response");
         }
 
-        String[] sections = response.split("\\n\\n", 2);
-        String hostName = parseHostName(sections[0]);
+        String hostName = parseHostName(response);
         List<String> playerNames = new ArrayList<>();
 
-        if (sections.length == 2) {
-            for (String line : sections[1].split("\\R")) {
-                Matcher playerMatcher = PLAYER_PATTERN.matcher(line);
-                if (playerMatcher.matches()) {
-                    playerNames.add(playerMatcher.group(1));
-                }
+        for (String line : response.split("\\R")) {
+            Matcher playerMatcher = PLAYER_PATTERN.matcher(line);
+            if (playerMatcher.matches()) {
+                playerNames.add(playerMatcher.group(1));
             }
         }
 
@@ -74,7 +69,7 @@ public class ServerTrackerAdapter {
             return "";
         }
 
-        String[] serverVariables = lines[1].split("\\\\");
+        String[] serverVariables = lines[1].split("\\\\", -1);
         for (int index = 1; index + 1 < serverVariables.length; index += 2) {
             if ("sv_hostname".equals(serverVariables[index])) {
                 return serverVariables[index + 1];

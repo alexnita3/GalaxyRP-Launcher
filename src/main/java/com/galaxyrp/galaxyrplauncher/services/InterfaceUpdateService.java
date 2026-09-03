@@ -108,7 +108,6 @@ public class InterfaceUpdateService {
         String ipAddress2 = controller.server2IpTextBox.getText();
 
         ServerTrackerAdapter.JediAcademyServerInfo server1Info = serverTrackerAdapter.getServerInfo(ipAddress1);
-        System.out.print(server1Info);
         ServerTrackerAdapter.JediAcademyServerInfo server2Info = serverTrackerAdapter.getServerInfo(ipAddress2);
 
         Platform.runLater(() -> {
