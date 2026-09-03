@@ -40,7 +40,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="474.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label layoutX="85.0" layoutY="177.0" prefHeight="47.0" prefWidth="470.0" text="The Launcher is not in the correct place. Please move it inside your JKA folder. (The same folder as your Jedi Academy .exe)" textAlignment="CENTER" wrapText="true" />
+            <Label layoutX="85.0" layoutY="177.0" prefHeight="47.0" prefWidth="470.0" text="The Launcher is not in the correct place. Please move it inside your JKA folder. (It should share the same folder as the base folder)" textAlignment="CENTER" wrapText="true" />
          </children>
     </AnchorPane>
   </children>

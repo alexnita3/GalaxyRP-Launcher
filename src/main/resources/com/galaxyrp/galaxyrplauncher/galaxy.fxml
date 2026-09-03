@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -8,79 +9,124 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController">
+<VBox alignment="CENTER" prefHeight="518.0" prefWidth="807.0" style="-fx-font-size: 14.4px;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController">
 <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <ImageView fitHeight="518.0" fitWidth="807.0" managed="false" mouseTransparent="true" preserveRatio="false">
+        <image>
+            <Image url="@galaxy_background.png" />
+        </image>
+    </ImageView>
+    <AnchorPane maxHeight="400.0" maxWidth="640.0" prefHeight="400.0" prefWidth="640.0">
         <children>
-            <TabPane layoutX="7.0" layoutY="10.0" prefHeight="378.0" prefWidth="622.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutY="-10.0" prefHeight="507.0" prefWidth="787.0" style="-fx-background-color: transparent;" tabClosingPolicy="UNAVAILABLE">
+                <stylesheets>
+                    <URL value="@galaxy.css" />
+                </stylesheets>
                 <tabs>
                     <Tab text="File Manager">
                         <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;">
                                 <children>
-                                    <ListView fx:id="cloudFileList" layoutX="12.0" layoutY="15.0" prefHeight="316.0" prefWidth="223.0" />
-                                    <Pane layoutX="243.0" layoutY="15.0" prefHeight="149.0" prefWidth="371.0">
+                                    <ListView fx:id="cloudFileList" layoutX="15.0" layoutY="8.0" prefHeight="453.0" prefWidth="262.0" style="-fx-background-color: #2b2b2b; -fx-control-inner-background: #2b2b2b; -fx-text-fill: white; -fx-border-color: #555555; -fx-font-size: 12px;" />
+                                    <Pane layoutX="290.0" layoutY="8.0" prefHeight="204.0" prefWidth="482.0" style="-fx-background-color: rgba(43,43,43,0.95);">
                                         <children>
-                                            <Label layoutX="144.0" layoutY="14.0" text="File Information" />
-                                            <Label layoutX="14.0" layoutY="39.0" text="File Name:" />
-                                            <Label layoutX="14.0" layoutY="56.0" text="Size:" />
-                                            <Label layoutX="12.0" layoutY="75.0" text="Version Number:" />
-                                            <Label layoutX="12.0" layoutY="92.0" text="Last Changed:" />
-                                            <Label fx:id="fileNameLabel" layoutX="144.0" layoutY="39.0" text="test.pk3" />
-                                            <Label fx:id="fileSizeLabel" layoutX="144.0" layoutY="56.0" text="1 MB" />
-                                            <Label fx:id="fileVersionNumberLabel" layoutX="144.0" layoutY="75.0" text="1" />
-                                            <Label fx:id="fileLastChangedLabel" layoutX="144.0" layoutY="92.0" text="08/05/2023 17:27:37" />
+                                            <Label layoutX="174.0" layoutY="14.0" style="-fx-text-fill: white; -fx-font-size: 19.2px;" text="File Information" />
+                                            <Label layoutX="23.0" layoutY="63.0" style="-fx-text-fill: white;" text="File Name:" />
+                                            <Label layoutX="23.0" layoutY="91.0" style="-fx-text-fill: white;" text="Size:" />
+                                            <Label layoutX="23.0" layoutY="117.0" style="-fx-text-fill: white;" text="Version Number:" />
+                                            <Label layoutX="23.0" layoutY="147.0" style="-fx-text-fill: white;" text="Last Changed:" />
+                                            <Label fx:id="fileNameLabel" layoutX="148.0" layoutY="63.0" style="-fx-text-fill: white;" text="N/A" />
+                                            <Label fx:id="fileSizeLabel" layoutX="148.0" layoutY="91.0" style="-fx-text-fill: white;" text="N/A" />
+                                            <Label fx:id="fileVersionNumberLabel" layoutX="148.0" layoutY="117.0" style="-fx-text-fill: white;" text="N/A" />
+                                            <Label fx:id="fileLastChangedLabel" layoutX="148.0" layoutY="147.0" style="-fx-text-fill: white;" text="N/A" />
                                         </children>
                                     </Pane>
-                                    <Pane layoutX="243.0" layoutY="182.0" prefHeight="149.0" prefWidth="371.0">
+                                    <Pane layoutX="290.0" layoutY="228.0" prefHeight="233.0" prefWidth="482.0" style="-fx-background-color: rgba(43,43,43,0.95);">
                                         <children>
-                                            <Button fx:id="downloadSelectedButton" layoutX="126.0" layoutY="75.0" mnemonicParsing="false" onAction="#onDownloadSelectedButtonClick" text="Download Selected" />
-                                            <Button fx:id="checkUpdateButton" layoutX="17.0" layoutY="75.0" mnemonicParsing="false" onAction="#onCheckUpdateButtonClick" text="Check Updates" />
-                                            <Button fx:id="downloadAllButton" layoutX="266.0" layoutY="75.0" mnemonicParsing="false" onAction="#onDownloadAllButtonClick" text="Download All" />
-                                            <Button fx:id="launchGameButton" layoutX="21.0" layoutY="109.0" mnemonicParsing="false" onAction="#onLaunchGameButtonClick" text="Launch Game" />
-                                            <ChoiceBox fx:id="serverSelectDropDownList" layoutX="203.0" layoutY="109.0" prefWidth="150.0" />
-                                    <ProgressBar fx:id="downloadProgressBar" layoutX="18.0" layoutY="41.0" prefHeight="18.0" prefWidth="336.0" progress="0.0" />
-                                    <Label fx:id="statusLabel" layoutX="169.0" layoutY="14.0" text="Status" />
-                                    <Label fx:id="downloadStatusLabel" layoutX="170.0" layoutY="42.0" text="100%" textAlignment="CENTER" />
+                                            <Label fx:id="statusLabel" layoutX="14.0" layoutY="14.0" style="-fx-text-fill: white;" text="Search for updates or start the game." />
+                                            <ProgressBar fx:id="downloadProgressBar" layoutX="13.0" layoutY="82.0" prefHeight="26.0" prefWidth="457.0" progress="0.0" />
+                                            <Label fx:id="downloadStatusLabel" layoutX="14.0" layoutY="42.0" style="-fx-text-fill: white;" text="100%" textAlignment="CENTER" />
+                                            <Button fx:id="checkUpdateButton" layoutX="10.0" layoutY="125.0" mnemonicParsing="false" onAction="#onCheckUpdateButtonClick" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Check Updates" />
+                                            <Button fx:id="downloadSelectedButton" layoutX="176.0" layoutY="125.0" mnemonicParsing="false" onAction="#onDownloadSelectedButtonClick" prefHeight="32.0" prefWidth="148.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Download Selected" />
+                                            <Button fx:id="downloadAllButton" layoutX="354.0" layoutY="125.0" mnemonicParsing="false" onAction="#onDownloadAllButtonClick" prefHeight="32.0" prefWidth="114.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Download All" />
+                                            <Button fx:id="launchGameButton" layoutX="10.0" layoutY="186.0" mnemonicParsing="false" onAction="#onLaunchGameButtonClick" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Launch Game" />
+                                            <ChoiceBox fx:id="serverSelectDropDownList" layoutX="243.0" layoutY="185.0" prefHeight="25.0" prefWidth="227.0" style="-fx-background-color: #2b2b2b; -fx-mark-color: white; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
                                         </children>
                                     </Pane>
                                 </children>
                             </AnchorPane>
                         </content>
                     </Tab>
+                  <Tab text="Server Tracker">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;">
+                           <children>
+                              <Pane layoutX="16.0" layoutY="13.0" prefHeight="445.0" prefWidth="756.0" style="-fx-background-color: rgba(43,43,43,0.95);">
+                                 <children>
+                                    <TextField fx:id="server1IpTextBox1" layoutX="175.0" layoutY="21.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Server News">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;">
+                           <children>
+                              <TextArea layoutX="12.0" layoutY="11.0" prefHeight="449.0" prefWidth="764.0" style="-fx-control-inner-background: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
                     <Tab text="Launcher Settings">
                         <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;">
                                 <children>
-                                    <Pane layoutX="15.0" layoutY="17.0" prefHeight="326.0" prefWidth="593.0">
+                                    <Pane layoutX="16.0" layoutY="13.0" prefHeight="445.0" prefWidth="756.0" style="-fx-background-color: rgba(43,43,43,0.95);">
                                         <children>
-                                            <Label layoutX="18.0" layoutY="23.0" text="Server IP:" />
-                                            <Label layoutX="20.0" layoutY="48.0" text="Server Name:" />
-                                            <Label layoutX="20.0" layoutY="74.0" text="Server 2 IP:" />
-                                            <Label layoutX="22.0" layoutY="99.0" text="Server 2 Name:" />
-                                            <Label layoutX="24.0" layoutY="125.0" text="Google Drive Link:" />
-                                            <Label layoutX="18.0" layoutY="150.0" text="Client Mod:" />
-                                            <Label layoutX="20.0" layoutY="175.0" text="Resolution:" />
-                                            <Label layoutX="20.0" layoutY="200.0" text="Custom Arguments:" />
-                                            <TextField fx:id="server1IpTextBox" layoutX="177.0" layoutY="19.0" />
-                                            <TextField fx:id="server1NameTextBox" layoutX="177.0" layoutY="44.0" />
-                                            <TextField fx:id="server2IpTextBox" layoutX="177.0" layoutY="70.0" />
-                                            <TextField fx:id="server2NameTextBox" layoutX="177.0" layoutY="95.0" />
-                                            <TextField fx:id="googleDriveLinkTextBox" layoutX="177.0" layoutY="121.0" />
-                                            <TextField fx:id="resolutionXTextBox" layoutX="177.0" layoutY="171.0" prefHeight="25.0" prefWidth="48.0" />
-                                            <TextField fx:id="customArgumentsTextBox" layoutX="177.0" layoutY="196.0" />
-                                            <Label layoutX="233.0" layoutY="175.0" text="X" />
-                                            <TextField fx:id="resolutionYTextBox" layoutX="251.0" layoutY="171.0" prefHeight="25.0" prefWidth="48.0" />
-                                            <ChoiceBox fx:id="clientModDropDown" layoutX="176.0" layoutY="146.0" prefWidth="150.0" />
-                                            <CheckBox fx:id="scanOnStartCheckBox" layoutX="376.0" layoutY="150.0" mnemonicParsing="false" text="Scan for new files on start?" />
-                                            <CheckBox fx:id="automaticallyDownloadCheckBox" layoutX="376.0" layoutY="175.0" mnemonicParsing="false" text="Automatically download?" />
-                                    <Button fx:id="applyConfig" layoutX="209.0" layoutY="249.0" mnemonicParsing="false" text="Apply Config" onAction="#onApplyConfigButtonClick" />
-                                    <Label layoutX="366.0" layoutY="304.0" text="© Alex Nita | https://github.com/alexnita3/" />
+                                            <Label layoutX="23.0" layoutY="27.0" style="-fx-text-fill: white;" text="Server IP:" />
+                                            <Label layoutX="23.0" layoutY="74.0" style="-fx-text-fill: white;" text="Server Name:" />
+                                            <Label layoutX="23.0" layoutY="118.0" style="-fx-text-fill: white;" text="Server 2 IP:" />
+                                            <Label layoutX="23.0" layoutY="163.0" style="-fx-text-fill: white;" text="Server 2 Name:" />
+                                            <Label layoutX="23.0" layoutY="211.0" style="-fx-text-fill: white;" text="Google Drive Link:" />
+                                            <Label layoutX="23.0" layoutY="260.0" style="-fx-text-fill: white;" text="Client Mod:" />
+                                            <Label layoutX="23.0" layoutY="308.0" style="-fx-text-fill: white;" text="Resolution:" />
+                                            <Label layoutX="23.0" layoutY="360.0" style="-fx-text-fill: white;" text="Custom Arguments:" />
+                                            <TextField fx:id="server1IpTextBox" layoutX="175.0" layoutY="21.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <TextField fx:id="server1NameTextBox" layoutX="175.0" layoutY="68.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <TextField fx:id="server2IpTextBox" layoutX="175.0" layoutY="112.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <TextField fx:id="server2NameTextBox" layoutX="175.0" layoutY="157.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <TextField fx:id="googleDriveLinkTextBox" layoutX="175.0" layoutY="205.0" prefHeight="34.0" prefWidth="559.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <TextField fx:id="resolutionXTextBox" layoutX="175.0" layoutY="302.0" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <TextField fx:id="customArgumentsTextBox" layoutX="175.0" layoutY="354.0" prefHeight="34.0" prefWidth="559.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <Label layoutX="250.0" layoutY="306.0" style="-fx-text-fill: white;" text="X" />
+                                            <TextField fx:id="resolutionYTextBox" layoutX="265.0" layoutY="300.0" prefHeight="34.0" prefWidth="70.0" style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <ChoiceBox fx:id="clientModDropDown" layoutX="175.0" layoutY="254.0" prefHeight="34.0" prefWidth="160.0" style="-fx-background-color: #2b2b2b; -fx-mark-color: white; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                            <CheckBox fx:id="scanOnStartCheckBox" layoutX="474.0" layoutY="74.0" mnemonicParsing="false" style="-fx-text-fill: white;" text="Auto scan for new files?">
+                                       <tooltip>
+                                          <Tooltip text="If this option is checked, the launcher will check for updates as soon as it's open" />
+                                       </tooltip>
+                                    </CheckBox>
+                                            <CheckBox fx:id="automaticallyDownloadCheckBox" layoutX="474.0" layoutY="118.0" mnemonicParsing="false" style="-fx-text-fill: white;" text="Auto update?" />
+                                    <Button fx:id="applyConfig" layoutX="327.0" layoutY="399.0" mnemonicParsing="false" onAction="#onApplyConfigButtonClick" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Apply Config" />
+                                    <Label layoutX="474.0" layoutY="420.0" style="-fx-text-fill: white;" text="© Alex Nita | https://github.com/alexnita3/" />
+                                    <Label layoutX="493.0" layoutY="260.0" style="-fx-text-fill: white;" text="Game Mod:" />
+                                    <ChoiceBox fx:id="gameModDropDown" layoutX="574.0" layoutY="254.0" prefHeight="34.0" prefWidth="160.0" style="-fx-background-color: #2b2b2b; -fx-mark-color: white; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
+                                    <CheckBox fx:id="scanOnStartCheckBox1" layoutX="474.0" layoutY="27.0" mnemonicParsing="false" style="-fx-text-fill: white;" text="Split download between two folders?">
+                                       <tooltip>
+                                          <Tooltip text="If this option is checked, the launcher will check for updates as soon as it's open" />
+                                       </tooltip>
+                                    </CheckBox>
                                         </children>
                                     </Pane>
                                 </children>

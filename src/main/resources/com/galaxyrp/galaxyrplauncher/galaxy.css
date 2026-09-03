@@ -1,0 +1,58 @@
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
+.tab-pane > .tab-header-area,
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: rgba(43, 43, 43, 0.9);
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: rgba(90, 90, 90, 0.98);
+    -fx-border-color: transparent transparent white transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab .tab-label {
+    -fx-text-fill: white;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected .tab-label {
+    -fx-font-weight: bold;
+}
+
+.choice-box .label,
+.choice-box-popup .list-cell {
+    -fx-text-fill: white;
+}
+
+.choice-box-popup .list-view,
+.choice-box-popup .list-cell {
+    -fx-background-color: black;
+    -fx-control-inner-background: black;
+}
+
+.choice-box-popup .context-menu,
+.choice-box-popup .menu-item {
+    -fx-background-color: black;
+}
+
+.context-menu {
+    -fx-background-color: black;
+}
+
+.context-menu .menu-item {
+    -fx-background-color: black;
+}
+
+.context-menu .menu-item > .label {
+    -fx-text-fill: white;
+}
+
+.choice-box-popup .list-cell:hover {
+    -fx-background-color: #5a5a5a;
+}

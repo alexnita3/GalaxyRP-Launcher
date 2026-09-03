@@ -207,36 +207,6 @@ public class GoogleDriveAdapter {
     public static void downloadFilesWithProgress(
             List<File> files,
             Path destinationDirectory,
-            DownloadProgressListener progressListener)
-            throws IOException, GeneralSecurityException {
-        downloadFilesWithProgress(
-                files,
-                destinationDirectory,
-                progressListener,
-                file -> {
-                },
-                file -> {
-                });
-    }
-
-    public static void downloadFilesWithProgress(
-            List<File> files,
-            Path destinationDirectory,
-            DownloadProgressListener progressListener,
-            FileDownloadedListener fileDownloadedListener)
-            throws IOException, GeneralSecurityException {
-        downloadFilesWithProgress(
-                files,
-                destinationDirectory,
-                progressListener,
-                file -> {
-                },
-                fileDownloadedListener);
-    }
-
-    public static void downloadFilesWithProgress(
-            List<File> files,
-            Path destinationDirectory,
             DownloadProgressListener progressListener,
             FileDownloadStartedListener fileDownloadStartedListener,
             FileDownloadedListener fileDownloadedListener)
