@@ -79,7 +79,7 @@
                                     <Label fx:id="playerCount1Label" layoutX="131.0" layoutY="45.0" style="-fx-text-fill: white;" text="0" />
                                     <Label layoutX="154.0" layoutY="45.0" style="-fx-text-fill: white;" text="/64" />
                                     <ListView fx:id="playerList1" layoutX="14.0" layoutY="91.0" prefHeight="297.0" prefWidth="341.0" style="-fx-background-color: #2b2b2b; -fx-control-inner-background: #2b2b2b; -fx-text-fill: white; -fx-border-color: #555555; -fx-font-size: 12px;" />
-                                    <Button fx:id="refreshServer1Info" layoutX="121.0" layoutY="399.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Refresh" />
+                                    <Button fx:id="refreshServer1Info" layoutX="121.0" layoutY="399.0" mnemonicParsing="false" onAction="#onRefreshServer1Info" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Refresh" />
                                  </children>
                               </Pane>
                               <Pane layoutX="404.0" layoutY="14.0" prefHeight="445.0" prefWidth="369.0" style="-fx-background-color: rgba(43,43,43,0.95);">
@@ -89,7 +89,7 @@
                                     <Label fx:id="playerCount2Label" layoutX="131.0" layoutY="45.0" style="-fx-text-fill: white;" text="0" />
                                     <Label layoutX="154.0" layoutY="45.0" style="-fx-text-fill: white;" text="/64" />
                                     <ListView fx:id="playerList2" layoutX="14.0" layoutY="91.0" prefHeight="297.0" prefWidth="341.0" style="-fx-background-color: #2b2b2b; -fx-control-inner-background: #2b2b2b; -fx-text-fill: white; -fx-border-color: #555555; -fx-font-size: 12px;" />
-                                    <Button fx:id="refreshServer2Info" layoutX="121.0" layoutY="399.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Refresh" />
+                                    <Button fx:id="refreshServer2Info" layoutX="121.0" layoutY="399.0" mnemonicParsing="false" onAction="#onRefreshServer2Info" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #5a5a5a; -fx-text-fill: white;" text="Refresh" />
                                  </children>
                               </Pane>
                            </children>

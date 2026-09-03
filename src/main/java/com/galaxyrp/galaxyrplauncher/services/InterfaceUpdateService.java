@@ -121,4 +121,26 @@ public class InterfaceUpdateService {
         });
     }
 
+    public void updateServerTrackerInfo(GalaxyRPLauncherController controller, int serverNumber)
+            throws IOException {
+        ServerTrackerAdapter serverTrackerAdapter = new ServerTrackerAdapter();
+        String ipAddress = serverNumber == 1
+                ? controller.server1IpTextBox.getText()
+                : controller.server2IpTextBox.getText();
+        ServerTrackerAdapter.JediAcademyServerInfo serverInfo =
+                serverTrackerAdapter.getServerInfo(ipAddress);
+
+        Platform.runLater(() -> {
+            if (serverNumber == 1) {
+                controller.server1InfoTitle.setText(serverInfo.hostName() + " Info");
+                controller.playerCount1Label.setText(String.valueOf(serverInfo.playerCount()));
+                controller.playerList1.getItems().setAll(serverInfo.playerNames());
+            } else {
+                controller.server2InfoTitle.setText(serverInfo.hostName() + " Info");
+                controller.playerCount2Label.setText(String.valueOf(serverInfo.playerCount()));
+                controller.playerList2.getItems().setAll(serverInfo.playerNames());
+            }
+        });
+    }
+
 }

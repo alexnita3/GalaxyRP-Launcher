@@ -68,6 +68,8 @@ public class GalaxyRPLauncherController {
         this.launcherConfiguration = configurationFileService.loadConfigurationFile();
         InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
 
+        gameModDropDown.getItems().setAll(new ModCheckService().getAvailableGameMods());
+        gameModDropDown.getSelectionModel().selectFirst();
         clientModDropDown.getItems().add(0, ClientMods.OPEN_JK);
         clientModDropDown.getItems().add(1, ClientMods.BASE_JKA);
 
@@ -180,5 +182,28 @@ public class GalaxyRPLauncherController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void onRefreshServer1Info() {
+        refreshServerInfo(1);
+    }
+
+    @FXML
+    public void onRefreshServer2Info() {
+        refreshServerInfo(2);
+    }
+
+    private void refreshServerInfo(int serverNumber) {
+        if (asyncActionService.isActionRunning()) {
+            return;
+        }
+
+        asyncActionService.run(
+                UserAction.UPDATE_SERVER_TRACKER,
+                () -> new InterfaceUpdateService().updateServerTrackerInfo(this, serverNumber),
+                () -> {
+                },
+                Throwable::printStackTrace);
     }
 }
