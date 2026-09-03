@@ -34,8 +34,10 @@ public class AsyncActionService {
         Thread worker = new Thread(() -> {
             try {
                 task.run();
+                actionRunning.set(false);
                 Platform.runLater(onComplete);
             } catch (Exception exception) {
+                actionRunning.set(false);
                 Platform.runLater(() -> onError.accept(exception));
             } finally {
                 actionRunning.set(false);

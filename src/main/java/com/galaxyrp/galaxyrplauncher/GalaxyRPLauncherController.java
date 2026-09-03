@@ -39,6 +39,16 @@ public class GalaxyRPLauncherController {
     public List<File> googleDriveFiles;
     public LauncherConfiguration launcherConfiguration;
     public Button applyConfig;
+    public ChoiceBox gameModDropDown;
+    public CheckBox scanOnStartCheckBox1;
+    public Label playerCount1Label;
+    public ListView playerList1;
+    public Button refreshServer1Info;
+    public Label playerCount2Label;
+    public ListView playerList2;
+    public Button refreshServer2Info;
+    public Label server1InfoTitle;
+    public Label server2InfoTitle;
 
     private AsyncActionService asyncActionService;
     private SearchService searchService;
@@ -61,11 +71,31 @@ public class GalaxyRPLauncherController {
         clientModDropDown.getItems().add(0, ClientMods.OPEN_JK);
         clientModDropDown.getItems().add(1, ClientMods.BASE_JKA);
 
-        if (launcherConfiguration.isScanOnStartup()) {
-            onCheckUpdateButtonClick();
-        } else if (launcherConfiguration.isAutoDownload()) {
-            onDownloadAllButtonClick();
+        Runnable startupAction = () -> {
+            if (launcherConfiguration.isScanOnStartup()) {
+                onCheckUpdateButtonClick();
+            } else if (launcherConfiguration.isAutoDownload()) {
+                onDownloadAllButtonClick();
+            }
+        };
+
+        if (hasText(launcherConfiguration.getServerIp())
+                && hasText(launcherConfiguration.getServer2Ip())) {
+            asyncActionService.run(
+                    UserAction.UPDATE_SERVER_TRACKER,
+                    () -> new InterfaceUpdateService().updateServerTrackerLists(this),
+                    startupAction,
+                    exception -> {
+                        exception.printStackTrace();
+                        startupAction.run();
+                    });
+        } else {
+            startupAction.run();
         }
+    }
+
+    private static boolean hasText(String value) {
+        return value != null && !value.isBlank();
     }
 
     @FXML

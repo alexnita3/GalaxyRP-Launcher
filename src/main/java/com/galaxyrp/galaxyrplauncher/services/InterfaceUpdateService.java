@@ -2,9 +2,12 @@ package com.galaxyrp.galaxyrplauncher.services;
 
 import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
 import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
+import com.galaxyrp.galaxyrplauncher.adapters.ServerTrackerAdapter;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
+
+import java.io.IOException;
 
 public class InterfaceUpdateService {
     public static void updateUserInterface(GalaxyRPLauncherController controller, UserAction userAction) {
@@ -21,6 +24,8 @@ public class InterfaceUpdateService {
                 case PRESSED_LAUNCH_GAME:
                     changeButtonState(controller, true);
                     setStatus(controller, "Launching...");
+                    break;
+                case UPDATE_SERVER_TRACKER:
                     break;
                 case NOTHING_TO_DOWNLOAD:
                     setEmptyState(controller);
@@ -94,6 +99,27 @@ public class InterfaceUpdateService {
 
         controller.serverSelectDropDownList.getItems().clear();
         controller.serverSelectDropDownList.getItems().addAll(configuration.getServerIp(), configuration.getServer2Ip());
+        controller.serverSelectDropDownList.getSelectionModel().selectFirst();
+    }
+
+    public void updateServerTrackerLists(GalaxyRPLauncherController controller) throws IOException {
+        ServerTrackerAdapter serverTrackerAdapter = new ServerTrackerAdapter();
+        String ipAddress1 = controller.server1IpTextBox.getText();
+        String ipAddress2 = controller.server2IpTextBox.getText();
+
+        ServerTrackerAdapter.JediAcademyServerInfo server1Info = serverTrackerAdapter.getServerInfo(ipAddress1);
+        System.out.print(server1Info);
+        ServerTrackerAdapter.JediAcademyServerInfo server2Info = serverTrackerAdapter.getServerInfo(ipAddress2);
+
+        Platform.runLater(() -> {
+            controller.server1InfoTitle.setText(server1Info.hostName() + " Info");
+            controller.playerCount1Label.setText(String.valueOf(server1Info.playerCount()));
+            controller.playerList1.getItems().setAll(server1Info.playerNames());
+
+            controller.server2InfoTitle.setText(server2Info.hostName() + " Info");
+            controller.playerCount2Label.setText(String.valueOf(server2Info.playerCount()));
+            controller.playerList2.getItems().setAll(server2Info.playerNames());
+        });
     }
 
 }

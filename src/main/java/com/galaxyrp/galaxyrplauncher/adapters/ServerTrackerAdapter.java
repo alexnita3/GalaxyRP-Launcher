@@ -130,10 +130,6 @@ public class ServerTrackerAdapter {
         }
     }
 
-    public void updateServerTrackerList(GalaxyRPLauncherController controller, String ipAddress) throws IOException {
-        JediAcademyServerInfo jkaServerInfo = getServerInfo(ipAddress);
-    }
-
     public record JediAcademyServerInfo(
             String hostName,
             int playerCount,
