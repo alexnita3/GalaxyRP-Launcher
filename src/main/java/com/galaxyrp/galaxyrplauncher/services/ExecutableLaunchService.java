@@ -37,16 +37,29 @@ public class ExecutableLaunchService {
     }
 
     public static String buildFullExecutableArguments(LauncherConfiguration launcherConfiguration, GalaxyRPLauncherController galaxyRPLauncherController){
+        List<String> arguments = new ArrayList<>();
 
-        String serverConnect = "+connect ";
-        serverConnect += galaxyRPLauncherController.serverSelectDropDownList.getValue().toString();
+        Object selectedServer = galaxyRPLauncherController.serverSelectDropDownList.getValue();
+        if (selectedServer != null && !selectedServer.toString().isBlank()) {
+            arguments.add("+connect");
+            arguments.add(selectedServer.toString().trim());
+        }
 
-        String gameMod = "+set fs_game ";
-        gameMod += ModCheckService.getGameStartArgumentForGameMod(launcherConfiguration.getGameMod());
+        if (launcherConfiguration != null && launcherConfiguration.getGameMod() != null) {
+            String gameModArguments =
+                    ModCheckService.getGameStartArgumentForGameMod(launcherConfiguration.getGameMod());
+            if (gameModArguments != null && !gameModArguments.isBlank()) {
+                arguments.add(gameModArguments);
+            }
+        }
 
-        String customArguments = launcherConfiguration.getCustomArguments();
+        String customArguments = launcherConfiguration == null
+                ? null
+                : launcherConfiguration.getCustomArguments();
+        if (customArguments != null && !customArguments.isBlank()) {
+            arguments.add(customArguments.trim());
+        }
 
-        String fullArguments = serverConnect + " " + gameMod + " " + customArguments;
-        return fullArguments;
+        return String.join(" ", arguments);
     }
 }
