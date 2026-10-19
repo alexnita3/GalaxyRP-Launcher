@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GalaxyRPLauncherController {
@@ -172,18 +174,27 @@ public class GalaxyRPLauncherController {
 
     @FXML
     public void onLaunchGameButtonClick() {
+        Path gameDirectory = Path.of("").toAbsolutePath();
+        String executable = ModCheckService.getAvailableClientModExecutables()
+                .get(launcherConfiguration.getClientMod());
+        if (executable == null) {
+            statusLabel.setText("The selected client executable was not found in the game folder.");
+            return;
+        }
+
+        List<String> command = new ArrayList<>();
+        command.add(gameDirectory.resolve(executable).toString());
+        String customArguments = launcherConfiguration.getCustomArguments();
+        if (customArguments != null && !customArguments.isBlank()) {
+            command.addAll(List.of(customArguments.trim().split("\\s+")));
+        }
+
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        processBuilder.directory(gameDirectory.toFile());
         try {
-
-            String executable = ModCheckService.getAvailableClientModExecutables().get(launcherConfiguration.getClientMod());
-
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    ModCheckService.getExecutableNameFromClientMod(this.launcherConfiguration.getClientMod()),
-                    launcherConfiguration.getCustomArguments()
-            );
-            //processBuilder.directory(new java.io.File(System.getProperty("user.dir")));
             processBuilder.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            statusLabel.setText("Unable to launch game: " + e.getMessage());
         }
     }
 
