@@ -28,6 +28,13 @@ public class NewsService {
                 white-space: pre-wrap;
                 overflow-wrap: anywhere;
               }
+              img {
+                max-width: 100%;
+                max-height: calc(100vh - 24px);
+                width: auto;
+                height: auto;
+                object-fit: contain;
+              }
               a { color: #8ab4f8; }
               blockquote {
                 border-left: 3px solid #888;
