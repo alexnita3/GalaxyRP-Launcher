@@ -14,15 +14,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class FileComparisonService {
-    public List<File> filterFiles(List<File> googleDriveFiles) throws IOException {
-        return filterFiles(googleDriveFiles, null);
-    }
-
     public List<File> filterFiles(
             List<File> googleDriveFiles, LauncherConfiguration launcherConfiguration)
             throws IOException {
         googleDriveFiles = filterPk3Files(googleDriveFiles);
-        googleDriveFiles = getDifferentFiles(googleDriveFiles, launcherConfiguration);
+        googleDriveFiles = getAllFilesThatNeedDownloading(googleDriveFiles, launcherConfiguration);
         return googleDriveFiles;
     }
 
@@ -44,7 +40,7 @@ public class FileComparisonService {
         return pk3Files;
     }
 
-    private List<File> getDifferentFiles(
+    private List<File> getAllFilesThatNeedDownloading(
             List<File> googleDriveFiles, LauncherConfiguration launcherConfiguration)
             throws IOException {
         if (googleDriveFiles == null) {
