@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InterfaceUpdateService {
@@ -171,8 +172,7 @@ public class InterfaceUpdateService {
     }
 
     public static void populateClientModDropDownList(GalaxyRPLauncherController controller) {
-        ModCheckService modCheckService = new ModCheckService();
-        List<ClientMods> availableClientMods = modCheckService.getAvailableClientMods();
+        List<ClientMods> availableClientMods = new ArrayList<>(ModCheckService.getAvailableClientModExecutables().keySet());
 
         ObservableList<ClientMods> clientModDropDownList = FXCollections.observableArrayList();
         clientModDropDownList.setAll(availableClientMods);

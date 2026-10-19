@@ -173,6 +173,9 @@ public class GalaxyRPLauncherController {
     @FXML
     public void onLaunchGameButtonClick() {
         try {
+
+            String executable = ModCheckService.getAvailableClientModExecutables().get(launcherConfiguration.getClientMod());
+
             ProcessBuilder processBuilder = new ProcessBuilder(
                     ModCheckService.getExecutableNameFromClientMod(this.launcherConfiguration.getClientMod()),
                     launcherConfiguration.getCustomArguments()

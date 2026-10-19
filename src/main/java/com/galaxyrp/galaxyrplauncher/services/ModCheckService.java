@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModCheckService {
 
@@ -26,24 +28,26 @@ public class ModCheckService {
         return availableGameMods;
     }
 
-    public List<ClientMods> getAvailableClientMods() {
-        List<ClientMods> availableClientMods = new ArrayList<>();
-
+    public static Map<ClientMods, String> getAvailableClientModExecutables() {
         List<String> allExecutables = getAllExecutableFiles();
+        Map<ClientMods, String> availableExecutables = new EnumMap<>(ClientMods.class);
 
-        for (ClientMods clientMod : ClientMods.values()) {
-            String executableName = getExecutableNameFromClientMod(clientMod);
-            for(String executable : allExecutables) {
-                if(executable.startsWith(executableName)) {
-                    availableClientMods.add(clientMod);
+        if (allExecutables != null) {
+            for (ClientMods clientMod : ClientMods.values()) {
+                String executableName = getExecutableNameFromClientMod(clientMod);
+                for (String executable : allExecutables) {
+                    if (executable.startsWith(executableName)) {
+                        availableExecutables.put(clientMod, executable);
+                        break;
+                    }
                 }
             }
         }
 
-        return availableClientMods;
+        return availableExecutables;
     }
 
-    public List<String> getAllExecutableFiles(){
+    public static List<String> getAllExecutableFiles(){
         List<String> executableFiles = new ArrayList<>();
 
         Path rootDirectory = Path.of("").toAbsolutePath();
