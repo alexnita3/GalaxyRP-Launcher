@@ -86,7 +86,7 @@ public class GalaxyRPLauncherController {
         };
 
         if (hasText(launcherConfiguration.getServerIp())
-                && hasText(launcherConfiguration.getServer2Ip())) {
+                || hasText(launcherConfiguration.getServer2Ip())) {
             asyncActionService.run(
                     UserAction.UPDATE_SERVER_TRACKER,
                     () -> new InterfaceUpdateService().updateServerTrackerLists(this),

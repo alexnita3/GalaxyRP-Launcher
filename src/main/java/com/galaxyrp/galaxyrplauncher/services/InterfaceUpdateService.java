@@ -126,17 +126,28 @@ public class InterfaceUpdateService {
         String ipAddress1 = controller.server1IpTextBox.getText();
         String ipAddress2 = controller.server2IpTextBox.getText();
 
-        ServerTrackerAdapter.JediAcademyServerInfo server1Info = serverTrackerAdapter.getServerInfo(ipAddress1);
-        ServerTrackerAdapter.JediAcademyServerInfo server2Info = serverTrackerAdapter.getServerInfo(ipAddress2);
+        ServerTrackerAdapter.JediAcademyServerInfo server1Info = null;
+        ServerTrackerAdapter.JediAcademyServerInfo server2Info = null;
+        if (ipAddress1 != null && !ipAddress1.isBlank()) {
+            server1Info = serverTrackerAdapter.getServerInfo(ipAddress1);
+        }
+        if (ipAddress2 != null && !ipAddress2.isBlank()) {
+            server2Info = serverTrackerAdapter.getServerInfo(ipAddress2);
+        }
 
+        ServerTrackerAdapter.JediAcademyServerInfo finalServer1Info = server1Info;
+        ServerTrackerAdapter.JediAcademyServerInfo finalServer2Info = server2Info;
         Platform.runLater(() -> {
-            controller.server1InfoTitle.setText(server1Info.hostName() + " Info");
-            controller.playerCount1Label.setText(String.valueOf(server1Info.playerCount()));
-            controller.playerList1.getItems().setAll(server1Info.playerNames());
-
-            controller.server2InfoTitle.setText(server2Info.hostName() + " Info");
-            controller.playerCount2Label.setText(String.valueOf(server2Info.playerCount()));
-            controller.playerList2.getItems().setAll(server2Info.playerNames());
+            if (finalServer1Info != null) {
+                controller.server1InfoTitle.setText(finalServer1Info.hostName() + " Info");
+                controller.playerCount1Label.setText(String.valueOf(finalServer1Info.playerCount()));
+                controller.playerList1.getItems().setAll(finalServer1Info.playerNames());
+            }
+            if (finalServer2Info != null) {
+                controller.server2InfoTitle.setText(finalServer2Info.hostName() + " Info");
+                controller.playerCount2Label.setText(String.valueOf(finalServer2Info.playerCount()));
+                controller.playerList2.getItems().setAll(finalServer2Info.playerNames());
+            }
         });
     }
 
