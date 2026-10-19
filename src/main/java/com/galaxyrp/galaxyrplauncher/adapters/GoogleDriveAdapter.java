@@ -24,9 +24,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -224,6 +226,51 @@ public class GoogleDriveAdapter {
                 fileComparisonService.filterFiles(allFiles, launcherConfiguration);
 
         return filteredFiles;
+    }
+
+    public static Optional<String> readTextFileFromFolder(
+            String folderLink, String fileName)
+            throws IOException, GeneralSecurityException {
+        String folderId = extractFolderId(folderLink);
+        if (folderId == null || folderId.isBlank()) {
+            throw new IllegalArgumentException("Invalid Google Drive folder URL or ID: " + folderLink);
+        }
+        if (fileName == null || fileName.isBlank()) {
+            throw new IllegalArgumentException("File name cannot be blank.");
+        }
+
+        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        Drive service = new Drive.Builder(
+                httpTransport, JSON_FACTORY, getCredentials(httpTransport))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+        String escapedFileName = fileName.replace("\\", "\\\\").replace("'", "\\'");
+        FileList result = service.files().list()
+                .setQ("'" + folderId + "' in parents and name = '" + escapedFileName
+                        + "' and trashed = false")
+                .setFields("files(id, name, mimeType)")
+                .setPageSize(100)
+                .setSupportsAllDrives(true)
+                .execute();
+
+        if (result.getFiles() == null) {
+            return Optional.empty();
+        }
+        File newsFile = result.getFiles().stream()
+                .filter(file -> !"application/vnd.google-apps.folder".equals(file.getMimeType()))
+                .findFirst()
+                .orElse(null);
+        if (newsFile == null) {
+            return Optional.empty();
+        }
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            service.files().get(newsFile.getId())
+                    .setAlt("media")
+                    .setSupportsAllDrives(true)
+                    .executeMediaAndDownloadTo(outputStream);
+            return Optional.of(outputStream.toString(StandardCharsets.UTF_8));
+        }
     }
 
     private static boolean isMapFolder(String folderName) {

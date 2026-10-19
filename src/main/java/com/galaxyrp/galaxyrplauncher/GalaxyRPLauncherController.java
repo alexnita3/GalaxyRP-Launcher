@@ -51,6 +51,7 @@ public class GalaxyRPLauncherController {
     public Label server1InfoTitle;
     public Label server2InfoTitle;
     public CheckBox splitDownloadsCheckBox;
+    public TextArea serverNewsTextArea;
 
     private AsyncActionService asyncActionService;
     private SearchService searchService;
@@ -73,6 +74,7 @@ public class GalaxyRPLauncherController {
         InterfaceUpdateService.populateClientModDropDownList(this);
 
         InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
+        new NewsService(this).loadNews();
 
 
         Runnable startupAction = () -> {
