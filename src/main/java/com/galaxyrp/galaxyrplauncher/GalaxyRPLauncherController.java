@@ -66,12 +66,12 @@ public class GalaxyRPLauncherController {
         ConfigurationFileService configurationFileService = new ConfigurationFileService();
         configurationFileService.initializeConfigurationFile();
         this.launcherConfiguration = configurationFileService.loadConfigurationFile();
+
+        InterfaceUpdateService.populateGameModDropDownList(this);
+        InterfaceUpdateService.populateClientModDropDownList(this);
+
         InterfaceUpdateService.displayConfigurationValues(this, launcherConfiguration);
 
-        gameModDropDown.getItems().setAll(new ModCheckService().getAvailableGameMods());
-        gameModDropDown.getSelectionModel().selectFirst();
-        clientModDropDown.getItems().add(0, ClientMods.OPEN_JK);
-        clientModDropDown.getItems().add(1, ClientMods.BASE_JKA);
 
         Runnable startupAction = () -> {
             if (launcherConfiguration.isScanOnStartup()) {
@@ -174,7 +174,7 @@ public class GalaxyRPLauncherController {
     public void onLaunchGameButtonClick() {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(
-                    "openjk.x86.exe",
+                    ModCheckService.getExecutableNameFromClientMod(this.launcherConfiguration.getClientMod()),
                     launcherConfiguration.getCustomArguments()
             );
             //processBuilder.directory(new java.io.File(System.getProperty("user.dir")));

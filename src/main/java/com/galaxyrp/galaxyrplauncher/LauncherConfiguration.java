@@ -1,6 +1,7 @@
 package com.galaxyrp.galaxyrplauncher;
 
 import com.galaxyrp.galaxyrplauncher.enums.ClientMods;
+import com.galaxyrp.galaxyrplauncher.enums.GameMods;
 
 public class LauncherConfiguration {
     private String serverIp;
@@ -9,6 +10,7 @@ public class LauncherConfiguration {
     private String server2Name;
     private String googleDriveLink;
     private ClientMods clientMod;
+    private GameMods gameMod;
     private int resolutionX;
     private int resolutionY;
     private String customArguments;
@@ -60,6 +62,14 @@ public class LauncherConfiguration {
 
     public ClientMods getClientMod() {
         return clientMod;
+    }
+
+    public GameMods getGameMod() {
+        return gameMod;
+    }
+
+    public void setGameMod(GameMods gameMod) {
+        this.gameMod = gameMod;
     }
 
     public void setClientMod(ClientMods clientMod) {

@@ -3,11 +3,16 @@ package com.galaxyrp.galaxyrplauncher.services;
 import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
 import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
 import com.galaxyrp.galaxyrplauncher.adapters.ServerTrackerAdapter;
+import com.galaxyrp.galaxyrplauncher.enums.ClientMods;
+import com.galaxyrp.galaxyrplauncher.enums.GameMods;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.google.api.services.drive.model.File;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.List;
 
 public class InterfaceUpdateService {
     public static void updateUserInterface(GalaxyRPLauncherController controller, UserAction userAction) {
@@ -100,6 +105,18 @@ public class InterfaceUpdateService {
         controller.serverSelectDropDownList.getItems().clear();
         controller.serverSelectDropDownList.getItems().addAll(configuration.getServerIp(), configuration.getServer2Ip());
         controller.serverSelectDropDownList.getSelectionModel().selectFirst();
+
+        if(configuration.getClientMod() == null) {
+            controller.clientModDropDown.getSelectionModel().selectFirst();
+        } else {
+            controller.clientModDropDown.getSelectionModel().select(configuration.getClientMod());
+        }
+
+        if(configuration.getGameMod() == null) {
+            controller.gameModDropDown.getSelectionModel().selectFirst();
+        } else {
+            controller.gameModDropDown.getSelectionModel().select(configuration.getGameMod());
+        }
     }
 
     public void updateServerTrackerLists(GalaxyRPLauncherController controller) throws IOException {
@@ -141,6 +158,26 @@ public class InterfaceUpdateService {
                 controller.playerList2.getItems().setAll(serverInfo.playerNames());
             }
         });
+    }
+
+    public static void populateGameModDropDownList(GalaxyRPLauncherController controller) {
+        ModCheckService modCheckService = new ModCheckService();
+        List<GameMods> availableGameMods = modCheckService.getAvailableGameMods();
+
+        ObservableList<GameMods> gameModDropDownList = FXCollections.observableArrayList();
+        gameModDropDownList.setAll(availableGameMods);
+
+        controller.gameModDropDown.setItems(gameModDropDownList);
+    }
+
+    public static void populateClientModDropDownList(GalaxyRPLauncherController controller) {
+        ModCheckService modCheckService = new ModCheckService();
+        List<ClientMods> availableClientMods = modCheckService.getAvailableClientMods();
+
+        ObservableList<ClientMods> clientModDropDownList = FXCollections.observableArrayList();
+        clientModDropDownList.setAll(availableClientMods);
+
+        controller.clientModDropDown.setItems(clientModDropDownList);
     }
 
 }
