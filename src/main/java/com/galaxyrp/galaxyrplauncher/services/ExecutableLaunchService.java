@@ -53,11 +53,11 @@ public class ExecutableLaunchService {
             }
         }
 
-        String customArguments = launcherConfiguration == null
-                ? null
-                : launcherConfiguration.getCustomArguments();
-        if (customArguments != null && !customArguments.isBlank()) {
-            arguments.add(customArguments.trim());
+        if (launcherConfiguration != null) {
+            String customArguments = launcherConfiguration.getCustomArguments();
+            if (customArguments != null && !customArguments.isBlank()) {
+                arguments.add(customArguments.trim());
+            }
         }
 
         return String.join(" ", arguments);
