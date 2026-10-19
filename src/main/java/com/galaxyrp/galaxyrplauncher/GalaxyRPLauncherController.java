@@ -6,6 +6,7 @@ import com.galaxyrp.galaxyrplauncher.services.*;
 import com.google.api.services.drive.model.File;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.web.WebView;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -51,7 +52,7 @@ public class GalaxyRPLauncherController {
     public Label server1InfoTitle;
     public Label server2InfoTitle;
     public CheckBox splitDownloadsCheckBox;
-    public TextArea serverNewsTextArea;
+    public WebView serverNewsWebView;
 
     private AsyncActionService asyncActionService;
     private SearchService searchService;
