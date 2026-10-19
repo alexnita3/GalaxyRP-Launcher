@@ -76,6 +76,7 @@ public class ConfigurationFileService {
         configuration.setCustomArguments(controller.customArgumentsTextBox.getText());
         configuration.setScanOnStartup(controller.scanOnStartCheckBox.isSelected());
         configuration.setAutoDownload(controller.automaticallyDownloadCheckBox.isSelected());
+        configuration.setSplitDownloads(controller.splitDownloadsCheckBox.isSelected());
 
         controller.serverSelectDropDownList.getItems().clear();
         controller.serverSelectDropDownList.getItems().addAll(configuration.getServerIp(), configuration.getServer2Ip());

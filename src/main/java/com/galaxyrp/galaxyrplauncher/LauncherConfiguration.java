@@ -17,6 +17,8 @@ public class LauncherConfiguration {
     private boolean scanOnStartup;
     private boolean autoDownload;
 
+    private boolean splitDownloads;
+
     public LauncherConfiguration() {
     }
 
@@ -114,5 +116,13 @@ public class LauncherConfiguration {
 
     public void setAutoDownload(boolean autoDownload) {
         this.autoDownload = autoDownload;
+    }
+
+    public boolean isSplitDownloads() {
+        return splitDownloads;
+    }
+
+    public void setSplitDownloads(boolean splitDownloads) {
+        this.splitDownloads = splitDownloads;
     }
 }

@@ -139,7 +139,7 @@
                                     <Label layoutX="474.0" layoutY="420.0" style="-fx-text-fill: white;" text="© Alex Nita | https://github.com/alexnita3/" />
                                     <Label layoutX="493.0" layoutY="260.0" style="-fx-text-fill: white;" text="Game Mod:" />
                                     <ChoiceBox fx:id="gameModDropDown" layoutX="574.0" layoutY="254.0" prefHeight="34.0" prefWidth="160.0" style="-fx-background-color: #2b2b2b; -fx-mark-color: white; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-background-radius: 3; -fx-border-radius: 3;" />
-                                    <CheckBox fx:id="scanOnStartCheckBox1" layoutX="474.0" layoutY="27.0" mnemonicParsing="false" style="-fx-text-fill: white;" text="Split download between two folders?">
+                                    <CheckBox fx:id="splitDownloadsCheckBox" layoutX="474.0" layoutY="27.0" mnemonicParsing="false" style="-fx-text-fill: white;" text="Split download between two folders?">
                                        <tooltip>
                                           <Tooltip text="If this option is checked, the launcher will check for updates as soon as it's open" />
                                        </tooltip>

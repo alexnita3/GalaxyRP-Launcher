@@ -42,7 +42,6 @@ public class GalaxyRPLauncherController {
     public LauncherConfiguration launcherConfiguration;
     public Button applyConfig;
     public ChoiceBox gameModDropDown;
-    public CheckBox scanOnStartCheckBox1;
     public Label playerCount1Label;
     public ListView playerList1;
     public Button refreshServer1Info;
@@ -51,6 +50,7 @@ public class GalaxyRPLauncherController {
     public Button refreshServer2Info;
     public Label server1InfoTitle;
     public Label server2InfoTitle;
+    public CheckBox splitDownloadsCheckBox;
 
     private AsyncActionService asyncActionService;
     private SearchService searchService;
