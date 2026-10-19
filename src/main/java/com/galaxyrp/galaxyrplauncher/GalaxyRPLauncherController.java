@@ -174,28 +174,7 @@ public class GalaxyRPLauncherController {
 
     @FXML
     public void onLaunchGameButtonClick() {
-        Path gameDirectory = Path.of("").toAbsolutePath();
-        String executable = ModCheckService.getAvailableClientModExecutables()
-                .get(launcherConfiguration.getClientMod());
-        if (executable == null) {
-            statusLabel.setText("The selected client executable was not found in the game folder.");
-            return;
-        }
-
-        List<String> command = new ArrayList<>();
-        command.add(gameDirectory.resolve(executable).toString());
-        String customArguments = launcherConfiguration.getCustomArguments();
-        if (customArguments != null && !customArguments.isBlank()) {
-            command.addAll(List.of(customArguments.trim().split("\\s+")));
-        }
-
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        processBuilder.directory(gameDirectory.toFile());
-        try {
-            processBuilder.start();
-        } catch (IOException e) {
-            statusLabel.setText("Unable to launch game: " + e.getMessage());
-        }
+        ExecutableLaunchService.launchGame(launcherConfiguration, this);
     }
 
     @FXML

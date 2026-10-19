@@ -91,7 +91,7 @@ public class ModCheckService {
         }
     }
 
-    private static String getGameStartArgumentForGameMod(GameMods gameMod) {
+    static String getGameStartArgumentForGameMod(GameMods gameMod) {
         String argument = switch (gameMod) {
             case GALAXY_RP -> "GalaxyRP";
             case OPEN_JK -> "OpenJk";
