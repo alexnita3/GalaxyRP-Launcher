@@ -1,12 +1,12 @@
 package com.galaxyrp.galaxyrplauncher.services;
 
 import com.google.api.services.drive.model.File;
+import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -14,11 +14,15 @@ import java.util.List;
 import java.util.Locale;
 
 public class FileComparisonService {
-    private static final Path DOWNLOADS_DIRECTORY = Paths.get("base");
-
     public List<File> filterFiles(List<File> googleDriveFiles) throws IOException {
+        return filterFiles(googleDriveFiles, null);
+    }
+
+    public List<File> filterFiles(
+            List<File> googleDriveFiles, LauncherConfiguration launcherConfiguration)
+            throws IOException {
         googleDriveFiles = filterPk3Files(googleDriveFiles);
-        googleDriveFiles = getDifferentFiles(googleDriveFiles);
+        googleDriveFiles = getDifferentFiles(googleDriveFiles, launcherConfiguration);
         return googleDriveFiles;
     }
 
@@ -40,7 +44,8 @@ public class FileComparisonService {
         return pk3Files;
     }
 
-    private List<File> getDifferentFiles(List<File> googleDriveFiles)
+    private List<File> getDifferentFiles(
+            List<File> googleDriveFiles, LauncherConfiguration launcherConfiguration)
             throws IOException {
         if (googleDriveFiles == null) {
             throw new IllegalArgumentException("Google Drive file list cannot be null.");
@@ -54,8 +59,8 @@ public class FileComparisonService {
                         "Google Drive file list contains a file without a name.");
             }
 
-            Path localFile = DOWNLOADS_DIRECTORY.resolve(
-                    sanitizeFileName(googleDriveFile.getName()));
+            Path localFile = DownloadService.getDestinationPath(
+                    googleDriveFile, launcherConfiguration);
             if (!Files.isRegularFile(localFile)) {
                 differentFiles.add(googleDriveFile);
                 continue;
@@ -94,7 +99,4 @@ public class FileComparisonService {
         return checksum.toString();
     }
 
-    private static String sanitizeFileName(String fileName) {
-        return fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
-    }
 }

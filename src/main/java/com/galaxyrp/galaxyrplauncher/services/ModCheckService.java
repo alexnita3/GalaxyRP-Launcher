@@ -74,7 +74,7 @@ public class ModCheckService {
         return executableFiles;
     }
 
-    private static String getFolderNameFromGameMod(GameMods gameMod) {
+    public static String getFolderNameFromGameMod(GameMods gameMod) {
         switch(gameMod) {
             case BASE_JKA:
                 return "base";

@@ -1,6 +1,7 @@
 package com.galaxyrp.galaxyrplauncher.services;
 
 import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
+import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
 import com.galaxyrp.galaxyrplauncher.adapters.GoogleDriveAdapter;
 import com.galaxyrp.galaxyrplauncher.exceptions.LauncherErrorException;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
@@ -12,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class DownloadService {
@@ -20,7 +22,7 @@ public class DownloadService {
     private DownloadProgressService progressView;
     private File selectedFile;
 
-    private final String PK3_PATH = "base";
+    private static final String PK3_PATH = "base";
 
     public DownloadService(GalaxyRPLauncherController controller) {
         this.controller = controller;
@@ -44,7 +46,7 @@ public class DownloadService {
         progressView.begin();
         GoogleDriveAdapter.downloadFilesWithProgress(
                 controller.googleDriveFiles,
-                Paths.get(PK3_PATH),
+                file -> getDestinationPath(file, controller.launcherConfiguration),
                 progressView::update,
                 this::selectFileForDownload,
                 file -> filterDownloadedFiles());
@@ -52,8 +54,8 @@ public class DownloadService {
 
     public void downloadSelected() throws IOException, GeneralSecurityException {
         progressView.begin();
-        Path destination = Paths.get(
-                PK3_PATH, sanitizeFileName(selectedFile.getName()));
+        Path destination = getDestinationPath(
+                selectedFile, controller.launcherConfiguration);
         GoogleDriveAdapter.downloadFileWithProgress(
                 selectedFile.getId(), destination, progressView::update);
         filterDownloadedFiles();
@@ -79,7 +81,8 @@ public class DownloadService {
 
     private void filterDownloadedFiles() throws IOException {
         controller.googleDriveFiles =
-                fileComparisonService.filterFiles(controller.googleDriveFiles);
+                fileComparisonService.filterFiles(
+                        controller.googleDriveFiles, controller.launcherConfiguration);
         List<String> fileNames = controller.googleDriveFiles.stream()
                 .map(File::getName)
                 .collect(Collectors.toList());
@@ -105,5 +108,23 @@ public class DownloadService {
 
     private static String sanitizeFileName(String fileName) {
         return fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
+    }
+
+    static Path getDestinationPath(File file, LauncherConfiguration configuration) {
+        String destinationFolder = PK3_PATH;
+        if (configuration != null
+                && configuration.isSplitDownloads()
+                && GoogleDriveAdapter.isInsideMapFolder(file)
+                && file.getName() != null
+                && file.getName().toLowerCase(Locale.ROOT).endsWith(".pk3")
+                && configuration.getGameMod() != null) {
+            String modFolder = ModCheckService.getFolderNameFromGameMod(
+                    configuration.getGameMod());
+            if (modFolder != null) {
+                destinationFolder = modFolder;
+            }
+        }
+
+        return Paths.get(destinationFolder, sanitizeFileName(file.getName()));
     }
 }

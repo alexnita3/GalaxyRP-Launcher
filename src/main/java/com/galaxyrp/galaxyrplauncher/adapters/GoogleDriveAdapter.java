@@ -1,5 +1,6 @@
 package com.galaxyrp.galaxyrplauncher.adapters;
 
+import com.galaxyrp.galaxyrplauncher.LauncherConfiguration;
 import com.galaxyrp.galaxyrplauncher.services.FileComparisonService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -25,6 +26,7 @@ import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -153,7 +155,8 @@ public class GoogleDriveAdapter {
         return null;
     }
 
-    private static void collectFilesRecursively(Drive service, String folderId, List<File> allFiles)
+    private static void collectFilesRecursively(
+            Drive service, String folderId, boolean insideMapFolder, List<File> allFiles)
             throws IOException {
         String pageToken = null;
         do {
@@ -169,8 +172,14 @@ public class GoogleDriveAdapter {
             if (children != null) {
                 for (File child : children) {
                     if ("application/vnd.google-apps.folder".equals(child.getMimeType())) {
-                        collectFilesRecursively(service, child.getId(), allFiles);
+                        boolean childIsMapFolder = isMapFolder(child.getName());
+                        collectFilesRecursively(
+                                service,
+                                child.getId(),
+                                insideMapFolder || childIsMapFolder,
+                                allFiles);
                     } else {
+                        child.set("insideMapFolder", insideMapFolder);
                         allFiles.add(child);
                     }
                 }
@@ -181,6 +190,13 @@ public class GoogleDriveAdapter {
     }
 
     public static List<File> listFilesFromFolder(String folderLink) throws IOException, GeneralSecurityException {
+        return listFilesFromFolder(folderLink, null);
+    }
+
+    public static List<File> listFilesFromFolder(
+            String folderLink,
+            LauncherConfiguration launcherConfiguration)
+            throws IOException, GeneralSecurityException {
         String folderId = extractFolderId(folderLink);
         if (folderId == null || folderId.isBlank()) {
             throw new IllegalArgumentException("Invalid Google Drive folder URL or ID: " + folderLink);
@@ -192,16 +208,34 @@ public class GoogleDriveAdapter {
                 .build();
 
         List<File> allFiles = new java.util.ArrayList<>();
-        collectFilesRecursively(service, folderId, allFiles);
+        File rootFolder = service.files()
+                .get(folderId)
+                .setFields("name, mimeType")
+                .setSupportsAllDrives(true)
+                .execute();
+        collectFilesRecursively(service, folderId, isMapFolder(rootFolder.getName()), allFiles);
         for(File file : allFiles) {
             System.out.println(file.getName());
         }
 
         FileComparisonService fileComparisonService = new FileComparisonService();
 
-        List<File> filteredFiles = fileComparisonService.filterFiles(allFiles);
+        List<File> filteredFiles =
+                fileComparisonService.filterFiles(allFiles, launcherConfiguration);
 
         return filteredFiles;
+    }
+
+    private static boolean isMapFolder(String folderName) {
+        if (folderName == null) {
+            return false;
+        }
+        String normalizedName = folderName.toLowerCase(Locale.ROOT);
+        return normalizedName.equals("map") || normalizedName.equals("maps");
+    }
+
+    public static boolean isInsideMapFolder(File file) {
+        return Boolean.TRUE.equals(file.get("insideMapFolder"));
     }
 
     public static void downloadFilesWithProgress(
@@ -211,11 +245,29 @@ public class GoogleDriveAdapter {
             FileDownloadStartedListener fileDownloadStartedListener,
             FileDownloadedListener fileDownloadedListener)
             throws IOException, GeneralSecurityException {
+        if (destinationDirectory == null) {
+            throw new IllegalArgumentException("Destination directory cannot be null.");
+        }
+        downloadFilesWithProgress(
+                files,
+                file -> destinationDirectory.resolve(sanitizeFileName(file.getName())),
+                progressListener,
+                fileDownloadStartedListener,
+                fileDownloadedListener);
+    }
+
+    public static void downloadFilesWithProgress(
+            List<File> files,
+            java.util.function.Function<File, Path> destinationResolver,
+            DownloadProgressListener progressListener,
+            FileDownloadStartedListener fileDownloadStartedListener,
+            FileDownloadedListener fileDownloadedListener)
+            throws IOException, GeneralSecurityException {
         if (files == null) {
             throw new IllegalArgumentException("File list cannot be null.");
         }
-        if (destinationDirectory == null) {
-            throw new IllegalArgumentException("Destination directory cannot be null.");
+        if (destinationResolver == null) {
+            throw new IllegalArgumentException("Destination resolver cannot be null.");
         }
         if (progressListener == null) {
             throw new IllegalArgumentException("Progress listener cannot be null.");
@@ -227,8 +279,6 @@ public class GoogleDriveAdapter {
             throw new IllegalArgumentException("File download started listener cannot be null.");
         }
 
-        Files.createDirectories(destinationDirectory);
-
         for (File file : files) {
             if (file == null || file.getId() == null || file.getId().isBlank()) {
                 throw new IllegalArgumentException("File list contains a file without an ID.");
@@ -237,7 +287,10 @@ public class GoogleDriveAdapter {
                 throw new IllegalArgumentException("File list contains a file without a name.");
             }
 
-            Path destination = destinationDirectory.resolve(sanitizeFileName(file.getName()));
+            Path destination = destinationResolver.apply(file);
+            if (destination == null) {
+                throw new IllegalArgumentException("Destination resolver returned null.");
+            }
             fileDownloadStartedListener.onFileDownloadStarted(file);
             long totalBytes = -1;
             if (file.getSize() != null) {

@@ -102,6 +102,7 @@ public class InterfaceUpdateService {
         controller.customArgumentsTextBox.setText(configuration.getCustomArguments());
         controller.scanOnStartCheckBox.setSelected(configuration.isScanOnStartup());
         controller.automaticallyDownloadCheckBox.setSelected(configuration.isAutoDownload());
+        controller.splitDownloadsCheckBox.setSelected(configuration.isSplitDownloads());
 
         controller.serverSelectDropDownList.getItems().clear();
         controller.serverSelectDropDownList.getItems().addAll(configuration.getServerIp(), configuration.getServer2Ip());

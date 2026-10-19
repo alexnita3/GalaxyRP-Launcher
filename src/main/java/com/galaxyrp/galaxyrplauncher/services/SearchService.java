@@ -25,7 +25,8 @@ public class SearchService {
             folderLink = controller.googleDriveLinkTextBox.getText();
         }
 
-        controller.googleDriveFiles = GoogleDriveAdapter.listFilesFromFolder(folderLink);
+        controller.googleDriveFiles = GoogleDriveAdapter.listFilesFromFolder(
+                folderLink, controller.launcherConfiguration);
         List<String> fileNames = controller.googleDriveFiles.stream()
                 .map(File::getName)
                 .collect(Collectors.toList());
