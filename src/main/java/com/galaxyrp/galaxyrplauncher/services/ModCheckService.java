@@ -4,12 +4,15 @@ import com.galaxyrp.galaxyrplauncher.enums.ClientMods;
 import com.galaxyrp.galaxyrplauncher.enums.GameMods;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class ModCheckService {
@@ -51,19 +54,19 @@ public class ModCheckService {
         List<String> executableFiles = new ArrayList<>();
 
         Path rootDirectory = Path.of("").toAbsolutePath();
-        Path dirPath = Paths.get(rootDirectory.toUri());
-        File[] files = dirPath.toFile().listFiles();
+        File[] files = rootDirectory.toFile().listFiles();
         if (files == null) {
             return null;
         }
 
         for (File f : files) {
-            if (Files.isExecutable(f.toPath()) && f.canExecute()) {
-                //TODO: Make this compatible with Linux executables
-                //Exclude dedicated servers
-                if(!f.getName().contains("ded") && f.getName().endsWith(".exe")) {
-                    executableFiles.add(f.getName());
-                }
+            Path executablePath = f.toPath();
+            String executableName = f.getName().toLowerCase(Locale.ROOT);
+            if (Files.isRegularFile(executablePath)
+                    && f.canExecute()
+                    && isNativeExecutable(executablePath, executableName)
+                    && !executableName.contains("ded")) {
+                executableFiles.add(f.getName());
             }
         }
 
@@ -72,6 +75,28 @@ public class ModCheckService {
         }
 
         return executableFiles;
+    }
+
+    private static boolean isNativeExecutable(Path path, String fileName) {
+        String operatingSystem = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+        try (InputStream inputStream = Files.newInputStream(path)) {
+            byte[] signature = inputStream.readNBytes(4);
+            if (operatingSystem.contains("win")) {
+                return fileName.endsWith(".exe")
+                        && signature.length >= 2
+                        && signature[0] == 'M'
+                        && signature[1] == 'Z';
+            }
+
+            return Files.isExecutable(path)
+                    && signature.length == 4
+                    && (signature[0] & 0xff) == 0x7f
+                    && signature[1] == 'E'
+                    && signature[2] == 'L'
+                    && signature[3] == 'F';
+        } catch (IOException exception) {
+            throw new UncheckedIOException("Unable to inspect executable candidate: " + path, exception);
+        }
     }
 
     public static String getFolderNameFromGameMod(GameMods gameMod) {
