@@ -6,6 +6,10 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import javafx.application.Platform;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 public class NewsService {
     private static final String NO_DRIVE_MESSAGE =
             "Set up Google Drive to get server news.";
@@ -15,37 +19,7 @@ public class NewsService {
     private static final HtmlRenderer HTML_RENDERER = HtmlRenderer.builder()
             .escapeHtml(true)
             .build();
-    private static final String NEWS_STYLES = """
-            <style>
-              body {
-                background-color: #2b2b2b;
-                color: white;
-                font-family: sans-serif;
-                margin: 12px 28px 12px 12px;
-                overflow-wrap: anywhere;
-              }
-              pre {
-                white-space: pre-wrap;
-                overflow-wrap: anywhere;
-              }
-              img {
-                max-width: 100%;
-                max-height: calc(100vh - 24px);
-                width: auto;
-                height: auto;
-                object-fit: contain;
-              }
-              a { color: #8ab4f8; }
-              blockquote {
-                border-left: 3px solid #888;
-                margin-left: 0;
-                padding-left: 12px;
-                color: #ccc;
-              }
-              table { border-collapse: collapse; }
-              th, td { border: 1px solid #888; padding: 4px 8px; }
-            </style>
-            """;
+    private static final String NEWS_STYLES = loadNewsStyles();
 
     private final GalaxyRPLauncherController controller;
 
@@ -78,10 +52,22 @@ public class NewsService {
     private void displayNews(String markdown) {
         String renderedMarkdown = HTML_RENDERER.render(MARKDOWN_PARSER.parse(markdown));
         String html = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\">"
-                + NEWS_STYLES
+                + "<style>" + NEWS_STYLES + "</style>"
                 + "</head><body>"
                 + renderedMarkdown
                 + "</body></html>";
         Platform.runLater(() -> controller.serverNewsWebView.getEngine().loadContent(html));
+    }
+
+    private static String loadNewsStyles() {
+        String stylesheetPath = "/com/galaxyrp/galaxyrplauncher/services/news.css";
+        try (InputStream stylesheet = NewsService.class.getResourceAsStream(stylesheetPath)) {
+            if (stylesheet == null) {
+                throw new IllegalStateException("News stylesheet not found: " + stylesheetPath);
+            }
+            return new String(stylesheet.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException exception) {
+            throw new IllegalStateException("Unable to read news stylesheet: " + stylesheetPath, exception);
+        }
     }
 }
