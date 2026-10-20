@@ -59,6 +59,7 @@ public class InterfaceUpdateService {
 
     private static void setEmptyState(GalaxyRPLauncherController controller) {
         controller.checkUpdateButton.setDisable(false);
+        controller.launchGameButton.setDisable(false);
         controller.downloadSelectedButton.setDisable(true);
         controller.downloadAllButton.setDisable(true);
         controller.cloudFileList.setDisable(true);

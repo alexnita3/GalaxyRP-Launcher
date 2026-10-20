@@ -45,6 +45,12 @@ public class ExecutableLaunchService {
             arguments.add(selectedServer.toString().trim());
         }
 
+        if(launcherConfiguration != null && launcherConfiguration.getResolutionX() != 0 && launcherConfiguration.getResolutionY() != 0) {
+            String resolutionArgument = "+set r_customwidth \"%s\" +set r_customheight \"%s\" +set r_mode \"-1\""
+                    .formatted(launcherConfiguration.getResolutionX(), launcherConfiguration.getResolutionY());
+            arguments.add(resolutionArgument);
+        }
+
         if (launcherConfiguration != null && launcherConfiguration.getGameMod() != null) {
             String gameModArguments =
                     ModCheckService.getGameStartArgumentForGameMod(launcherConfiguration.getGameMod());
