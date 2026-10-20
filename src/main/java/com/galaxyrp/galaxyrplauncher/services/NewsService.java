@@ -2,15 +2,22 @@ package com.galaxyrp.galaxyrplauncher.services;
 
 import com.galaxyrp.galaxyrplauncher.GalaxyRPLauncherController;
 import com.galaxyrp.galaxyrplauncher.adapters.GoogleDriveAdapter;
+import org.commonmark.Extension;
+import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.parser.Parser;
 import javafx.application.Platform;
+
+import java.util.List;
 
 public class NewsService {
     private static final String NO_DRIVE_MESSAGE =
             "Set up Google Drive to get server news.";
     private static final String NO_NEWS_MESSAGE =
             "No news found. Talk to your server admin to upload a news.txt file.";
-    private static final Parser MARKDOWN_PARSER = Parser.builder().build();
+    private static final Extension STRIKETHROUGH = StrikethroughExtension.create();
+    private static final Parser MARKDOWN_PARSER = Parser.builder()
+            .extensions(List.of(STRIKETHROUGH))
+            .build();
 
     private final GalaxyRPLauncherController controller;
     private final NewsMarkdownRenderer markdownRenderer;

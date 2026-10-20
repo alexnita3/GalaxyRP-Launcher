@@ -2,6 +2,7 @@ package com.galaxyrp.galaxyrplauncher.services;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -31,11 +32,24 @@ import org.commonmark.node.Paragraph;
 import org.commonmark.node.SoftLineBreak;
 import org.commonmark.node.StrongEmphasis;
 import org.commonmark.node.ThematicBreak;
+import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is absolute black magic. This is a custom renderer, that drives the markdown display for the news page.
+ * MODIFY THIS AT YOUR OWN PERIL. <br></br>
+ *
+ * The reason this exists, is that using java-fx, together with a WebView component, while easier, caused the app
+ * to quadruple in file size. this way, the renderer only adds around a megabyte to it. <br></br>
+ *
+ * Instantiate using a <b>ScrollPane</b> object. <br></br>
+ * Use the render method, and give it text, via a <b>Parser</b> object.
+ *
+ */
 public class NewsMarkdownRenderer {
+    private static final String NEWS_FONT_FAMILY = "Verdana";
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final Color LINK_COLOR = Color.web("#8ab4f8");
     private static final Color QUOTE_COLOR = Color.LIGHTGRAY;
@@ -82,7 +96,8 @@ public class NewsMarkdownRenderer {
             } else if (node instanceof BulletList || node instanceof OrderedList) {
                 renderList(node, target);
             } else if (node instanceof ThematicBreak) {
-                Label divider = new Label();
+                Separator divider = new Separator();
+                divider.setMaxWidth(Double.MAX_VALUE);
                 divider.getStyleClass().add("news-divider");
                 target.getChildren().add(divider);
             } else if (node instanceof HtmlBlock htmlBlock) {
@@ -103,6 +118,7 @@ public class NewsMarkdownRenderer {
                 continue;
             }
             Label marker = new Label(ordered ? index++ + "." : "\u2022");
+            marker.setFont(Font.font(NEWS_FONT_FAMILY, 14));
             marker.getStyleClass().add("news-list-marker");
             VBox itemContent = new VBox(6);
             itemContent.setFillWidth(true);
@@ -121,7 +137,7 @@ public class NewsMarkdownRenderer {
     private TextFlow renderInline(org.commonmark.node.Node parent, double fontSize) {
         TextFlow flow = new TextFlow();
         flow.getStyleClass().add("news-text-flow");
-        appendInlineChildren(parent, flow, false, false, false, false, fontSize);
+        appendInlineChildren(parent, flow, false, false, false, false, false, fontSize);
         return flow;
     }
 
@@ -132,43 +148,50 @@ public class NewsMarkdownRenderer {
             boolean italic,
             boolean code,
             boolean link,
+            boolean strikethrough,
             double fontSize) {
         for (org.commonmark.node.Node node = parent.getFirstChild();
              node != null;
              node = node.getNext()) {
             if (node instanceof org.commonmark.node.Text text) {
-                addText(flow, text.getLiteral(), bold, italic, code, link, fontSize);
+                addText(flow, text.getLiteral(), bold, italic, code, link, strikethrough, fontSize);
             } else if (node instanceof Code inlineCode) {
-                addText(flow, inlineCode.getLiteral(), bold, italic, true, link, fontSize);
+                addText(flow, inlineCode.getLiteral(), bold, italic, true, link, strikethrough, fontSize);
             } else if (node instanceof Emphasis emphasis) {
-                appendInlineChildren(emphasis, flow, bold, true, code, link, fontSize);
+                appendInlineChildren(emphasis, flow, bold, true, code, link, strikethrough, fontSize);
             } else if (node instanceof StrongEmphasis strong) {
-                appendInlineChildren(strong, flow, true, italic, code, link, fontSize);
+                appendInlineChildren(strong, flow, true, italic, code, link, strikethrough, fontSize);
+            } else if (node instanceof Strikethrough strikethroughNode) {
+                appendInlineChildren(
+                        strikethroughNode, flow, bold, italic, code, link, true, fontSize);
             } else if (node instanceof Link markdownLink) {
-                appendInlineChildren(markdownLink, flow, bold, italic, code, true, fontSize);
+                appendInlineChildren(
+                        markdownLink, flow, bold, italic, code, true, strikethrough, fontSize);
             } else if (node instanceof org.commonmark.node.Image markdownImage) {
                 addImage(flow, markdownImage.getDestination(), markdownImage.getTitle());
             } else if (node instanceof SoftLineBreak || node instanceof HardLineBreak) {
                 flow.getChildren().add(new Text("\n"));
             } else if (node instanceof HtmlInline htmlInline) {
-                addText(flow, htmlInline.getLiteral(), bold, italic, code, link, fontSize);
+                addText(flow, htmlInline.getLiteral(), bold, italic, code, link, strikethrough, fontSize);
             } else if (node.getFirstChild() != null) {
-                appendInlineChildren(node, flow, bold, italic, code, link, fontSize);
+                appendInlineChildren(node, flow, bold, italic, code, link, strikethrough, fontSize);
             }
         }
     }
 
     private void addText(
             TextFlow flow, String value, boolean bold, boolean italic,
-            boolean code, boolean link, double fontSize) {
+            boolean code, boolean link, boolean strikethrough, double fontSize) {
         Text text = new Text(value);
         FontWeight weight = bold ? FontWeight.BOLD : FontWeight.NORMAL;
         FontPosture posture = italic ? FontPosture.ITALIC : FontPosture.REGULAR;
-        text.setFont(Font.font(code ? "Monospaced" : "System", weight, posture, fontSize));
+        String fontFamily = code ? "Monospaced" : NEWS_FONT_FAMILY;
+        text.setFont(Font.font(fontFamily, weight, posture, fontSize));
         text.setFill(link ? LINK_COLOR : TEXT_COLOR);
         if (link) {
             text.setUnderline(true);
         }
+        text.setStrikethrough(strikethrough);
         if (code) {
             text.getStyleClass().add("news-inline-code");
         } else {
@@ -207,7 +230,7 @@ public class NewsMarkdownRenderer {
     private TextFlow textBlock(String value) {
         TextFlow flow = new TextFlow();
         flow.getStyleClass().add("news-text-flow");
-        addText(flow, value, false, false, false, false, 14);
+        addText(flow, value, false, false, true, false, false, 14);
         return flow;
     }
 

@@ -37,6 +37,10 @@
 }
 
 .news-divider {
+    -fx-padding: 4 0;
+}
+
+.news-divider > .line {
     -fx-border-color: #888;
     -fx-border-width: 1 0 0 0;
 }
