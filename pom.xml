@@ -27,11 +27,6 @@
             <version>21.0.6</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-web</artifactId>
-            <version>21.0.6</version>
-        </dependency>
-        <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
             <version>0.24.0</version>
