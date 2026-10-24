@@ -90,7 +90,7 @@ chmod +x ./run-example.sh
 ./run-example.sh
 ```
 
-The script downloads and caches a matching Java 24 JRE in `.java-runtime/` on first run.
+The script uses an installed Java 24 if available; otherwise, it downloads and caches a matching Java 24 JRE in `.java-runtime/` on first run.
 
 Important: the launcher reads the credentials from a file, not from environment variables. The app will check `src/main/resources/credentials.json`.
 

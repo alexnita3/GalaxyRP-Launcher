@@ -27,13 +27,18 @@ case "$(uname -m)" in
         ;;
 esac
 
-if ! command -v curl >/dev/null 2>&1 || ! command -v tar >/dev/null 2>&1; then
-    printf 'Error: curl and tar are required to download and unpack Java.\n' >&2
-    exit 1
-fi
-
 RUNTIME_ROOT="$SCRIPT_DIR/.java-runtime"
 RUNTIME_DIR="$RUNTIME_ROOT/temurin-24-$OS-$ARCH"
+
+JAVA_BIN=""
+SYSTEM_JAVA="$(command -v java 2>/dev/null || true)"
+if [[ -n "$SYSTEM_JAVA" ]]; then
+    SYSTEM_JAVA_VERSION="$("$SYSTEM_JAVA" -version 2>&1 | sed -nE '1{s/.*version "([0-9]+)(\.[0-9]+)*".*/\1/p;}' || true)"
+    if [[ "$SYSTEM_JAVA_VERSION" == "24" ]]; then
+        JAVA_BIN="$SYSTEM_JAVA"
+        printf 'Using the system Java 24 installation.\n'
+    fi
+fi
 
 find_java() {
     if [[ -d "$1" ]]; then
@@ -41,8 +46,15 @@ find_java() {
     fi
 }
 
-JAVA_BIN="$(find_java "$RUNTIME_DIR")"
-if [[ ! -x "$JAVA_BIN" ]]; then
+if [[ -z "$JAVA_BIN" ]]; then
+    JAVA_BIN="$(find_java "$RUNTIME_DIR")"
+fi
+if [[ -z "$JAVA_BIN" || ! -x "$JAVA_BIN" ]]; then
+    if ! command -v curl >/dev/null 2>&1 || ! command -v tar >/dev/null 2>&1; then
+        printf 'Error: curl and tar are required to download and unpack Java.\n' >&2
+        exit 1
+    fi
+
     mkdir -p "$RUNTIME_ROOT"
     TEMP_DIR="$(mktemp -d "$RUNTIME_ROOT/.temurin-24-$OS-$ARCH.XXXXXX")"
     trap 'rm -rf "$TEMP_DIR"' EXIT
