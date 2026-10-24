@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -74,8 +75,16 @@ public class GalaxyRPLauncherApplication extends Application {
         windowRoot.setMinWidth(windowWidth);
         windowRoot.setPrefWidth(windowWidth);
         windowRoot.setMaxWidth(windowWidth);
+        Rectangle roundedClip = new Rectangle();
+        roundedClip.widthProperty().bind(windowRoot.widthProperty());
+        roundedClip.heightProperty().bind(windowRoot.heightProperty());
+        roundedClip.setArcWidth(20);
+        roundedClip.setArcHeight(20);
+        windowRoot.setClip(roundedClip);
+
         Scene scene = new Scene(windowRoot);
-        stage.initStyle(StageStyle.UNDECORATED);
+        scene.setFill(Color.TRANSPARENT);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setResizable(false);
         stage.setTitle("GalaxyRP Launcher");
         stage.setScene(scene);
