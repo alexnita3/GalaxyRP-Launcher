@@ -1,6 +1,5 @@
 package com.galaxyrp.galaxyrplauncher;
 
-import com.galaxyrp.galaxyrplauncher.enums.ClientMods;
 import com.galaxyrp.galaxyrplauncher.enums.UserAction;
 import com.galaxyrp.galaxyrplauncher.services.*;
 import com.google.api.services.drive.model.File;
@@ -8,8 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GalaxyRPLauncherController {

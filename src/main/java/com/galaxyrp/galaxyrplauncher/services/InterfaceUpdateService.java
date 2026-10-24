@@ -12,6 +12,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +90,14 @@ public class InterfaceUpdateService {
         controller.fileNameLabel.setText(file.getName());
         controller.fileSizeLabel.setText(file.getSize() / 1000000 + " MB"); //We want to display MB
         controller.fileVersionNumberLabel.setText(String.valueOf(file.getVersion()));
-        controller.fileLastChangedLabel.setText(String.valueOf(file.getModifiedTime()));
+
+        LocalDateTime lastChangedDate = LocalDateTime.parse(
+                file.getModifiedTime().toString(),
+                DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        );
+
+        controller.fileLastChangedLabel.setText(
+                lastChangedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
     public static void displayConfigurationValues(GalaxyRPLauncherController controller, LauncherConfiguration configuration) {
