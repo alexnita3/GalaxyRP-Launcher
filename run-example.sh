@@ -36,10 +36,10 @@ fi
 JAVA_BIN=""
 SYSTEM_JAVA="$(command -v java 2>/dev/null || true)"
 if [[ -n "$SYSTEM_JAVA" ]]; then
-    SYSTEM_JAVA_VERSION="$("$SYSTEM_JAVA" -version 2>&1 | sed -nE '1{s/.*version "([0-9]+)(\.[0-9]+)*".*/\1/p;}' || true)"
-    if [[ "$SYSTEM_JAVA_VERSION" == "24" ]]; then
+    SYSTEM_JAVA_VERSION="$("$SYSTEM_JAVA" -version 2>&1 | sed -nE '1{s/.*version "([0-9]+).*/\1/p;}' || true)"
+    if [[ "$SYSTEM_JAVA_VERSION" =~ ^[0-9]+$ ]] && (( SYSTEM_JAVA_VERSION >= 24 )); then
         JAVA_BIN="$SYSTEM_JAVA"
-        printf 'Using the system Java 24 installation.\n'
+        printf 'Using the system Java %s installation.\n' "$SYSTEM_JAVA_VERSION"
     fi
 fi
 
