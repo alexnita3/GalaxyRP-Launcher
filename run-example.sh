@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-JAR_PATH="$SCRIPT_DIR/example.jar"
+JAR_PATH="$SCRIPT_DIR/GalaxyRP Launcher.jar"
 
 if [[ ! -f "$JAR_PATH" ]]; then
     printf 'Error: %s was not found.\n' "$JAR_PATH" >&2
