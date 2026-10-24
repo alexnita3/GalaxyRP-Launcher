@@ -27,8 +27,11 @@ case "$(uname -m)" in
         ;;
 esac
 
-RUNTIME_ROOT="$SCRIPT_DIR/.java-runtime"
-RUNTIME_DIR="$RUNTIME_ROOT/temurin-24-$OS-$ARCH"
+if [[ "$OS" == "mac" ]]; then
+    INSTALL_DIR="/Library/Java/JavaVirtualMachines/temurin-24.jdk"
+else
+    INSTALL_DIR="/usr/local/lib/jvm/temurin-24"
+fi
 
 JAVA_BIN=""
 SYSTEM_JAVA="$(command -v java 2>/dev/null || true)"
@@ -46,17 +49,32 @@ find_java() {
     fi
 }
 
+run_as_root() {
+    if [[ "$(id -u)" -eq 0 ]]; then
+        "$@"
+    else
+        sudo "$@"
+    fi
+}
+
 if [[ -z "$JAVA_BIN" ]]; then
-    JAVA_BIN="$(find_java "$RUNTIME_DIR")"
+    if [[ "$OS" == "mac" ]]; then
+        JAVA_BIN="$INSTALL_DIR/Contents/Home/bin/java"
+    else
+        JAVA_BIN="$INSTALL_DIR/bin/java"
+    fi
 fi
 if [[ -z "$JAVA_BIN" || ! -x "$JAVA_BIN" ]]; then
     if ! command -v curl >/dev/null 2>&1 || ! command -v tar >/dev/null 2>&1; then
-        printf 'Error: curl and tar are required to download and unpack Java.\n' >&2
+        printf 'Error: curl and tar are required to download and unpack Java 24.\n' >&2
+        exit 1
+    fi
+    if [[ "$(id -u)" -ne 0 ]] && ! command -v sudo >/dev/null 2>&1; then
+        printf 'Error: sudo is required to install Java 24 system-wide.\n' >&2
         exit 1
     fi
 
-    mkdir -p "$RUNTIME_ROOT"
-    TEMP_DIR="$(mktemp -d "$RUNTIME_ROOT/.temurin-24-$OS-$ARCH.XXXXXX")"
+    TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/temurin-24-$OS-$ARCH.XXXXXX")"
     trap 'rm -rf "$TEMP_DIR"' EXIT
 
     JRE_URL="https://api.adoptium.net/v3/binary/latest/24/ga/$OS/$ARCH/jre/hotspot/normal/eclipse"
@@ -65,14 +83,42 @@ if [[ -z "$JAVA_BIN" || ! -x "$JAVA_BIN" ]]; then
 
     mkdir "$TEMP_DIR/extracted"
     tar -xzf "$TEMP_DIR/jre.tar.gz" -C "$TEMP_DIR/extracted"
-    if [[ ! -x "$(find_java "$TEMP_DIR/extracted")" ]]; then
+    ARCHIVE_JAVA="$(find_java "$TEMP_DIR/extracted")"
+    if [[ -z "$ARCHIVE_JAVA" || ! -x "$ARCHIVE_JAVA" ]]; then
         printf 'Error: the downloaded archive did not contain a usable Java runtime.\n' >&2
         exit 1
     fi
 
-    rm -rf "$RUNTIME_DIR"
-    mv "$TEMP_DIR/extracted" "$RUNTIME_DIR"
-    JAVA_BIN="$(find_java "$RUNTIME_DIR")"
+    ARCHIVE_JAVA_HOME="$(dirname "$(dirname "$ARCHIVE_JAVA")")"
+    if [[ "$OS" == "mac" ]]; then
+        ARCHIVE_CONTENTS="$(dirname "$ARCHIVE_JAVA_HOME")"
+        if [[ ! -d "$ARCHIVE_CONTENTS" || "$(basename "$ARCHIVE_CONTENTS")" != "Contents" ]]; then
+            printf 'Error: the downloaded macOS runtime has an unexpected layout.\n' >&2
+            exit 1
+        fi
+        run_as_root rm -rf "$INSTALL_DIR"
+        run_as_root mkdir -p "$(dirname "$INSTALL_DIR")"
+        run_as_root mkdir -p "$INSTALL_DIR"
+        run_as_root cp -R "$ARCHIVE_CONTENTS" "$INSTALL_DIR/Contents"
+        JAVA_BIN="$INSTALL_DIR/Contents/Home/bin/java"
+    else
+        run_as_root rm -rf "$INSTALL_DIR"
+        run_as_root mkdir -p "$INSTALL_DIR"
+        run_as_root cp -R "$ARCHIVE_JAVA_HOME/." "$INSTALL_DIR/"
+        JAVA_BIN="$INSTALL_DIR/bin/java"
+        if command -v update-alternatives >/dev/null 2>&1; then
+            run_as_root update-alternatives --install /usr/bin/java java "$JAVA_BIN" 2400
+        elif command -v alternatives >/dev/null 2>&1; then
+            run_as_root alternatives --install /usr/bin/java java "$JAVA_BIN" 2400
+        elif ! command -v java >/dev/null 2>&1; then
+            run_as_root ln -s "$JAVA_BIN" /usr/local/bin/java
+        fi
+    fi
+fi
+
+if [[ ! -x "$JAVA_BIN" ]]; then
+    printf 'Error: Java could not be found at the expected installation path: %s\n' "$JAVA_BIN" >&2
+    exit 1
 fi
 
 cd "$SCRIPT_DIR"

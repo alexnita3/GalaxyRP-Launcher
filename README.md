@@ -90,7 +90,7 @@ chmod +x ./run-example.sh
 ./run-example.sh
 ```
 
-The script uses an installed Java 24 if available; otherwise, it downloads and caches a matching Java 24 JRE in `.java-runtime/` on first run.
+The script uses an installed Java 24 if available; otherwise, it downloads and installs a matching Java 24 JRE system-wide (`/usr/local/lib/jvm` on Linux or `/Library/Java/JavaVirtualMachines` on macOS). On Linux, it registers Java with the system alternatives tool when available. Installation may prompt for administrator privileges (`sudo`).
 
 Important: the launcher reads the credentials from a file, not from environment variables. The app will check `src/main/resources/credentials.json`.
 
