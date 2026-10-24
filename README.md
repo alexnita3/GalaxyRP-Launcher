@@ -83,6 +83,15 @@ java -jar .\target\GalaxyRPLauncher-1.0-SNAPSHOT.jar
 
 The generated jar and installer live under `target/`.
 
+On Linux or macOS, place `example.jar` beside `run-example.sh` and run:
+
+```bash
+chmod +x ./run-example.sh
+./run-example.sh
+```
+
+The script downloads and caches a matching Java 24 JRE in `.java-runtime/` on first run.
+
 Important: the launcher reads the credentials from a file, not from environment variables. The app will check `src/main/resources/credentials.json`.
 
 ## Google Drive API
